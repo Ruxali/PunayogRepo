@@ -87,7 +87,7 @@
                     style="@style/modifiedEditText"
                     android:backgroundTint="@color/colorPrimary"
                     android:hint="Re-Type Password"
-                    android:inputType="date"
+                    android:inputType="textPassword"
                     android:maxLines="1"
                     android:textColorHint="@color/colorPrimaryDark"
                     android:textSize="20sp" />

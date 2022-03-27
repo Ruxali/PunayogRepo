@@ -87,7 +87,7 @@
                     style="@style/modifiedEditText"
                     android:backgroundTint="@color/colorPrimary"
                     android:hint="Email Address"
-                    android:inputType="date"
+                    android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:textColorHint="@color/colorPrimaryDark"
                     android:textSize="20sp" />

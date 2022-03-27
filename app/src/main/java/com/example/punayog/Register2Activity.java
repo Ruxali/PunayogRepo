@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 public class Register2Activity extends AppCompatActivity {
     private EditText phoneNum;
-    private EditText textEmail;
+    private EditText textEmail,address;
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
 
@@ -21,9 +21,24 @@ public class Register2Activity extends AppCompatActivity {
         statusBarColor();
         phoneNum=findViewById(R.id.editTextNumber);
         textEmail=findViewById(R.id.editTextEmail);
-        validateEmail();
+        address=findViewById(R.id.editTextLocation);
         validateNum();
+        validateEmail();
+        validateAddress();
     }
+
+    private boolean validateAddress() {
+        String addInput=address.getText().toString().trim();
+        if(addInput.isEmpty()){
+            address.setError("Field is empty");
+            return false;
+        }
+        else{
+            address.setError(null);
+            return true;
+        }
+    }
+
     private boolean validateEmail() {
         String emailInput = textEmail.getText().toString().trim();
         if (emailInput.isEmpty()) {
