@@ -21,6 +21,8 @@ public class LoginActivity extends AppCompatActivity {
         statusBarColor();
         textPassword = findViewById(R.id.editTextPassword);
         textEmail = findViewById(R.id.editTextEmail);
+        validateEmail();
+        validatePassword();
     }
 
     private boolean validateEmail() {

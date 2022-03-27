@@ -21,6 +21,8 @@ public class Register2Activity extends AppCompatActivity {
         statusBarColor();
         phoneNum=findViewById(R.id.editTextNumber);
         textEmail=findViewById(R.id.editTextEmail);
+        validateEmail();
+        validateNum();
     }
     private boolean validateEmail() {
         String emailInput = textEmail.getText().toString().trim();
