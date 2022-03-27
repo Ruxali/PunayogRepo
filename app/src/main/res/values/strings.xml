@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Punayog</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="skip">SKIP</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="new_member_register_now">New Member? Register Now!</string>
+    <string name="use_other_methods">Use Other Methods</string>
+    <string name="tc">I agree with all the <u>Terms and Conditions.</u></string>
+    <string name="back">Back</string>
+    <string name="next">NEXT</string>
+    <string name="OPTMessage">6 digit OTP has been sent to the provided email address.</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="explore" translatable="false">EXPLORE</string>
+</resources>
