@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class Register3Activity extends AppCompatActivity {
     private EditText textPassword;
     private EditText finalPassword;
+    private Button registerButton;
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
 
     @Override
@@ -20,30 +22,48 @@ public class Register3Activity extends AppCompatActivity {
         setContentView(R.layout.activity_register3);
         statusBarColor();
         textPassword = findViewById(R.id.editTextPassword);
-        finalPassword=findViewById(R.id.editTextRePassword);
-        validatePassword();
+        finalPassword = findViewById(R.id.editTextRePassword);
+        registerButton = findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validateUser();
+            }
+        });
 
 
     }
-    private boolean validatePassword() {
+
+    public void validateUser() {
         String pswInput = textPassword.getText().toString().trim();
-        if(!textPassword.equals(finalPassword)) {
-            Toast.makeText(Register3Activity.this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
-        }
+        String pswTwoInput = finalPassword.getText().toString().trim();
         if (pswInput.isEmpty()) {
-            textPassword.setError("Field cant be empty");
-            return false;
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
         } else if (!pswInput.matches(pswRegex)) {
-            textPassword.setError("Please enter a valid password");
-            return false;
-        } else{
-            textPassword.setError(null);
-            return true;
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        } else if (pswInput.length() < 10) {
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (pswTwoInput.isEmpty()) {
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!pswTwoInput.matches(pswRegex)) {
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
 
-
-
+        } else if (pswTwoInput.length() < 10) {
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!pswInput.equals(pswTwoInput)) {
+            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     public void statusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

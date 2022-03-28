@@ -146,20 +146,20 @@
             </RadioGroup>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/loginButton"
+                android:id="@+id/continueOneButton"
                 style="@style/loginButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="50dp"
-                android:onClick="onLoginClick"
+                android:onClick="onContinueClick"
                 android:text="CONTINUE ➤"
                 android:textSize="20sp" />
 
             <TextView
                 style="@style/parent"
                 android:layout_marginTop="20dp"
-                android:onClick="onRegisterClick"
+                android:onClick="onLoginClick"
                 android:text="Have an Account? Login!"
                 android:textAlignment="textEnd"
                 android:textColor="@color/primaryTextColor"

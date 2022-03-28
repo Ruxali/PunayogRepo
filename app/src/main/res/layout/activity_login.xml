@@ -84,20 +84,20 @@
                 style="@style/viewParent"
                 android:layout_gravity="end"
                 android:layout_marginTop="20dp"
+                android:onClick="onForgotPassword"
                 android:text="@string/forgot_password"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:onClick="onForgotPassword"/>
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:onClick="onLoginButtonClick"
                 android:id="@+id/loginButton"
                 style="@style/loginButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="35dp"
+                android:onClick="onLoginButtonClick"
                 android:text="@string/login"
                 android:textSize="20sp" />
 
@@ -110,9 +110,6 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-
-
 
 
         </LinearLayout>

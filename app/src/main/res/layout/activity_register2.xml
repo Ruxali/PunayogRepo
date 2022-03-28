@@ -113,13 +113,13 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/loginButton"
+                android:id="@+id/continueTwoButton"
                 style="@style/loginButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="50dp"
-                android:onClick="onContinueClick"
+                android:onClick="onContinueTwoClick"
                 android:text="CONTINUE ➤"
                 android:textSize="20sp"
                 tools:ignore="OnClick" />
