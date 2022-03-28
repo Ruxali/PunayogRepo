@@ -154,7 +154,8 @@
                 android:layout_marginTop="50dp"
                 android:onClick="onContinueClick"
                 android:text="CONTINUE ➤"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="UsingOnClickInXml" />
 
             <TextView
                 style="@style/parent"

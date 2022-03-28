@@ -32,8 +32,10 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 validateUser();
+
             }
         });
+
     }
 
     public void validateUser() {
@@ -90,7 +92,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onContinueClick(View view) {
-        startActivity(new Intent(this, Register2Activity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+
+        Intent intent = new Intent(RegisterActivity.this, Register2Activity.class);
+        startActivity(intent);
     }
 }

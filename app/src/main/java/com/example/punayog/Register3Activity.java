@@ -28,6 +28,7 @@ public class Register3Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 validateUser();
+
             }
         });
 
@@ -51,13 +52,13 @@ public class Register3Activity extends AppCompatActivity {
         if (pswTwoInput.isEmpty()) {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return;
-        } else if (!pswTwoInput.matches(pswRegex)) {
-            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        } else if (pswTwoInput.length() < 10) {
-            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-            return;
+//        } else if (!pswTwoInput.matches(pswRegex)) {
+//            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+//            return;
+//
+//        } else if (pswTwoInput.length() < 10) {
+//            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+//            return;
         }
         if (!pswInput.equals(pswTwoInput)) {
             Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
@@ -72,11 +73,11 @@ public class Register3Activity extends AppCompatActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
         }
     }
-
-    public void onRegisterClick(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
-    }
+//
+//    public void onRegisterClick(View view) {
+//        startActivity(new Intent(this, LoginActivity.class));
+//        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+//    }
 
     public void onBackClick(View view) {
         startActivity(new Intent(this, Register2Activity.class));

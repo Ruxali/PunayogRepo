@@ -69,10 +69,10 @@ public class Register2Activity extends AppCompatActivity {
         }
     }
 
-    public void onContinueTwoClick(View view) {
-        startActivity(new Intent(this, Register3Activity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
-    }
+//    public void onContinueTwoClick(View view) {
+//        startActivity(new Intent(this, Register3Activity.class));
+//        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+//    }
 
     public void onBackClick(View view) {
         startActivity(new Intent(this, RegisterActivity.class));
