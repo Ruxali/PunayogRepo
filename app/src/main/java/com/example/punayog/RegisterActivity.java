@@ -13,9 +13,12 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText textName, dateOfBirth;
-    private Button continueOneButton;
+    private EditText textName, dateOfBirth,phoneNum,textEmail, address,textPassword,finalPassword;
+    private Button registerButton;
     private RadioButton radioMale, radioFemale, radioOthers;
+    private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+    private static final String numRegex = "^[+]?[0-9]{10,13}$";
+    private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +27,16 @@ public class RegisterActivity extends AppCompatActivity {
         statusBarColor();
         textName = findViewById(R.id.editTextName);
         dateOfBirth = findViewById(R.id.editTextDoB);
-        continueOneButton = findViewById(R.id.continueOneButton);
+        phoneNum = findViewById(R.id.editTextNumber);
+        textEmail = findViewById(R.id.editTextEmail);
+        address = findViewById(R.id.editTextLocation);
+        textPassword = findViewById(R.id.editTextPassword);
+        finalPassword = findViewById(R.id.editTextRePassword);
+        registerButton = findViewById(R.id.registerButton);
         radioMale = findViewById(R.id.radioMale);
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
-        continueOneButton.setOnClickListener(new View.OnClickListener() {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 validateUser();
@@ -41,6 +49,11 @@ public class RegisterActivity extends AppCompatActivity {
     public void validateUser() {
         String inputDOB = dateOfBirth.getText().toString().trim();
         String inputUsername = textName.getText().toString().trim();
+        String emailInput = textEmail.getText().toString().trim();
+        String phoneInput = phoneNum.getText().toString().trim();
+        String addInput = address.getText().toString().trim();
+        String pswInput = textPassword.getText().toString().trim();
+        String pswTwoInput = finalPassword.getText().toString().trim();
         String radioButtonMale=radioMale.getText().toString().trim();
         String radioButtonFemale=radioFemale.getText().toString().trim();
         String radioButtonOthers=radioOthers.getText().toString().trim();
@@ -73,6 +86,53 @@ public class RegisterActivity extends AppCompatActivity {
 //            return;
 //        }
 
+        if (emailInput.isEmpty()) {
+            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!emailInput.matches(emailRegex)) {
+            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+        if (phoneInput.isEmpty()) {
+            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!phoneInput.matches(emailRegex)) {
+            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+        if (addInput.isEmpty()) {
+            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (pswInput.isEmpty()) {
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!pswInput.matches(pswRegex)) {
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        } else if (pswInput.length() < 10) {
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (pswTwoInput.isEmpty()) {
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
+//        } else if (!pswTwoInput.matches(pswRegex)) {
+//            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+//            return;
+//
+//        } else if (pswTwoInput.length() < 10) {
+//            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+//            return;
+        }
+        if (!pswInput.equals(pswTwoInput)) {
+            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 
@@ -91,9 +151,9 @@ public class RegisterActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
     }
 
-    public void onContinueClick(View view) {
+    public void onRegisterClick(View view) {
 
-        Intent intent = new Intent(RegisterActivity.this, Register2Activity.class);
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 }

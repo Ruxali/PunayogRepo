@@ -29,12 +29,6 @@
             android:name=".VerificationActivity"
             android:exported="false" />
         <activity
-            android:name=".Register3Activity"
-            android:exported="false" />
-        <activity
-            android:name=".Register2Activity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
