@@ -60,19 +60,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (inputUsername.isEmpty()) {
             Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
-            return;
+            onRegisterClick();
         } else if (textName.length() < 10) {
             Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
             return;
 
         }
-        if (inputDOB.isEmpty()) {
-            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        else if(!inputUsername.matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")){
+//            Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (inputDOB.isEmpty()) {
+//            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
+//            return;
+//        } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
+//            Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 //        if(radioButtonMale.matches(" ")){
 //            Toast.makeText(this, "Gender should be selected", Toast.LENGTH_SHORT).show();
 //            return;
@@ -86,52 +90,52 @@ public class RegisterActivity extends AppCompatActivity {
 //            return;
 //        }
 
-        if (emailInput.isEmpty()) {
-            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!emailInput.matches(emailRegex)) {
-            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-        if (phoneInput.isEmpty()) {
-            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!phoneInput.matches(emailRegex)) {
-            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-        if (addInput.isEmpty()) {
-            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (pswInput.isEmpty()) {
-            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!pswInput.matches(pswRegex)) {
-            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        } else if (pswInput.length() < 10) {
-            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (pswTwoInput.isEmpty()) {
-            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-            return;
-//        } else if (!pswTwoInput.matches(pswRegex)) {
+//        if (emailInput.isEmpty()) {
+//            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+//            return;
+//        } else if (!emailInput.matches(emailRegex)) {
+//            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
+//            return;
+//
+//        }
+//        if (phoneInput.isEmpty()) {
+//            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
+//            return;
+//        } else if (!phoneInput.matches(emailRegex)) {
+//            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
+//            return;
+//
+//        }
+//        if (addInput.isEmpty()) {
+//            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        if (pswInput.isEmpty()) {
+//            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+//            return;
+//        } else if (!pswInput.matches(pswRegex)) {
 //            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
 //            return;
 //
-//        } else if (pswTwoInput.length() < 10) {
+//        } else if (pswInput.length() < 10) {
 //            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
 //            return;
-        }
-        if (!pswInput.equals(pswTwoInput)) {
-            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
-        }
+//        }
+//        if (pswTwoInput.isEmpty()) {
+//            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+//            return;
+////        } else if (!pswTwoInput.matches(pswRegex)) {
+////            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+////            return;
+////
+////        } else if (pswTwoInput.length() < 10) {
+////            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+////            return;
+//        }
+//        if (!pswInput.equals(pswTwoInput)) {
+//            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
+//        }
 
 
     }
@@ -151,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
     }
 
-    public void onRegisterClick(View view) {
+    public void onRegisterClick() {
 
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
