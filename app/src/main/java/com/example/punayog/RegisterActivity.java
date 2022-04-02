@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.regex.Pattern;
+
 public class RegisterActivity extends AppCompatActivity {
     private EditText textName, dateOfBirth, phoneNum, textEmail, address, textPassword, finalPassword;
     private Button registerButton;
@@ -19,6 +28,8 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +47,14 @@ public class RegisterActivity extends AppCompatActivity {
         radioMale = findViewById(R.id.radioMale);
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
+        mAuth = FirebaseAuth.getInstance();
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateUser();
+                switch (view.getId()){
+                    case R.id.registerButton:
+                        validateUser();
+                }
 
             }
         });
@@ -69,74 +84,87 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
             return;
         }
-//        if (inputDOB.isEmpty()) {
-//            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
-//            Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(radioButtonMale.matches(" ")){
-//            Toast.makeText(this, "Gender should be selected", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(radioButtonFemale.matches(" ")){
-//            Toast.makeText(this, "Gender should be selected", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(radioButtonOthers.matches(" ")){
-//            Toast.makeText(this, "Gender should be selected", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        if (inputDOB.isEmpty()) {
+            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-//        if (emailInput.isEmpty()) {
-//            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (!emailInput.matches(emailRegex)) {
-//            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
-//            return;
-//
-//        }
-//        if (phoneInput.isEmpty()) {
-//            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (!phoneInput.matches(emailRegex)) {
-//            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
-//            return;
-//
-//        }
-//        if (addInput.isEmpty()) {
-//            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (pswInput.isEmpty()) {
-//            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (!pswInput.matches(pswRegex)) {
-//            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-//            return;
-//
-//        } else if (pswInput.length() < 10) {
-//            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if (pswTwoInput.isEmpty()) {
-//            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-//            return;
-////        } else if (!pswTwoInput.matches(pswRegex)) {
-////            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-////            return;
-////
-////        } else if (pswTwoInput.length() < 10) {
-////            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-////            return;
-//        }
-//        if (!pswInput.equals(pswTwoInput)) {
-//            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
-//        }
+        if (emailInput.isEmpty()) {
+            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!emailInput.matches(emailRegex)) {
+            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
 
+        }
 
+        if (phoneInput.isEmpty()) {
+            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!phoneInput.matches(numRegex)) {
+            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+        if (addInput.isEmpty()) {
+            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (pswInput.isEmpty()) {
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!pswInput.matches(pswRegex)) {
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        } else if (pswInput.length() < 10) {
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (pswTwoInput.isEmpty()) {
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!pswTwoInput.matches(pswRegex)) {
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return;
+
+        } else if (pswTwoInput.length() < 10) {
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!pswInput.equals(pswTwoInput)) {
+            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
+        }
+        mAuth.createUserWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isComplete()) {
+                    User user = new User(inputDOB, inputUsername, emailInput, pswInput, phoneInput, addInput,pswTwoInput);
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+
+                } else{
+                    Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
 
@@ -146,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
         }
+
     }
 
 
