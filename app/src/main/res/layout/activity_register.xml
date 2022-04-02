@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".RegisterActivity"
     android:layout_gravity="center"
     android:background="@color/login_bk_color"
     android:focusableInTouchMode="true"
-    android:gravity="center">
+    android:gravity="center"
+    tools:context=".RegisterActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -114,25 +114,25 @@
                         android:id="@+id/radioMale"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Male"
-                        android:textSize="16sp"
-                        android:layout_weight="1"/>
+                        android:textSize="16sp" />
 
                     <RadioButton
                         android:id="@+id/radioFemale"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Female"
-                        android:textSize="16sp"
-                        android:layout_weight="1"/>
+                        android:textSize="16sp" />
 
                     <RadioButton
                         android:id="@+id/radioOthers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Others"
-                        android:textSize="16sp"
-                        android:layout_weight="1"/>
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -263,13 +263,14 @@
 
 
     </ScrollView>
+
     <View
         android:layout_width="11dp"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:background="@drawable/ic_side_bg"/>
+        android:background="@drawable/ic_side_bg" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -278,7 +279,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
-        android:onClick="onRegisterClick"
+
         android:src="@drawable/ic_back_img" />
 
 

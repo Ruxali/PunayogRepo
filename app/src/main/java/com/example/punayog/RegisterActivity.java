@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText textName, dateOfBirth,phoneNum,textEmail, address,textPassword,finalPassword;
+    private EditText textName, dateOfBirth, phoneNum, textEmail, address, textPassword, finalPassword;
     private Button registerButton;
     private RadioButton radioMale, radioFemale, radioOthers;
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
@@ -54,9 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
         String addInput = address.getText().toString().trim();
         String pswInput = textPassword.getText().toString().trim();
         String pswTwoInput = finalPassword.getText().toString().trim();
-        String radioButtonMale=radioMale.getText().toString().trim();
-        String radioButtonFemale=radioFemale.getText().toString().trim();
-        String radioButtonOthers=radioOthers.getText().toString().trim();
+        String radioButtonMale = radioMale.getText().toString().trim();
+        String radioButtonFemale = radioFemale.getText().toString().trim();
+        String radioButtonOthers = radioOthers.getText().toString().trim();
 
         if (inputUsername.isEmpty()) {
             Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
@@ -65,11 +65,10 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
             return;
 
+        } else if (!inputUsername.matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")) {
+            Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
+            return;
         }
-//        else if(!inputUsername.matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")){
-//            Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
 //        if (inputDOB.isEmpty()) {
 //            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
 //            return;
