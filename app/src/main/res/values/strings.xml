@@ -9,7 +9,7 @@
     <string name="use_other_methods">Use Other Methods</string>
     <string name="tc">I agree with all the <u>Terms and Conditions.</u></string>
     <string name="back">Back</string>
-    <string name="next">NEXT</string>
+    <string name="next">Send OTP</string>
     <string name="OPTMessage">6 digit OTP has been sent to the provided email address.</string>
     <string name="verify_otp">Verify OTP</string>
     <string name="explore" translatable="false">EXPLORE</string>

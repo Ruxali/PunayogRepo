@@ -11,9 +11,17 @@ import android.widget.Toast;
 import java.lang.Object;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class LoginActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     private EditText textInputEmail;
     private EditText textInputPassword;
     private Button loginButton;
@@ -28,10 +36,15 @@ public class LoginActivity extends AppCompatActivity {
         textInputPassword = findViewById(R.id.editTextPassword);
         textInputEmail = findViewById(R.id.editTextEmail);
         loginButton = findViewById(R.id.loginButton);
+        mAuth = FirebaseAuth.getInstance();
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateUser();
+                switch (view.getId()) {
+                    case R.id.loginButton:
+                        validateUser();
+                }
+
 
             }
         });
@@ -50,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+
         if (pswInput.isEmpty()) {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return;
@@ -61,6 +75,26 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
             return;
         }
+        mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user.isEmailVerified()) {
+                        startActivity(new Intent(LoginActivity.this, VerificationActivity.class));
+                    }
+                    else{
+                        user.sendEmailVerification();
+                        Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login is failed", Toast.LENGTH_SHORT).show();
+
+
+                }
+
+            }
+        });
 
     }
 
