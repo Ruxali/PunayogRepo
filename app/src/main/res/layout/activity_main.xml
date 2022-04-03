@@ -27,10 +27,11 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="5dp"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_baseline_notifications_24"
-                android:layout_weight="0.5"/>
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.5"
+                android:paddingTop="10dp"
+                android:src="@drawable/ic_baseline_notifications_24" />
 
         </LinearLayout>
     </RelativeLayout>

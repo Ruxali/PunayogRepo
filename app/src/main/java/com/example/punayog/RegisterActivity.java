@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,12 +20,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText textName, dateOfBirth, phoneNum, textEmail, address, textPassword, finalPassword;
     private Button registerButton;
     private RadioButton radioMale, radioFemale, radioOthers;
+    private RadioGroup radioGrp;
+    private CheckBox tcCheckBox;
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -47,21 +53,173 @@ public class RegisterActivity extends AppCompatActivity {
         radioMale = findViewById(R.id.radioMale);
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
+        radioGrp = findViewById(R.id.radioGrp);
+        tcCheckBox = findViewById(R.id.tcCheckBox);
+
         mAuth = FirebaseAuth.getInstance();
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
-                    case R.id.registerButton:
-                        validateUser();
-                }
-
+                    if(!validateUserName() || !validateDoB() || !validateContact()|| !validateEmail() || !validateLocation() ||
+                            !validatePassword() || !validateGender()|| !validateTC() || !validateUser()){
+                        return;
+                    }
+                    else{
+                        onRegisterClick();
+                    }
             }
         });
 
     }
 
-    public void validateUser() {
+
+    private Boolean validateUserName(){
+        String inputUsername = textName.getText().toString().trim();
+        if (inputUsername.isEmpty()) {
+            Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (textName.length() < 10) {
+            Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
+            return false;
+
+        }
+        else if(!inputUsername.matches("^[a-zA-Z0-9]+([ ]?[a-zA-Z0-9]+)*$")){
+            Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Boolean validateDoB()  {
+
+        String inputDOB = dateOfBirth.getText().toString().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(inputDOB);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        if (inputDOB.isEmpty()) {
+            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (date1.compareTo(date2) >0){
+            Toast.makeText(this, "Date should be smaller than current date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Boolean validateGender() {
+
+        if (!radioMale.isChecked() && !radioOthers.isChecked() && !radioFemale.isChecked()){
+            Toast.makeText(this, "Choose your Gender", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Boolean validateTC() {
+
+        if (!tcCheckBox.isChecked()){
+            Toast.makeText(this, "Please Accept the Terms and Conditions", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Boolean validateContact() {
+        String phoneInput = phoneNum.getText().toString().trim();
+        if (phoneInput.isEmpty()) {
+            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!phoneInput.matches(numRegex)) {
+            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
+            return false;
+
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Boolean validateEmail() {
+
+        String emailInput = textEmail.getText().toString().trim();
+        if (emailInput.isEmpty()) {
+            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!emailInput.matches(emailRegex)) {
+            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
+            return false;
+
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Boolean validateLocation() {
+        String addInput = address.getText().toString().trim();
+        if (addInput.isEmpty()) {
+            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+
+    private boolean validatePassword() {
+        String pswInput = textPassword.getText().toString().trim();
+        String pswTwoInput = finalPassword.getText().toString().trim();
+
+        if (pswInput.isEmpty()){
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!pswInput.matches(pswRegex)){
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(pswInput.length() < 10){
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(pswTwoInput.isEmpty()){
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!pswInput.equals(pswTwoInput)){
+            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+
+    }
+
+    public boolean validateUser(){
         String inputDOB = dateOfBirth.getText().toString().trim();
         String inputUsername = textName.getText().toString().trim();
         String emailInput = textEmail.getText().toString().trim();
@@ -69,76 +227,6 @@ public class RegisterActivity extends AppCompatActivity {
         String addInput = address.getText().toString().trim();
         String pswInput = textPassword.getText().toString().trim();
         String pswTwoInput = finalPassword.getText().toString().trim();
-        String radioButtonMale = radioMale.getText().toString().trim();
-        String radioButtonFemale = radioFemale.getText().toString().trim();
-        String radioButtonOthers = radioOthers.getText().toString().trim();
-
-        if (inputUsername.isEmpty()) {
-            Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
-            onRegisterClick();
-        } else if (textName.length() < 10) {
-            Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
-            return;
-
-        } else if (!inputUsername.matches("^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$")) {
-            Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (inputDOB.isEmpty()) {
-            Toast.makeText(this, "Date  is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (emailInput.isEmpty()) {
-            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!emailInput.matches(emailRegex)) {
-            Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-
-        if (phoneInput.isEmpty()) {
-            Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!phoneInput.matches(numRegex)) {
-            Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-        if (addInput.isEmpty()) {
-            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (pswInput.isEmpty()) {
-            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!pswInput.matches(pswRegex)) {
-            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        } else if (pswInput.length() < 10) {
-            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (pswTwoInput.isEmpty()) {
-            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!pswTwoInput.matches(pswRegex)) {
-            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        } else if (pswTwoInput.length() < 10) {
-            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!pswInput.equals(pswTwoInput)) {
-            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
-        }
         mAuth.createUserWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -165,6 +253,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+        return true;
     }
 
 
@@ -184,7 +273,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onRegisterClick() {
-
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
     }

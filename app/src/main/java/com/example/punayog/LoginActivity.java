@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.lang.Object;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,9 +38,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.loginButton:
-                        validateUser();
+                if (!validateEmail() || !validatePassword() || !validateUser()){
+                    return;
+                }else{
+                    onLoginButtonClick();
                 }
 
 
@@ -51,53 +50,66 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void validateUser() {
+    private Boolean validateEmail() {
+
         String emailInput = textInputEmail.getText().toString().trim();
-        String pswInput = textInputPassword.getText().toString().trim();
         if (emailInput.isEmpty()) {
             Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         } else if (!emailInput.matches(emailRegex)) {
             Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
 
         }
-
-
-        if (pswInput.isEmpty()) {
-            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!pswInput.matches(pswRegex)) {
-            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
-            return;
-
-        } else if (pswInput.length() < 10) {
-            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
-            return;
+        else{
+            return true;
         }
-        mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user.isEmailVerified()) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    }
-                    else{
-                        user.sendEmailVerification();
-                        Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(LoginActivity.this, "Login is failed", Toast.LENGTH_SHORT).show();
-
-
-                }
-
-            }
-        });
-
     }
 
+    private boolean validatePassword() {
+        String pswInput = textInputPassword.getText().toString().trim();
+
+        if (pswInput.isEmpty()){
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!pswInput.matches(pswRegex)){
+            Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(pswInput.length() < 10) {
+            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+
+    }
+public boolean validateUser(){
+    String emailInput = textInputEmail.getText().toString().trim();
+    String pswInput = textInputPassword.getText().toString().trim();
+    mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        @Override
+        public void onComplete(@NonNull Task<AuthResult> task) {
+            if (task.isSuccessful()) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user.isEmailVerified()) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+                else{
+                    user.sendEmailVerification();
+                    Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(LoginActivity.this, "Login is failed", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+        }
+
+    });
+    return true;
+}
 
     public void statusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -117,9 +129,9 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
     }
 
-    public void onLoginButtonClick(View view) {
-        startActivity(new Intent(this, VerificationActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+    public void onLoginButtonClick() {
+        Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
+        startActivity(intent);
     }
 
     public void onForgotPassword(View view) {
