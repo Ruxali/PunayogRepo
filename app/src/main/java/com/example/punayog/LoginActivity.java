@@ -93,7 +93,7 @@ public boolean validateUser(){
             if (task.isSuccessful()) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user.isEmailVerified()) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, VerificationActivity.class));
                 }
                 else{
                     user.sendEmailVerification();
