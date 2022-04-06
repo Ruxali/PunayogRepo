@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     HomeFragment homeFragment = new HomeFragment();
     ProfileFragment profileFragment = new ProfileFragment();
+    ChatFragment chatFragment = new ChatFragment();
+    WishlistFragment wishlistFragment = new WishlistFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +60,30 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         //fragments
-//        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,homeFragment).commit();
-//        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()){
-//                    case R.id.homeButton:
-//                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,homeFragment).commit();
-//                        return true;
-//
-//                    case R.id.profile:
-//                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,profileFragment).commit();
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
+        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,homeFragment).commit();
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.homeButton:
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,homeFragment).commit();
+                        return true;
+
+                    case R.id.profile:
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,profileFragment).commit();
+                        return true;
+
+                    case R.id.chat:
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,chatFragment).commit();
+                        return true;
+
+                    case R.id.wishlist:
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,wishlistFragment).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
 
 
     }

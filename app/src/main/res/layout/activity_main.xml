@@ -63,7 +63,6 @@
                         android:layout_height="15dp" />
 
 
-
                     <RelativeLayout
                         android:id="@+id/relativeLayout2"
                         android:layout_width="match_parent"
@@ -79,15 +78,14 @@
                             <androidx.appcompat.widget.Toolbar
                                 android:id="@+id/toolbar"
                                 android:layout_width="0dp"
-                                android:layout_weight="0.25"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="0.25"
                                 android:minHeight="?attr/actionBarSize"
                                 android:theme="?attr/actionBarTheme"
                                 app:layout_constraintStart_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:navigationIcon="@drawable/ic_baseline_menu_24"
-                                 />
+                                app:navigationIcon="@drawable/ic_baseline_menu_24" />
 
                             <SearchView
                                 android:id="@+id/searchView"
@@ -105,15 +103,28 @@
                         </LinearLayout>
 
                     </RelativeLayout>
+
                     <Space
                         android:layout_width="match_parent"
-                        android:layout_height="15dp" />
+                        android:layout_height="25dp" />
 
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/relativeLayout2">
 
+                        <FrameLayout
+                            android:id="@+id/container"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </RelativeLayout>
                 </LinearLayout>
 
+
             </RelativeLayout>
+
 
 
 
@@ -121,10 +132,7 @@
 
 
     </ScrollView>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/container"/>
+
     <include layout="@layout/activity_bottom_navigation" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

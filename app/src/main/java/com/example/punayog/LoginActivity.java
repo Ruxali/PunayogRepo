@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
         startActivity(intent);
-main
+
     }
 
     public void onForgotPassword(View view) {
