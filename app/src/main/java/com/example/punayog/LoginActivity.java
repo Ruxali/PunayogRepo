@@ -134,8 +134,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick() {
+
+        startActivity(new Intent(this, VerificationActivity.class));
+        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);;
+
         Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
         startActivity(intent);
+main
     }
 
     public void onForgotPassword(View view) {

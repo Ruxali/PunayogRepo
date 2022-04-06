@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/accessories"
+            android:icon="@drawable/accessories"
+            android:title="Accessories">
+
+
+<!--            <menu>-->
+<!--                <item-->
+<!--                    android:id="@+id/bags"-->
+<!--                    android:title="Bags"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/sunglasses"-->
+<!--                    android:title="Sunglasses"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/watches"-->
+<!--                    android:title="Watches"/>-->
+<!--            </menu>-->
+
+        </item>
+
+        <item
+            android:id="@+id/clothes"
+            android:icon="@drawable/clothes"
+            android:title="Apparels">
+
+<!--            <menu>-->
+<!--                <item-->
+<!--                    android:id="@+id/menClothes"-->
+<!--                    android:title="Men Clothes"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/womenClothes"-->
+<!--                    android:title="Women Clothes"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/kidsClothes"-->
+<!--                    android:title="Kids Clothes"/>-->
+<!--            </menu>-->
+
+        </item>
+
+        <item
+            android:id="@+id/books"
+            android:icon="@drawable/books"
+            android:title="Books">
+
+<!--            <menu>-->
+<!--                <item-->
+<!--                    android:id="@+id/fiction"-->
+<!--                    android:title="Fiction"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/nonFiction"-->
+<!--                    android:title="Non-Fiction"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/courseBooks"-->
+<!--                    android:title="Course Books"/>-->
+<!--            </menu>-->
+
+        </item>
+
+        <item
+            android:id="@+id/electronics"
+            android:icon="@drawable/electronics"
+            android:title="Electronics">
+
+<!--            <menu>-->
+<!--                <item-->
+<!--                    android:id="@+id/mobilePhones"-->
+<!--                    android:title="Mobile Phones"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/television"-->
+<!--                    android:title="Television"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/microwave"-->
+<!--                    android:title="Microwave/Oven"/>-->
+<!--            </menu>-->
+
+        </item>
+    </group>
+
+
+
+
+</menu>
