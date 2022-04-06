@@ -130,8 +130,8 @@ public boolean validateUser(){
     }
 
     public void onLoginButtonClick() {
-        Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, VerificationActivity.class));
+        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);;
     }
 
     public void onForgotPassword(View view) {
