@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.punayog">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,8 +27,13 @@
             android:name=".SuccessfulVerificationActivity"
             android:exported="false" />
         <activity
-            android:name=".VerificationActivity"
-            android:exported="false" />
+            android:name=".OtpSendActivity"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".OtpVerifyActivity"
+            android:exported="false"
+            tools:ignore="Instantiatable,MissingClass" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -39,8 +45,16 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".ForgetPassword"/>
 
-
+        <receiver
+            android:name=".OTP_Receiver"
+            android:exported="true"
+            android:permission="com.google.android.gas.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gas.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

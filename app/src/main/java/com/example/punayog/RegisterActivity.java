@@ -28,6 +28,7 @@ import java.util.Date;
 public class RegisterActivity extends AppCompatActivity {
     private EditText textName, dateOfBirth, phoneNum, textEmail, address, textPassword, finalPassword;
     private Button registerButton;
+    private String userGender = "";
     private RadioButton radioMale, radioFemale, radioOthers;
     private RadioGroup radioGrp;
     private CheckBox tcCheckBox;
@@ -204,6 +205,7 @@ public class RegisterActivity extends AppCompatActivity {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
+
         // Check which radio button was clicked
         switch (view.getId()) {
             case R.id.radioMale:
@@ -211,12 +213,14 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Male is selected", Toast.LENGTH_SHORT).show();
                 radioFemale.setChecked(false);
                 radioOthers.setChecked(false);
+                userGender="male";
                 break;
             case R.id.radioFemale:
                 if (checked) {
                     Toast.makeText(RegisterActivity.this, "Female is selected", Toast.LENGTH_SHORT).show();
                     radioMale.setChecked(false);
                     radioOthers.setChecked(false);
+                    userGender="female";
                 }
                 break;
             case R.id.radioOthers:
@@ -224,6 +228,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Others is selected", Toast.LENGTH_SHORT).show();
                     radioMale.setChecked(false);
                     radioFemale.setChecked(false);
+                    userGender="others";
                 }
                 break;
         }
@@ -241,7 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete()) {
-                    User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput);
+                    User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput,userGender);
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
