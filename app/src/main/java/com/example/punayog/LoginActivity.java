@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText textInputEmail;
     private EditText textInputPassword;
-    private Button loginButton;
+    private Button loginButton,forgetPassword;
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
 
@@ -34,16 +34,21 @@ public class LoginActivity extends AppCompatActivity {
         textInputPassword = findViewById(R.id.editTextPassword);
         textInputEmail = findViewById(R.id.editTextEmail);
         loginButton = findViewById(R.id.loginButton);
+        forgetPassword=findViewById(R.id.forgetPassword);
         mAuth = FirebaseAuth.getInstance();
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateEmail() || !validatePassword() || !validateUser()){
+                if (!validateEmail() || !validatePassword() || !validateUser()) {
                     return;
-                }else{
+                } else {
                     onLoginButtonClick();
                 }
 
+                switch (view.getId()) {
+                    case R.id.forgetPassword:
+                        startActivity(new Intent(LoginActivity.this, ForgetPassword.class));
+                }
 
             }
         });
@@ -60,8 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
 
-        }
-        else{
+        } else {
             return true;
         }
     }
@@ -69,47 +73,47 @@ public class LoginActivity extends AppCompatActivity {
     private boolean validatePassword() {
         String pswInput = textInputPassword.getText().toString().trim();
 
-        if (pswInput.isEmpty()){
+        if (pswInput.isEmpty()) {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(!pswInput.matches(pswRegex)){
+        } else if (!pswInput.matches(pswRegex)) {
             Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(pswInput.length() < 10) {
+        } else if (pswInput.length() < 10) {
             Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
 
     }
-public boolean validateUser(){
-    String emailInput = textInputEmail.getText().toString().trim();
-    String pswInput = textInputPassword.getText().toString().trim();
-    mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if (task.isSuccessful()) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user.isEmailVerified()) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-                else{
-                    user.sendEmailVerification();
-                    Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(LoginActivity.this, "Login is failed", Toast.LENGTH_SHORT).show();
 
+    public boolean validateUser() {
+        String emailInput = textInputEmail.getText().toString().trim();
+        String pswInput = textInputPassword.getText().toString().trim();
+        mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    assert user != null;
+                    if (user.isEmailVerified()) {
+                        onLoginButtonClick();
+                    } else {
+                        user.sendEmailVerification();
+                        Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login is failed", Toast.LENGTH_SHORT).show();
+
+
+                }
 
             }
 
-        }
-
-    });
-    return true;
-}
+        });
+        return true;
+    }
 
     public void statusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -130,12 +134,19 @@ public boolean validateUser(){
     }
 
     public void onLoginButtonClick() {
+
         startActivity(new Intent(this, VerificationActivity.class));
         overridePendingTransition(R.anim.slide_in_right, R.anim.stay);;
+
+        Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
+        startActivity(intent);
+main
     }
 
     public void onForgotPassword(View view) {
-        startActivity(new Intent(this, VerificationActivity.class));
+        startActivity(new Intent(this, ForgetPassword.class));
         overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
     }
+
+
 }
