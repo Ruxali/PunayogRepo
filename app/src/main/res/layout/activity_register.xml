@@ -88,8 +88,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <RadioGroup
-                android:id="@+id/radioGrp"
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp">
@@ -116,7 +115,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Male"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:onClick="onRadioButtonClicked"/>
 
                     <RadioButton
                         android:id="@+id/radioFemale"
@@ -124,7 +124,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Female"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:onClick="onRadioButtonClicked"/>
 
                     <RadioButton
                         android:id="@+id/radioOthers"
@@ -132,7 +133,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Others"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:onClick="onRadioButtonClicked"/>
 
                 </LinearLayout>
 

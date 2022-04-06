@@ -18,16 +18,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText textName, dateOfBirth, phoneNum, textEmail, address, textPassword, finalPassword;
     private Button registerButton;
+    private String userGender = "";
     private RadioButton radioMale, radioFemale, radioOthers;
     private RadioGroup radioGrp;
     private CheckBox tcCheckBox;
@@ -35,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
     private FirebaseAuth mAuth;
+    private DatabaseReference reference;
 
 
     @Override
@@ -53,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
         radioMale = findViewById(R.id.radioMale);
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
-        radioGrp = findViewById(R.id.radioGrp);
         tcCheckBox = findViewById(R.id.tcCheckBox);
 
         mAuth = FirebaseAuth.getInstance();
@@ -61,20 +62,19 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    if(!validateUserName() || !validateDoB() || !validateContact()|| !validateEmail() || !validateLocation() ||
-                            !validatePassword() || !validateGender()|| !validateTC() || !validateUser()){
-                        return;
-                    }
-                    else{
-                        onRegisterClick();
-                    }
+                if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
+                        !validatePassword() || !validateTC() || !validateUser()) {
+                    return;
+                } else {
+                    onRegisterClick();
+                }
             }
         });
 
     }
 
 
-    private Boolean validateUserName(){
+    private Boolean validateUserName() {
         String inputUsername = textName.getText().toString().trim();
         if (inputUsername.isEmpty()) {
             Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
@@ -83,17 +83,15 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
             return false;
 
-        }
-        else if(!inputUsername.matches("^[a-zA-Z0-9]+([ ]?[a-zA-Z0-9]+)*$")){
+        } else if (!inputUsername.matches("^[a-zA-Z0-9]+([ ]?[a-zA-Z0-9]+)*$")) {
             Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
-    private Boolean validateDoB()  {
+    private Boolean validateDoB() {
 
         String inputDOB = dateOfBirth.getText().toString().trim();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -119,33 +117,21 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!inputDOB.matches("\\d{4}-\\d{2}-\\d{2}")) {
             Toast.makeText(this, "Date pattern is wrong", Toast.LENGTH_SHORT).show();
             return false;
-        }else if (date1.compareTo(date2) >0){
+        } else if (date1.compareTo(date2) > 0) {
             Toast.makeText(this, "Date should be smaller than current date", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
-    private Boolean validateGender() {
-
-        if (!radioMale.isChecked() && !radioOthers.isChecked() && !radioFemale.isChecked()){
-            Toast.makeText(this, "Choose your Gender", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
 
     private Boolean validateTC() {
 
-        if (!tcCheckBox.isChecked()){
+        if (!tcCheckBox.isChecked()) {
             Toast.makeText(this, "Please Accept the Terms and Conditions", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
@@ -159,8 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
 
-        }
-        else{
+        } else {
             return true;
         }
     }
@@ -175,8 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Email pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
 
-        }
-        else{
+        } else {
             return true;
         }
     }
@@ -186,8 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (addInput.isEmpty()) {
             Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
@@ -197,29 +180,61 @@ public class RegisterActivity extends AppCompatActivity {
         String pswInput = textPassword.getText().toString().trim();
         String pswTwoInput = finalPassword.getText().toString().trim();
 
-        if (pswInput.isEmpty()){
+        if (pswInput.isEmpty()) {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(!pswInput.matches(pswRegex)){
+        } else if (!pswInput.matches(pswRegex)) {
             Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(pswInput.length() < 10){
+        } else if (pswInput.length() < 10) {
             Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(pswTwoInput.isEmpty()){
+        } else if (pswTwoInput.isEmpty()) {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(!pswInput.equals(pswTwoInput)){
+        } else if (!pswInput.equals(pswTwoInput)) {
             Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
 
     }
 
-    public boolean validateUser(){
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+
+        // Check which radio button was clicked
+        switch (view.getId()) {
+            case R.id.radioMale:
+                if (checked)
+                    Toast.makeText(RegisterActivity.this, "Male is selected", Toast.LENGTH_SHORT).show();
+                radioFemale.setChecked(false);
+                radioOthers.setChecked(false);
+                userGender="male";
+                break;
+            case R.id.radioFemale:
+                if (checked) {
+                    Toast.makeText(RegisterActivity.this, "Female is selected", Toast.LENGTH_SHORT).show();
+                    radioMale.setChecked(false);
+                    radioOthers.setChecked(false);
+                    userGender="female";
+                }
+                break;
+            case R.id.radioOthers:
+                if (checked) {
+                    Toast.makeText(RegisterActivity.this, "Others is selected", Toast.LENGTH_SHORT).show();
+                    radioMale.setChecked(false);
+                    radioFemale.setChecked(false);
+                    userGender="others";
+                }
+                break;
+        }
+    }
+
+    public boolean validateUser() {
         String inputDOB = dateOfBirth.getText().toString().trim();
         String inputUsername = textName.getText().toString().trim();
         String emailInput = textEmail.getText().toString().trim();
@@ -231,7 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete()) {
-                    User user = new User(inputDOB, inputUsername, emailInput, pswInput, phoneInput, addInput,pswTwoInput);
+                    User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput,userGender);
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -247,7 +262,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-                } else{
+                } else {
                     Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
                 }
 
