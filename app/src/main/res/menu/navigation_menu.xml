@@ -26,9 +26,9 @@
     </item>
 
     <item
-        android:id="@+id/wishlist"
-        android:icon="@drawable/img"
-        android:title="Wishlist"
+        android:id="@+id/cart"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        android:title="Cart"
         app:showAsAction="ifRoom"
         android:iconTint="@color/colorPrimaryDark">
     </item>

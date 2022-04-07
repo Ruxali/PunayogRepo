@@ -58,9 +58,6 @@
 
                     </LinearLayout>
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="15dp" />
 
 
                     <RelativeLayout
@@ -100,14 +97,16 @@
                                 android:queryHint="Search Products" />
 
 
+
                         </LinearLayout>
+
 
                     </RelativeLayout>
 
+
                     <Space
                         android:layout_width="match_parent"
-                        android:layout_height="25dp" />
-
+                        android:layout_height="15dp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"

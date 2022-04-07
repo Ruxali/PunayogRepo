@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Build;
@@ -34,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     ChatFragment chatFragment = new ChatFragment();
-    WishlistFragment wishlistFragment = new WishlistFragment();
+    CartFragment cartFragment = new CartFragment();
+
+    NavigationView sideNavView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setBackground(null);
 
         listView = findViewById(R.id.productListView);
+
+        sideNavView = findViewById(R.id.sideNavView);
 
         statusBarColor();
 
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,chatFragment).commit();
                         return true;
 
-                    case R.id.wishlist:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,wishlistFragment).commit();
+                    case R.id.cart:
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, cartFragment).commit();
                         return true;
                 }
                 return false;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddClick(View view) {
         startActivity(new Intent(this, AddProductActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
+        overridePendingTransition(R.anim.slide_up, R.anim.stay);
     }
 
     @Override
