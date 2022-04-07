@@ -96,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    assert user != null;
                     if (user.isEmailVerified()) {
                         onLoginButtonClick();
                     } else {
@@ -134,9 +133,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick() {
-
-        startActivity(new Intent(this, VerificationActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);;
 
         Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
         startActivity(intent);
