@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <supports-screens
@@ -26,7 +28,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
-            android:name=".LoginActivity"
+            android:name=".ProductDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SuccessfulVerificationActivity"
             android:exported="false" />
         <activity
             android:name=".OtpSendActivity"
@@ -34,11 +42,11 @@
             tools:ignore="Instantiatable" />
         <activity
             android:name=".OtpVerifyActivity"
-            android:exported="false"
-            tools:ignore="Instantiatable,MissingClass" />
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,8 +54,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".AddProductActivity" />
-        <activity android:name=".ForgetPassword"/>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ForgetPassword" />
 
         <receiver
             android:name=".OTP_Receiver"
@@ -57,7 +65,6 @@
                 <action android:name="com.google.android.gas.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

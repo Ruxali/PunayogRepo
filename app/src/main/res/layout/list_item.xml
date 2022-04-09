@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="160dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".HomeFragment">
     
     
     <RelativeLayout
+        android:id="@+id/productRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_height="wrap_content">
       
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,7 +23,8 @@
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_weight="0.35"
-                android:src="@drawable/img"/>
+                android:src="@drawable/ic_baseline_person_24"
+                android:padding="5dp"/>
 
             <LinearLayout
                 android:layout_width="0dp"

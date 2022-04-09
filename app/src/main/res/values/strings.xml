@@ -36,6 +36,7 @@
     //Spinner
     <string name="categories_prompt">Choose a Category</string>
     <string-array name="categories_arrays">
+        <item>Choose a Category</item>
         <item>Accessories</item>
         <item>Apparels</item>
         <item>Books</item>
@@ -44,6 +45,7 @@
 
     <string name="subCategories_prompt">Choose the Sub-Category</string>
     <string-array name="subCategories_arrays">
+        <item>Choose the Sub-Category</item>
         <item>Accessories</item>
         <item>Apparels</item>
         <item>Books</item>

@@ -1,6 +1,5 @@
 package com.example.punayog;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -51,14 +50,8 @@ public class ForgetPassword extends AppCompatActivity {
                             Toast.makeText(ForgetPassword.this,"Something went wrong please try again",Toast.LENGTH_SHORT).show();
                         }
                     }
-
                 });
             }
         });
     }
-    public void onForgotPassword(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
-    }
-
 }

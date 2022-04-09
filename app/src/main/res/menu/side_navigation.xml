@@ -4,41 +4,18 @@
 
     <group android:checkableBehavior="single">
         <item
-
             android:id="@+id/accessories"
             android:icon="@drawable/accessories"
             android:title="Accessories >">
-            <menu>
 
-                <item
-                    android:id="@+id/bags"
-                    android:title="Bag" />
-                <item
-                    android:id="@+id/sunGlass"
-                    android:title="Sunglass" />
-                <item
-                    android:id="@+id/watches"
-                    android:title="Watch" />
-            </menu>
+
 
         </item>
-        
 
         <item
             android:id="@+id/clothes"
             android:icon="@drawable/clothes"
             android:title="Apparels >">
-            <menu>
-                <item
-                    android:id="@+id/men"
-                    android:title="Men" />
-                <item
-                    android:id="@+id/women"
-                    android:title="Women" />
-                <item
-                    android:id="@+id/child"
-                    android:title="Children" />
-            </menu>
 
         </item>
 
@@ -46,17 +23,6 @@
             android:id="@+id/books"
             android:icon="@drawable/books"
             android:title="Books >">
-            <menu>
-                <item
-                    android:id="@+id/fictional"
-                    android:title="Fictional" />
-                <item
-                    android:id="@+id/nonFictional"
-                    android:title="Non-Fictional" />
-                <item
-                    android:id="@+id/course"
-                    android:title="Course-Book" />
-            </menu>
 
         </item>
 
@@ -64,20 +30,11 @@
             android:id="@+id/electronics"
             android:icon="@drawable/electronics"
             android:title="Electronics >">
-            <menu>
-                <item
-                    android:id="@+id/mobile"
-                    android:title="Mobile" />
-                <item
-                    android:id="@+id/television"
-                    android:title="Television" />
-                <item
-                    android:id="@+id/kitchen"
-                    android:title="Microoven/Oven" />
-            </menu>
 
         </item>
     </group>
+
+
 
 
 </menu>

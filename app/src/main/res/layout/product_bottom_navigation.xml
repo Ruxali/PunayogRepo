@@ -1,0 +1,25 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navbar"
+            android:layout_width="match_parent"
+            android:layout_height="75.5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bottom_bar"
+            android:fitsSystemWindows="true"
+            android:paddingTop="14dp"
+            app:itemHorizontalTranslationEnabled="false"
+            app:itemIconTint="@drawable/add_button"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/product_list_bottom_navigation_menu">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</merge>
