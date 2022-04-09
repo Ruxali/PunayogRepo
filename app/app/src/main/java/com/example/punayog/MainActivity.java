@@ -1,12 +1,9 @@
 package com.example.punayog;
 
-import static com.example.punayog.R.id.sideNavView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
@@ -22,10 +19,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-//    private MenuItem ace,cloth,book,electronics;
 
     ListView listView;
 
@@ -57,30 +53,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //side navigation
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.sideNavView);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
 
         //fragments
-        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, homeFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,homeFragment).commit();
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+                switch (item.getItemId()){
                     case R.id.homeButton:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, homeFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,homeFragment).commit();
                         return true;
 
                     case R.id.profile:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, profileFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,profileFragment).commit();
                         return true;
 
                     case R.id.chat:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, chatFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container,chatFragment).commit();
                         return true;
 
                     case R.id.cart:
@@ -93,18 +89,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else super.onBackPressed();
-
-    }
-
-    public void statusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2, this.getTheme()));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    public void statusBarColor(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2,this.getTheme()));
+        }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
         }
     }
@@ -117,21 +105,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.side_navigation, menu);
         menuInflater.inflate(R.menu.navigation_menu,menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.accessories:
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return true;
-    }
+
 }

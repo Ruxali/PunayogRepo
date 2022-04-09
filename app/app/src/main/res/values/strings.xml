@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Punayog</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="skip">SKIP</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="new_member_register_now">New Member? Register Now!</string>
+    <string name="use_other_methods">Use Other Methods</string>
+    <string name="tc">I agree with all the <u>Terms and Conditions.</u></string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="OPTMessage">6 digit OTP has been sent to the provided email address.</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="explore" translatable="false">EXPLORE</string>
+
+    <string name="title_activity_hamburger">HamburgerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="all_products"><u>All Products</u></string>
+
+    <string name="reset_password">Reset Password</string>
+
+    <string name="post_your_ad"><u>POST YOUR AD!</u></string>
+
+    <string name="registerAccount"><u>CREATE YOUR ACCOUNT!</u></string>
+
+    //Spinner
+    <string name="categories_prompt">Choose a Category</string>
+    <string-array name="categories_arrays">
+        <item>Accessories</item>
+        <item>Apparels</item>
+        <item>Books</item>
+        <item>Electronics</item>
+    </string-array>
+
+    <string name="subCategories_prompt">Choose the Sub-Category</string>
+    <string name="datereg">\\d{4}-\\d{2}-\\d{2}</string>
+    <string-array name="subCategories_arrays">
+        <item>Accessories</item>
+        <item>Apparels</item>
+        <item>Books</item>
+        <item>Electronics</item>
+    </string-array>
+
+
+</resources>
