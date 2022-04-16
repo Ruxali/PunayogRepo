@@ -213,14 +213,14 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Male is selected", Toast.LENGTH_SHORT).show();
                 radioFemale.setChecked(false);
                 radioOthers.setChecked(false);
-                userGender="male";
+                userGender = "male";
                 break;
             case R.id.radioFemale:
                 if (checked) {
                     Toast.makeText(RegisterActivity.this, "Female is selected", Toast.LENGTH_SHORT).show();
                     radioMale.setChecked(false);
                     radioOthers.setChecked(false);
-                    userGender="female";
+                    userGender = "female";
                 }
                 break;
             case R.id.radioOthers:
@@ -228,7 +228,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Others is selected", Toast.LENGTH_SHORT).show();
                     radioMale.setChecked(false);
                     radioFemale.setChecked(false);
-                    userGender="others";
+                    userGender = "others";
                 }
                 break;
         }
@@ -246,7 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete()) {
-                    User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput,userGender);
+                    User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput, userGender);
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -254,6 +254,10 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, UserProfile.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
 
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();

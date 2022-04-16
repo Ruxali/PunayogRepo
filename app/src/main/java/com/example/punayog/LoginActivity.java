@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,19 +11,21 @@ import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText textInputEmail;
     private EditText textInputPassword;
-    private Button loginButton,forgetPassword;
+    private Button loginButton, forgetPassword;
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
 
@@ -34,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         textInputPassword = findViewById(R.id.editTextPassword);
         textInputEmail = findViewById(R.id.editTextEmail);
         loginButton = findViewById(R.id.loginButton);
-        forgetPassword=findViewById(R.id.forgetPassword);
+        forgetPassword = findViewById(R.id.forgetPassword);
         mAuth = FirebaseAuth.getInstance();
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,22 +99,61 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                     if (user.isEmailVerified()) {
-                        onLoginButtonClick();
+                        Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
+                        //startActivity(new Intent(LoginActivity.this,UserProfile.class));
+                       // finish();
+
                     } else {
                         user.sendEmailVerification();
                         Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
+                        showAlertDialog();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Login is failed", Toast.LENGTH_SHORT).show();
-
-
+                    try {
+                        throw task.getException();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
 
         });
         return true;
+    }
+//if email is not verified
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("Email is not verified");
+        builder.setMessage("Please verify your email before signing inside the app");
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_APP_EMAIL);//launch in email
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//launch in new page
+                startActivity(intent);
+
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+//checking if user is already logged in
+    @Override
+    protected void onStart() {
+        if (mAuth.getCurrentUser() != null) {
+            Toast.makeText(this, "Your are already logged in", Toast.LENGTH_SHORT).show();
+           // startActivity(new Intent(LoginActivity.this,UserProfile.class));
+           // finish();
+        } else {
+            Toast.makeText(this, "You can log-in now", Toast.LENGTH_SHORT).show();
+        }
+
+        super.onStart();
     }
 
     public void statusBarColor() {
@@ -134,8 +176,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginButtonClick() {
 
-        Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
+//        startActivity(intent);
+
 
     }
 

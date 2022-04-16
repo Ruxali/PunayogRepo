@@ -37,7 +37,6 @@
                     android:src="@drawable/logo" />
 
 
-
             </RelativeLayout>
 
             <LinearLayout
@@ -62,140 +61,166 @@
                 android:weightSum="1">
 
 
-            <TextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/post_your_ad"
-                    android:textSize="30sp"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="@color/primaryTextColor"
                     android:layout_gravity="end"
+                    android:layout_marginLeft="15dp"
                     android:layout_weight="0.75"
-                    android:textStyle="italic"/>
+                    android:text="@string/post_your_ad"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="30sp"
+                    android:textStyle="italic" />
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputProductName"
-                style="@style/parent"
-                android:layout_marginTop="@dimen/loginViewsMargin">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:padding="16dp">
 
-                <EditText
-                    android:id="@+id/editTextProductName"
+                <Button
+                    android:id="@+id/button_choose_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/whiteTextColor"
+                    android:text="Choose file"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="15sp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_file_name"
                     style="@style/modifiedEditText"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:hint="Enter Product Name"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="140dp"
+                    android:hint=" Product name"
                     android:textColorHint="@color/colorPrimaryDark"
                     android:textSize="20sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <ImageView
+                    android:id="@+id/image_view_picture"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_below="@id/edit_text_file_name"
+                    android:layout_marginTop="16dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textPrice"
-                style="@style/parent"
-                android:layout_marginTop="@dimen/loginViewsMargin">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                <EditText
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editTextPrice"
                     style="@style/modifiedEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_view_picture"
+                    android:layout_marginTop="5dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:hint="Price"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:textColorHint="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_below="@id/editTextPrice"
+                    android:layout_marginTop="@dimen/loginViewsMargin"
+                    android:entries="@array/Categories_arrays"
+                    android:prompt="@string/Categories_prompt" />
 
-            <Spinner
-                android:id="@+id/spinnerCategory"
-                android:layout_marginTop="@dimen/loginViewsMargin"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:entries="@array/categories_arrays"
-                android:prompt="@string/categories_prompt" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <Spinner
-                android:id="@+id/spinnerSubCategory"
-                android:layout_marginTop="@dimen/loginViewsMargin"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:entries="@array/subCategories_arrays"
-                android:prompt="@string/subCategories_prompt" />
+                <Spinner
+                    android:id="@+id/spinnerSubCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_below="@id/spinnerCategory"
+                    android:layout_marginTop="@dimen/loginViewsMargin"
+                    android:entries="@array/subCategories_arrays"
+                    android:prompt="@string/subCategories_prompt" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputShortDesc"
-                style="@style/parent"
-                android:layout_marginTop="@dimen/loginViewsMargin">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editTextShortDesc"
                     style="@style/modifiedEditText"
+                    android:layout_below="@id/spinnerSubCategory"
+                    android:layout_marginTop="26dp"
                     android:backgroundTint="@color/colorPrimary"
-                    android:hint="Short Description About Product"
-                    android:inputType="text"
+                    android:hint="Product Short Description"
+                    android:inputType="textMultiLine"
                     android:maxLines="2"
                     android:textColorHint="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textLongDesc"
-                style="@style/parent"
-                android:layout_marginTop="@dimen/loginViewsMargin">
-
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editTextLongDesc"
                     style="@style/modifiedEditText"
+                    android:layout_below="@id/editTextShortDesc"
+                    android:layout_marginTop="39dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:hint="Specifications of Product"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:maxLines="15"
                     android:textColorHint="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textLocation"
-                style="@style/parent"
-                android:layout_marginTop="@dimen/loginViewsMargin">
-
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editTextLocation"
                     style="@style/modifiedEditText"
+                    android:layout_below="@id/editTextLongDesc"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginBottom="10dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:hint="Location"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColorHint="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/postButton"
-                style="@style/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="50dp"
-                android:text="POST"
-                android:textSize="20sp"
-                tools:ignore="UsingOnClickInXml" />
-
-
-
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_upload_file"
+                    style="@style/loginButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editTextLongDesc"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="80dp"
+                    android:backgroundTint="@color/whiteTextColor"
+                    android:text="Upload File"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="15sp" />
+            </RelativeLayout>
         </LinearLayout>
-
-
     </ScrollView>
-
-
-
-
 </RelativeLayout>

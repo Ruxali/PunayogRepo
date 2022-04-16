@@ -34,9 +34,9 @@
     <string name="registerAccount"><u>CREATE YOUR ACCOUNT!</u></string>
 
     //Spinner
-    <string name="categories_prompt">Choose a Category</string>
-    <string-array name="categories_arrays">
-        <item>Choose a Category</item>
+    <string name="Categories_prompt">Choose the Category</string>
+    <string-array name="Categories_arrays">
+        <item>Choose the Category</item>
         <item>Accessories</item>
         <item>Apparels</item>
         <item>Books</item>

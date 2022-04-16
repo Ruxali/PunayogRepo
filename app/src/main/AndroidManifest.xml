@@ -28,6 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -42,7 +45,7 @@
             tools:ignore="Instantiatable" />
         <activity
             android:name=".OtpVerifyActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".AddProductActivity"
             android:exported="true"
@@ -54,7 +57,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".UserProfile" />
         <activity android:name=".ForgetPassword" />
 
         <receiver
