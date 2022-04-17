@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
-            android:name=".LoginActivity"
+            android:name=".AddProductActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -47,7 +47,7 @@
             android:name=".OtpVerifyActivity"
             android:exported="false" />
         <activity
-            android:name=".AddProductActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>

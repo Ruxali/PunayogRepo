@@ -88,21 +88,12 @@
                     android:textColor="@color/darkTextColor"
                     android:textSize="15sp" />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_text_file_name"
-                    style="@style/modifiedEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="140dp"
-                    android:hint=" Product name"
-                    android:textColorHint="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/image_view_picture"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
-                    android:layout_below="@id/edit_text_file_name"
+                    android:layout_below="@id/button_choose_image"
                     android:layout_marginTop="16dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY" />
@@ -111,12 +102,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-
-
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_file_name"
+                    style="@style/modifiedEditText"
+                    android:layout_marginTop="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_below="@id/image_view_picture"
+                    android:hint=" Product name"
+                    android:textColorHint="@color/colorPrimaryDark"
+                    android:textSize="20sp" />
 
 
                 <androidx.appcompat.widget.AppCompatEditText
@@ -124,8 +125,8 @@
                     style="@style/modifiedEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/image_view_picture"
-                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/edit_text_file_name"
+                    android:layout_marginTop="15dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:hint="Price"
                     android:inputType="numberDecimal"
@@ -216,9 +217,9 @@
                     android:layout_below="@id/editTextLongDesc"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="80dp"
-                    android:backgroundTint="@color/whiteTextColor"
+                    android:backgroundTint="@color/primaryTextColor"
                     android:text="Upload File"
-                    android:textColor="@color/darkTextColor"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="15sp" />
             </RelativeLayout>
         </LinearLayout>
