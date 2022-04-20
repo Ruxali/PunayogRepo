@@ -10,16 +10,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
+import com.example.punayog.adapter.CustomExpandableListAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -35,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProfileFragment profileFragment = new ProfileFragment();
     ChatFragment chatFragment = new ChatFragment();
     CartFragment cartFragment = new CartFragment();
+
+    ExpandableListView expandableListView;
+    private String[] items;
+    private ExpandableListAdapter adapter;
+    private List<String> lstTitle;
+    private Map<String,List<String>> lstChild;
 
 
     @Override
@@ -59,9 +73,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        expandableListView = findViewById(R.id.navList);
+        initItems();
+
+        View listHeaderView = getLayoutInflater().inflate(R.layout.header,null,false);
+        expandableListView.addHeaderView(listHeaderView);
+
+        genData();
+
+        addDrawersItem();
+        setUpDrawer();
 
         //fragments
         getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, homeFragment).commit();
@@ -92,6 +113,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
+    private void setUpDrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            public void onDrawerOpened (View drawerView){
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("");
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerClosed (View drawerView){
+                super.onDrawerClosed(drawerView);
+                getSupportActionBar().setTitle("");
+                invalidateOptionsMenu();
+            }
+        };
+        toggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.setDrawerListener(toggle);
+    }
+
+    private void addDrawersItem() {
+        adapter = new CustomExpandableListAdapter(this,lstTitle,lstChild);
+        expandableListView.setAdapter(adapter);
+    }
+
+    private void genData() {
+        List<String> title = Arrays.asList("Accessories","Apparels","Books","Electronics");
+        List<String> childItem=Arrays.asList("Bags","Sunglasses","Shoes","Watches");
+        List<String> childItem2=Arrays.asList("Men","Women","Children","Unisex");
+        List<String> childItem3=Arrays.asList("Course","Fiction","Fantasy","Non-Fiction");
+        List<String> childItem4=Arrays.asList("Mobile Phones","Laptop","Microwave","Television");
+
+
+        lstChild = new TreeMap<>();
+        lstChild.put(title.get(0),childItem);
+        lstChild.put(title.get(1),childItem2);
+        lstChild.put(title.get(2),childItem3);
+        lstChild.put(title.get(3),childItem4);
+
+        lstTitle = new ArrayList<>(lstChild.keySet());
+    }
+
+    private void initItems() {
+        items = new String[]{"Accessories", "Apparels", "Books", "Electronics"};
+    }
 
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
