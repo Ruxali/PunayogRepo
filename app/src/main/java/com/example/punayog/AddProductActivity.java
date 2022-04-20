@@ -1,79 +1,112 @@
 package com.example.punayog;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.ContentResolver;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 
-public class AddProductActivity extends AppCompatActivity {
-    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile;
+public class AddProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private static final int PICK_IMAGES_CODE = 0;
     private Spinner spinnerCategory, spinnerSubCategory;
-    private FirebaseDatabase database;
-    private DatabaseReference reference;
-    private String record;
-    private Product product;
-    private int maxid = 0;
-    private String names[] = {"Accessories", "Apparels", "Books", "Electronics"};
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private Button mButtonChooseImage, mButtonUpload;
-    private ImageView mImageView;
-    private Uri ImageUri;
+    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile;
+    private ImageSwitcher imageSwitcher;
+    private ArrayList<Uri> imageUris;
+    private Button previousBtn, nextBtn, choseBtn, mButtonUpload;
+    private int position = 0;
+    private FirebaseDatabase firebaseDatabase;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private StorageTask mUploadTask;
+    private Uri imageUri;
+    private int uploads;
+    private String item;
+    private String[] category = {"Choose a category", "Accessories", "Apparels", "Books", "Electronics"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         statusBarColor();
+        imageUris = new ArrayList<>();//inti list
+        mEdittextFile = findViewById(R.id.edit_text_file_name);
         editTextPrice = findViewById(R.id.editTextPrice);
         editTextLongDesc = findViewById(R.id.editTextLongDesc);
         editTextShortText = findViewById(R.id.editTextShortDesc);
         editTextLocation = findViewById(R.id.editTextLocation);
         spinnerCategory = findViewById(R.id.spinnerCategory);
         spinnerSubCategory = findViewById(R.id.spinnerSubCategory);
-        mImageView = findViewById(R.id.image_view_picture);
+        imageSwitcher = findViewById(R.id.image_view_picture);
+        choseBtn = findViewById(R.id.button_choose_image);
+        previousBtn = findViewById(R.id.previous);
+        nextBtn = findViewById(R.id.next);
         mButtonUpload = findViewById(R.id.button_upload_file);
-        mButtonChooseImage = findViewById(R.id.button_choose_image);
-        mEdittextFile = findViewById(R.id.edit_text_file_name);
-        product = new Product();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
-        reference = database.getInstance().getReference("uploads").child("Spinner");
-        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+        spinnerCategory.setOnItemSelectedListener(this);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, category);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(arrayAdapter);
+        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                ImageView imageView = new ImageView(getApplicationContext());
+                return imageView;
+            }
+        });
+        previousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFileChooser();
+                if (position > 0) {
+                    position--;
+                    imageSwitcher.setImageURI(imageUris.get(position));
+                } else {
+                    Toast.makeText(AddProductActivity.this, "No previous image", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (position < imageUris.size() - 1) {
+                    position++;
+                    imageSwitcher.setImageURI(imageUris.get(position));
+                } else {
+                    Toast.makeText(AddProductActivity.this, "No more images", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        choseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickImageIntent();
             }
         });
         mButtonUpload.setOnClickListener(new View.OnClickListener() {
@@ -81,69 +114,91 @@ public class AddProductActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!validateProductName() || !validatePrice() || !validateLong() || !validateLocation() || !validateShort()) {
                     return;
-                }else{uploadFile();}
+                } else {
+                    uploadFile();
+                }
 
             }
         });
 
-
-    }
-
-    //for file extension
-    private String getFileExtension(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     private void uploadFile() {
-
-        if (ImageUri != null) {
-            StorageReference fileReference = storageReference.child("uploads" + System.currentTimeMillis() + "." + getFileExtension(ImageUri));
-            mUploadTask = fileReference.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        for (uploads = 0; uploads < imageUris.size(); uploads++) {
+            Uri Image = imageUris.get(uploads);
+            StorageReference fileReference = storageReference.child("uploads" + Image.getLastPathSegment());
+            mUploadTask = fileReference.putFile(Image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> downloadUri = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-                    Upload upload = new Upload(editTextLocation.getText().toString().trim(),
-                            editTextLongDesc.getText().toString().trim(),
-                            editTextPrice.getText().toString().trim(),
+
+                    Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+
+                    Upload upload = new Upload(
                             mEdittextFile.getText().toString().trim(),
-                            editTextShortText.getText().toString().trim()
-                            ,downloadUri.toString());
+                            editTextPrice.getText().toString().trim(),
+                            editTextShortText.getText().toString().trim(),
+                            editTextLongDesc.getText().toString().trim(),
+                            editTextLocation.getText().toString().trim(),
+                            spinnerCategory.getSelectedItem().toString());
+                    upload.setmImageUrl(downloadUri.toString());
                     String uploadId = databaseReference.push().getKey();
                     databaseReference.child(uploadId).setValue(upload);
                     Toast.makeText(AddProductActivity.this, "Image is uploaded successfully", Toast.LENGTH_SHORT).show();
-
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddProductActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
                 }
             });
-        } else {
-            Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void openFileChooser() {
-        Intent i = new Intent();
-        i.setType("image/*");
-        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        i.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(i, PICK_IMAGE_REQUEST);
 
     }
 
+    private void pickImageIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), PICK_IMAGES_CODE);
+    }
+
+    //for choosing multiple images at a time
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PICK_IMAGES_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.getClipData() != null) {
+                    //picked multiple images
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        imageUri = data.getClipData().getItemAt(i).getUri();
+                        imageUris.add(imageUri);
+                    }
+                    //set 1st image to imageSwitcher
+                    imageSwitcher.setImageURI(imageUris.get(0));
+                    position = 0;
+                } else {
+                    Uri imageUri = data.getData();
+                    imageUris.add(imageUri);
+                }
+                //set  image to imageSwitcher
+                imageSwitcher.setImageURI(imageUris.get(0));
+                position = 0;
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            ImageUri = data.getData();
-            Picasso.get().load(ImageUri).fit().centerCrop().into(mImageView);
+    }
+
+    public void statusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2, this.getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
         }
     }
 
+    //validating text,price,decs
     private boolean validateProductName() {
         String inputProductName = mEdittextFile.getText().toString().trim();
         if (inputProductName.isEmpty()) {
@@ -198,22 +253,21 @@ public class AddProductActivity extends AppCompatActivity {
         }
     }
 
-
-    public void statusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2, this.getTheme()));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
+    //for spinner item selection
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        item = spinnerCategory.getSelectedItem().toString();
+        if(item=="Choose a category"){
+            Toast.makeText(AddProductActivity.this,"Please select a category",Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void onPostClick(View view) {
-        product.setSpinnerCat(spinnerCategory.getSelectedItem().toString());
-        reference.child(String.valueOf(maxid + 1)).setValue(product);
+else{
+        }
 
     }
 
-    private void onPostClick() {
-        startActivity(new Intent(AddProductActivity.this, MainActivity.class));
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
+
 }

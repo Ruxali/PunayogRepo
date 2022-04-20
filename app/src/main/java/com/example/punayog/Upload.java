@@ -1,7 +1,7 @@
 package com.example.punayog;
 
 public class Upload {
-    private String mImageUrl,productName,price,shortDesc,longDesc,location;
+    private String mImageUrl,productName,price,shortDesc,longDesc,location,category;
     Upload(){}
 
     public String getmImageUrl() {
@@ -52,14 +52,14 @@ public class Upload {
         this.location = location;
     }
 
-    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location)
+    public Upload( String productName, String price, String shortDesc, String longDesc, String location,String category)
     {
-        this.mImageUrl=mImageUrl;
         this.productName=productName;
         this.price=price;
         this.shortDesc=shortDesc;
         this.longDesc=longDesc;
         this.location=location;
+        this.category=category;
     }
 
 
