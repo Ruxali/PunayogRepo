@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -53,5 +54,13 @@ public class ForgetPassword extends AppCompatActivity {
                 });
             }
         });
+        statusBarColor();
+    }
+    public void statusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2, this.getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
+        }
     }
 }

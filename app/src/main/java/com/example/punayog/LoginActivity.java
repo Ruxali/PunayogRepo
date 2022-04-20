@@ -102,8 +102,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (user.isEmailVerified()) {
                         Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
-                        //startActivity(new Intent(LoginActivity.this,UserProfile.class));
-                       // finish();
+                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        finish();
 
                     } else {
                         user.sendEmailVerification();
@@ -143,18 +143,18 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.show();
     }
 //checking if user is already logged in
-    @Override
-    protected void onStart() {
-        if (mAuth.getCurrentUser() != null) {
-            Toast.makeText(this, "Your are already logged in", Toast.LENGTH_SHORT).show();
-           // startActivity(new Intent(LoginActivity.this,UserProfile.class));
-           // finish();
-        } else {
-            Toast.makeText(this, "You can log-in now", Toast.LENGTH_SHORT).show();
-        }
-
-        super.onStart();
-    }
+//    @Override
+//    protected void onStart() {
+//        if (mAuth.getCurrentUser() != null) {
+////            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+//           // startActivity(new Intent(LoginActivity.this,UserProfile.class));
+//           // finish();
+//        } else {
+//            Toast.makeText(this, "You can log-in now", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        super.onStart();
+//    }
 
     public void statusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -176,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginButtonClick() {
 
-//        Intent intent = new Intent(LoginActivity.this, OtpSendActivity.class);
+//       Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //        startActivity(intent);
 
 
