@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -125,34 +128,55 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
     private void uploadFile() {
         for (uploads = 0; uploads < imageUris.size(); uploads++) {
-            Uri Image = imageUris.get(uploads);
-            StorageReference fileReference = storageReference.child("uploads" + Image.getLastPathSegment());
-            mUploadTask = fileReference.putFile(Image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            Uri image = imageUris.get(uploads);
+            Log.i("last path segment", image.getLastPathSegment());
+            StorageReference fileReference = storageReference.child("uploads" + image.getLastPathSegment());
+            mUploadTask = (StorageTask) fileReference.putFile(image)
+                    .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
-
-                    Upload upload = new Upload(
-                            mEdittextFile.getText().toString().trim(),
-                            editTextPrice.getText().toString().trim(),
-                            editTextShortText.getText().toString().trim(),
-                            editTextLongDesc.getText().toString().trim(),
-                            editTextLocation.getText().toString().trim(),
-                            spinnerCategory.getSelectedItem().toString());
-                    upload.setmImageUrl(downloadUri.toString());
-                    String uploadId = databaseReference.push().getKey();
-                    databaseReference.child(uploadId).setValue(upload);
-                    Toast.makeText(AddProductActivity.this, "Image is uploaded successfully", Toast.LENGTH_SHORT).show();
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    return fileReference.getDownloadUrl();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        Log.d("Download uri",downloadUri.getPath());
+                    } else {
+                        Toast.makeText(AddProductActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
-        }
+//
 
+
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                    Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+//
+//                    Upload upload = new Upload(
+//                            mEdittextFile.getText().toString().trim(),
+//                            editTextPrice.getText().toString().trim(),
+//                            editTextShortText.getText().toString().trim(),
+//                            editTextLongDesc.getText().toString().trim(),
+//                            editTextLocation.getText().toString().trim(),
+//                            spinnerCategory.getSelectedItem().toString());
+//                    upload.setmImageUrl(downloadUri.toString());
+//                    String uploadId = databaseReference.push().getKey();
+//                    databaseReference.child(uploadId).setValue(upload);
+//                    Toast.makeText(AddProductActivity.this, "Image is uploaded successfully", Toast.LENGTH_SHORT).show();
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+        }
+//
     }
 
     private void pickImageIntent() {

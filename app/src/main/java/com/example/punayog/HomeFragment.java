@@ -1,78 +1,144 @@
 package com.example.punayog;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.ProductAdapter;
 import com.example.punayog.model.Product;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
 public class HomeFragment extends Fragment {
 
-    private ArrayList<Product> productArrayList;
     private ProductAdapter adapter;
 
     private RecyclerView recyclerView;
+
+    //Firebase
+    private DatabaseReference myRef;
+
+    //variables
+    private ArrayList<Product> productArrayList;
+    private Context context;
+    private ProductAdapter productAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_home,container,false);
 
         recyclerView = rootView.findViewById(R.id.productRecyclerView);
-        loadData();
 
-        adapter = new ProductAdapter(productArrayList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-//
-//
-//        recyclerView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                productDetails();
-//            }
-//        });
+        recyclerView.setHasFixedSize(true);
+
+
+        //firebase
+        myRef = FirebaseDatabase.getInstance().getReference();
+
+
+        clearAll();
+
+        GetDataFromFirebase();
 
         return rootView;
     }
 
-//    private void productDetails() {
-//        Intent i = new Intent(getActivity().getBaseContext(),
-//                ProductDetailsActivity.class);
-//        getActivity().startActivity(i);
-//    }
-
-    private void loadData() {
+    private void GetDataFromFirebase() {
         productArrayList = new ArrayList<>();
 
-        Product product = new Product("https://www.xda-developers.com/files/2022/02/Samsung-Galaxy-S22-Ultra-Both-Devices-Snapdragon-Exynos.jpg","Samsung Galaxy S22 Ultra 12/576","Rs.1,00,000","Used for 1 month","Sunakothi");
-        productArrayList.add(product);
+        Query query = myRef.child("uploads");
 
-        product = new Product("https://images.samsung.com/uk/smartphones/galaxy-s22/buy/02_carousel/01_group/s22_carousel_groupkv_mo.jpg","Samsung Galaxy S22 Ultra 12/576","Rs.1,00,000","Used for 1 month","Sunakothi");
-        productArrayList.add(product);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Product product = new Product();
 
-        product = new Product("https://www.xda-developers.com/files/2022/02/Samsung-Galaxy-S22-Ultra-Both-Devices-Snapdragon-Exynos.jpg","Samsung Galaxy S22 Ultra 12/576","Rs.1,00,000","Used for 1 month","Sunakothi");
-        productArrayList.add(product);
+                    product.setmImageUrl(snapshot.child("mImageUrl").getValue().toString());
+                    product.setProductName(snapshot.child("productName").getValue().toString());
+                    product.setPrice(snapshot.child("price").getValue().toString());
+                    product.setLocation(snapshot.child("location").getValue().toString());
+                    product.setLongDesc(snapshot.child("longDesc").getValue().toString());
+                    product.setShortDesc(snapshot.child("shortDesc").getValue().toString());
 
-        product = new Product("https://images.samsung.com/uk/smartphones/galaxy-s22/buy/02_carousel/01_group/s22_carousel_groupkv_mo.jpg","Samsung Galaxy S22 Ultra 12/576","Rs.1,00,000","Used for 1 month","Sunakothi");
-        productArrayList.add(product);
+                    productArrayList.add(product);
 
-        product = new Product("https://www.xda-developers.com/files/2022/02/Samsung-Galaxy-S22-Ultra-Both-Devices-Snapdragon-Exynos.jpg","Samsung Galaxy S22 Ultra 12/576","Rs.1,00,000","Used for 1 month","Sunakothi");
-        productArrayList.add(product);
+                }
 
-        product = new Product("https://images.samsung.com/uk/smartphones/galaxy-s22/buy/02_carousel/01_group/s22_carousel_groupkv_mo.jpg","Samsung Galaxy S22 Ultra 12/576","Rs.1,00,000","Used for 1 month","Sunakothi");
-        productArrayList.add(product);
+                productAdapter = new ProductAdapter(context,productArrayList);
+                recyclerView.setAdapter(productAdapter);
+                productAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
+    private void getDateFromFirebase(){
+        Query query = myRef.child("uploads");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Product product = new Product();
+
+                    product.setmImageUrl(snapshot.child("mImageUrl").getValue().toString());
+                    product.setProductName(snapshot.child("productName").getValue().toString());
+                    product.setPrice(snapshot.child("price").getValue().toString());
+                    product.setLocation(snapshot.child("location").getValue().toString());
+                    product.setLongDesc(snapshot.child("longDesc").getValue().toString());
+                    product.setShortDesc(snapshot.child("shortDesc").getValue().toString());
+
+                    productArrayList.add(product);
+
+                }
+
+                productAdapter = new ProductAdapter(context,productArrayList);
+                recyclerView.setAdapter(productAdapter);
+                productAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        getDateFromFirebase();
+        super.onResume();
+    }
+
+    private void clearAll(){
+        if(productArrayList!=null){
+            productArrayList.clear();
+
+            if(productAdapter !=null){
+                productAdapter.notifyDataSetChanged();
+            }
+        }
+        productArrayList = new ArrayList<>();
+    }
 }

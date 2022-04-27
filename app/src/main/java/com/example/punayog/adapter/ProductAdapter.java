@@ -1,6 +1,7 @@
 package com.example.punayog.adapter;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.punayog.AddProductActivity;
 import com.example.punayog.ProductDetailsActivity;
 import com.example.punayog.R;
@@ -22,14 +24,13 @@ import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
-
+    private Context context;
     private ArrayList<Product> productArrayList;
 
-
-    public ProductAdapter(ArrayList<Product> productArrayList) {
+    public ProductAdapter(Context context, ArrayList<Product> productArrayList) {
+        this.context = context;
         this.productArrayList = productArrayList;
     }
-
 
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -45,10 +46,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         //setting value
         productViewHolder.productName.setText(product.getProductName());
-        productViewHolder.productPrice.setText(product.getProductPrice());
-        productViewHolder.productShortDesc.setText(product.getProductShortDesc());
-        productViewHolder.productLocation.setText(product.getProductLocation());
-        Picasso.get().load(product.getProductImage()).into(productViewHolder.productImage);
+        productViewHolder.productPrice.setText(product.getPrice());
+        productViewHolder.productShortDesc.setText(product.getShortDesc());
+        productViewHolder.productLocation.setText(product.getLocation());
+        Picasso.get().load(product.getmImageUrl()).into(productViewHolder.productImage);
+        System.out.println("URL is:" + product.getmImageUrl());
 
         productViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
