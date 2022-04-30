@@ -151,6 +151,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                                     spinnerCategory.getSelectedItem().toString());
                             upload.setmImageUrl(downloadUri.toString());
                             String uploadId = databaseReference.push().getKey();
+                            assert uploadId != null;
                             databaseReference.child(uploadId).setValue(upload);
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("Link", String.valueOf((uri)));
