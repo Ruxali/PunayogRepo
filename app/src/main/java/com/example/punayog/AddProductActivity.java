@@ -34,6 +34,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AddProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int PICK_IMAGES_CODE = 0;
@@ -130,53 +131,44 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         for (uploads = 0; uploads < imageUris.size(); uploads++) {
             Uri image = imageUris.get(uploads);
             Log.i("last path segment", image.getLastPathSegment());
-            StorageReference fileReference = storageReference.child("uploads" + image.getLastPathSegment());
-            mUploadTask = (StorageTask) fileReference.putFile(image)
-                    .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads" + image.getLastPathSegment());
+            mUploadTask = (StorageTask) fileReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    return fileReference.getDownloadUrl();
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+                    downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("uploads");
+                            Upload upload = new Upload(
+                                    mEdittextFile.getText().toString().trim(),
+                                    editTextPrice.getText().toString().trim(),
+                                    editTextShortText.getText().toString().trim(),
+                                    editTextLongDesc.getText().toString().trim(),
+                                    editTextLocation.getText().toString().trim(),
+                                    spinnerCategory.getSelectedItem().toString());
+                            upload.setmImageUrl(downloadUri.toString());
+                            String uploadId = databaseReference.push().getKey();
+                            assert uploadId != null;
+                            databaseReference.child(uploadId).setValue(upload);
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("Link", String.valueOf((uri)));
+                            databaseReference.push().setValue(hashMap);
+                            Toast.makeText(AddProductActivity.this, "Image is uploaded successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
                 }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            }).addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        Log.d("Download uri",downloadUri.getPath());
-                    } else {
-                        Toast.makeText(AddProductActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    }
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
                 }
             });
-//
-
-
-//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                    Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
-//
-//                    Upload upload = new Upload(
-//                            mEdittextFile.getText().toString().trim(),
-//                            editTextPrice.getText().toString().trim(),
-//                            editTextShortText.getText().toString().trim(),
-//                            editTextLongDesc.getText().toString().trim(),
-//                            editTextLocation.getText().toString().trim(),
-//                            spinnerCategory.getSelectedItem().toString());
-//                    upload.setmImageUrl(downloadUri.toString());
-//                    String uploadId = databaseReference.push().getKey();
-//                    databaseReference.child(uploadId).setValue(upload);
-//                    Toast.makeText(AddProductActivity.this, "Image is uploaded successfully", Toast.LENGTH_SHORT).show();
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
-//                }
-//            });
         }
-//
     }
 
     private void pickImageIntent() {
@@ -281,10 +273,9 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         item = spinnerCategory.getSelectedItem().toString();
-        if(item=="Choose a category"){
-            Toast.makeText(AddProductActivity.this,"Please select a category",Toast.LENGTH_SHORT).show();
-        }
-else{
+        if (item == "Choose a category") {
+            Toast.makeText(AddProductActivity.this, "Please select a category", Toast.LENGTH_SHORT).show();
+        } else {
         }
 
     }
