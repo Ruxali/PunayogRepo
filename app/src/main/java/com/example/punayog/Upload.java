@@ -1,14 +1,41 @@
 package com.example.punayog;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Upload {
-    private String mImageUrl,productName,price,shortDesc,longDesc,location,category;
+    private Array mImageUrl[];
+    private String productName;
+    private String price;
+    private String shortDesc;
+    private String longDesc;
+    private String location;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    private String subCategory;
     Upload(){}
 
-    public String getmImageUrl() {
+    public Array[] getmImageUrl() {
         return mImageUrl;
     }
 
-    public void setmImageUrl(String mImageUrl) {
+    public void setmImageUrl(Array[] mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
 
@@ -52,7 +79,7 @@ public class Upload {
         this.location = location;
     }
 
-    public Upload( String productName, String price, String shortDesc, String longDesc, String location,String category)
+    public Upload( String productName, String price, String shortDesc, String longDesc, String location,String category, String subCategory)
     {
         this.productName=productName;
         this.price=price;
@@ -60,6 +87,7 @@ public class Upload {
         this.longDesc=longDesc;
         this.location=location;
         this.category=category;
+        this.subCategory = subCategory;
     }
 
 

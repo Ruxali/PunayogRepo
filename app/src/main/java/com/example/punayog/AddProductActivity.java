@@ -54,6 +54,11 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private String item;
     private String[] category = {"Choose a category", "Accessories", "Apparels", "Books", "Electronics"};
 
+    private String[] subCategory1 = {"Choose a sub category", "Bags", "Shoes", "Sunglasses", "Watches"};
+    private String[] subCategory2 = {"Choose a sub category", "Children", "Men", "Unisex", "Women"};
+    private String[] subCategory3 = {"Choose a sub category", "Course", "Fantasy", "Fiction", "Non-Fiction"};
+    private String[] subCategory4 = {"Choose a sub category", "Laptop", "Microwave", "Mobile Phones", "Television"};
+
     private ProgressDialog progressDialog;
 
     @Override
@@ -80,10 +85,43 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
         progressDialog = new ProgressDialog(this);
 
-        spinnerCategory.setOnItemSelectedListener(this);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, category);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, category);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(arrayAdapter);
+
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String itemSelect = category[position];
+                if(position == 1){
+                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory1);
+                    arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSubCategory.setAdapter(arrayAdapter1);
+                }
+                if(position == 2){
+                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory2);
+                    arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSubCategory.setAdapter(arrayAdapter2);
+                }
+                if(position == 3){
+                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory3);
+                    arrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSubCategory.setAdapter(arrayAdapter3);
+                }
+                if(position == 4){
+                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory4);
+                    arrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSubCategory.setAdapter(arrayAdapter4);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
 
 
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
@@ -152,6 +190,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
                     Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
                     downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+
                         @Override
                         public void onSuccess(Uri uri) {
 
@@ -162,8 +201,10 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                                     editTextShortText.getText().toString().trim(),
                                     editTextLongDesc.getText().toString().trim(),
                                     editTextLocation.getText().toString().trim(),
-                                    spinnerCategory.getSelectedItem().toString());
-                            upload.setmImageUrl(String.valueOf((uri)));
+                                    spinnerCategory.getSelectedItem().toString().trim(),
+                                    spinnerSubCategory.getSelectedItem().toString().trim());
+
+                            upload.setmImageUrl(String.valueOf(uri));
                             String uploadId = databaseReference.push().getKey();
                             assert uploadId != null;
                             databaseReference.child(uploadId).setValue(upload);
@@ -182,12 +223,13 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddProductActivity.this, "Something is Wrong", Toast.LENGTH_SHORT).show();
                 }
             });
 
         }
     }
+
 
     private void pickImageIntent() {
         Intent intent = new Intent();
