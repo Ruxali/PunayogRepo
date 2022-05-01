@@ -14,5 +14,6 @@
     <color name="primaryTextColor">#1B2638</color>
     <color name="Aqua">#87bcbf</color>
     <color name="lightAqua_Item"> #D5E7E9 </color>
+    <color name="navigation">#E3E9EA</color>
 
 </resources>

@@ -193,7 +193,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void onCancelClick(View view) {
-
-    }
 }
