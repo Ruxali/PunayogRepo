@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="#E3E9EA">
+    android:background="#E3E9EA"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="All Categories"
-            android:textSize="30sp"
+            android:fontFamily="@font/bold"
+            android:textSize="35sp"
             android:textColor="@color/primaryTextColor"
             android:layout_marginLeft="10dp"
             android:layout_weight="0.85"/>
@@ -27,6 +29,7 @@
             android:layout_gravity="end"
             android:layout_height="40dp"
             android:src="@drawable/ic_baseline_clear_24"
+            android:onClick="onCancelClick"
             android:layout_weight="0.15"
             android:paddingTop="7dp"/>
 

@@ -70,12 +70,12 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Product product = new Product();
 
-                    product.setmImageUrl(snapshot.child("mImageUrl").getValue().toString());
-                    product.setProductName(snapshot.child("productName").getValue().toString());
-                    product.setPrice(snapshot.child("price").getValue().toString());
-                    product.setLocation(snapshot.child("location").getValue().toString());
-                    product.setLongDesc(snapshot.child("longDesc").getValue().toString());
-                    product.setShortDesc(snapshot.child("shortDesc").getValue().toString());
+                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
+                    product.setProductName((String) snapshot.child("productName").getValue());
+                    product.setPrice((String) snapshot.child("price").getValue());
+                    product.setLocation((String) snapshot.child("location").getValue());
+                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
+                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
 
                     productArrayList.add(product);
 
@@ -91,44 +91,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-    }
-
-    private void getDateFromFirebase(){
-        Query query = myRef.child("uploads");
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Product product = new Product();
-
-                    product.setmImageUrl(snapshot.child("mImageUrl").getValue().toString());
-                    product.setProductName(snapshot.child("productName").getValue().toString());
-                    product.setPrice(snapshot.child("price").getValue().toString());
-                    product.setLocation(snapshot.child("location").getValue().toString());
-                    product.setLongDesc(snapshot.child("longDesc").getValue().toString());
-                    product.setShortDesc(snapshot.child("shortDesc").getValue().toString());
-
-                    productArrayList.add(product);
-
-                }
-
-                productAdapter = new ProductAdapter(context,productArrayList);
-                recyclerView.setAdapter(productAdapter);
-                productAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        getDateFromFirebase();
-        super.onResume();
     }
 
     private void clearAll(){

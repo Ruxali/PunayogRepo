@@ -17,6 +17,7 @@
     <style name="viewParent">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/robotolight</item>
     </style>
 
     <style name="viewParent.headerText">
@@ -54,6 +55,7 @@
         <item name="android:textSize">@dimen/newsMoreTextSize</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:paddingLeft">5dp</item>
+        <item name="android:fontFamily">@font/robotolight</item>
     </style>
 
 </resources>

@@ -13,7 +13,7 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/sideNavView"
         android:layout_width="270dp"
-        android:paddingTop="63dp"
+        android:fitsSystemWindows="false"
         android:layout_height="match_parent"
         android:layout_gravity="start">
         <LinearLayout
@@ -107,7 +107,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="1.75"
-                                android:background="@drawable/background"
+                                android:background="@drawable/edit_text_style"
                                 android:iconifiedByDefault="false"
                                 android:padding="10dp"
                                 android:queryHint="Search Products" />

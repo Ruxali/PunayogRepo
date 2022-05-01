@@ -1,6 +1,7 @@
 package com.example.punayog;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -53,6 +54,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private String item;
     private String[] category = {"Choose a category", "Accessories", "Apparels", "Books", "Electronics"};
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +77,15 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         firebaseDatabase = FirebaseDatabase.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
+
+        progressDialog = new ProgressDialog(this);
+
         spinnerCategory.setOnItemSelectedListener(this);
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, category);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(arrayAdapter);
+
+
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -85,6 +93,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                 return imageView;
             }
         });
+
+
         previousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,10 +126,15 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         mButtonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateProductName() || !validatePrice() || !validateLong() || !validateLocation() || !validateShort()) {
-                    return;
-                } else {
+                if (validateProductName() || validatePrice() || validateLong() || validateLocation() || validateShort()) {
+                    progressDialog.setTitle("Uploading...");
+                    progressDialog.show();
                     uploadFile();
+
+
+                } else {
+                    return;
+
                 }
 
             }
@@ -130,7 +145,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private void uploadFile() {
         for (uploads = 0; uploads < imageUris.size(); uploads++) {
             Uri image = imageUris.get(uploads);
-            Log.i("last path segment", image.getLastPathSegment());
             StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads" + image.getLastPathSegment());
             mUploadTask = (StorageTask) fileReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -149,14 +163,17 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                                     editTextLongDesc.getText().toString().trim(),
                                     editTextLocation.getText().toString().trim(),
                                     spinnerCategory.getSelectedItem().toString());
-                            upload.setmImageUrl(downloadUri.toString());
+                            upload.setmImageUrl(String.valueOf((uri)));
                             String uploadId = databaseReference.push().getKey();
                             assert uploadId != null;
                             databaseReference.child(uploadId).setValue(upload);
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("Link", String.valueOf((uri)));
-                            databaseReference.push().setValue(hashMap);
-                            Toast.makeText(AddProductActivity.this, "Image is uploaded successfully", Toast.LENGTH_SHORT).show();
+//
+                            Toast.makeText(AddProductActivity.this, "Product Added Successfully", Toast.LENGTH_SHORT).show();
+
+                            progressDialog.dismiss();
+                            //intent
+                            Intent send = new Intent(AddProductActivity.this, MainActivity.class);
+                            startActivity(send);
                         }
                     });
 
@@ -168,6 +185,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                     Toast.makeText(AddProductActivity.this, "Please select a image", Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
     }
 
@@ -176,14 +194,13 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Images"), PICK_IMAGES_CODE);
+        startActivityForResult(intent, PICK_IMAGES_CODE);
     }
 
     //for choosing multiple images at a time
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PICK_IMAGES_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK ) {
                 if (data.getClipData() != null) {
                     //picked multiple images
                     int count = data.getClipData().getItemCount();
@@ -201,7 +218,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                 //set  image to imageSwitcher
                 imageSwitcher.setImageURI(imageUris.get(0));
                 position = 0;
-            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

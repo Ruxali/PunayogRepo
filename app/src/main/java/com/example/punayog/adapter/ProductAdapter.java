@@ -50,7 +50,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         productViewHolder.productShortDesc.setText(product.getShortDesc());
         productViewHolder.productLocation.setText(product.getLocation());
         Picasso.get().load(product.getmImageUrl()).into(productViewHolder.productImage);
-        System.out.println("URL is:" + product.getmImageUrl());
 
         productViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
