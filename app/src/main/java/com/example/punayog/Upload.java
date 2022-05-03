@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Upload {
-    private Array mImageUrl[];
+    private ArrayList<String> mImageUrl;
     private String productName;
     private String price;
     private String shortDesc;
@@ -31,11 +31,11 @@ public class Upload {
     private String subCategory;
     Upload(){}
 
-    public Array[] getmImageUrl() {
+    public ArrayList<String> getmImageUrl() {
         return mImageUrl;
     }
 
-    public void setmImageUrl(Array[] mImageUrl) {
+    public void setmImageUrl(ArrayList<String> mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
 

@@ -181,6 +181,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     }
 
     private void uploadFile() {
+       // local array banaune ani tesma value pathayera for loop bahira upload lai pathaune
+
         for (uploads = 0; uploads < imageUris.size(); uploads++) {
             Uri image = imageUris.get(uploads);
             StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads" + image.getLastPathSegment());
