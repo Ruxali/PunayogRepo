@@ -85,25 +85,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpDrawer();
 
         //fragments
-        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, homeFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.homeButton:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, homeFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
 
                     case R.id.profile:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, profileFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
                         return true;
 
                     case R.id.chat:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, chatFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
                         return true;
 
                     case R.id.cart:
-                        getSupportFragmentManager().beginTransaction().replace(androidx.navigation.ui.R.id.container, cartFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, cartFragment).commit();
                         return true;
                 }
                 return false;

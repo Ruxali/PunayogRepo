@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -32,6 +33,9 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton radioMale, radioFemale, radioOthers;
     private RadioGroup radioGrp;
     private CheckBox tcCheckBox;
+    private ProgressBar registerProgressBar;
+
+
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -56,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
         tcCheckBox = findViewById(R.id.tcCheckBox);
+        registerProgressBar = findViewById(R.id.registerProgressBar);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -247,6 +252,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete()) {
                     User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput, userGender);
+
+                    registerProgressBar.setVisibility(View.VISIBLE);
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -261,6 +268,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 finish();
 
                             } else {
+                                registerProgressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
 
                             }
@@ -293,6 +301,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onRegisterClick() {
+        startActivity(new Intent(this, LoginActivity.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
+    }
+
+    public void onBackClick(View view) {
         startActivity(new Intent(this, LoginActivity.class));
         overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
     }

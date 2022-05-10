@@ -48,7 +48,7 @@
 
     </LinearLayout>
 
-  <Space
+    <Space
         android:id="@+id/spacer"
         android:layout_width="match_parent"
         android:layout_height="15dp" />

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.punayog.AddProductActivity;
 import com.example.punayog.ProductDetailsActivity;
 import com.example.punayog.R;

@@ -28,6 +28,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
+<<<<<<< HEAD
+            android:name=".MainActivity"
+=======
+            android:name=".cart"
+>>>>>>> 6168d27a41d0a63635af0523ab5981a73b0e7315
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -35,16 +42,20 @@
             android:exported="false" />
         <activity
             android:name=".ProductDetailsActivity"
+<<<<<<< HEAD
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".OtpSendActivity"-->
-<!--            android:exported="false"-->
-<!--            tools:ignore="Instantiatable" />-->
+=======
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".OtpSendActivity" -->
+        <!-- android:exported="false" -->
+        <!-- tools:ignore="Instantiatable" /> -->
+>>>>>>> 6168d27a41d0a63635af0523ab5981a73b0e7315
         <activity
             android:name=".OtpVerifyActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashScreenActivity"
+            android:theme="@style/SplashTheme"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
