@@ -7,26 +7,23 @@
 
 
         <TextView
+            android:id="@+id/topic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="19dp"
-            android:text="@string/all_products"
+            android:fontFamily="@font/bold"
+            android:text="Recent Products"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp" />
 
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-
-<!--        <include layout="@layout/list_item" />-->
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/list_item" />
+            tools:listitem="@layout/list_item"
+            android:layout_below="@+id/topic"/>
 
 
 

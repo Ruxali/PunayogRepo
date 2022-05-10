@@ -139,10 +139,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void genData() {
         List<String> title = Arrays.asList("Accessories","Apparels","Books","Electronics");
-        List<String> childItem=Arrays.asList("Bags","Sunglasses","Shoes","Watches");
-        List<String> childItem2=Arrays.asList("Men","Women","Children","Unisex");
-        List<String> childItem3=Arrays.asList("Course","Fiction","Fantasy","Non-Fiction");
-        List<String> childItem4=Arrays.asList("Mobile Phones","Laptop","Microwave","Television");
+        List<String> childItem=Arrays.asList("Bags", "Shoes", "Sunglasses", "Watches");
+        List<String> childItem2=Arrays.asList("Children", "Men", "Unisex", "Women");
+        List<String> childItem3=Arrays.asList("Course", "Fantasy", "Fiction", "Non-Fiction");
+        List<String> childItem4=Arrays.asList("Laptop", "Microwave", "Mobile Phones", "Television");
 
 
         lstChild = new TreeMap<>();
@@ -193,7 +193,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void onCancelClick(View view) {
-
-    }
 }

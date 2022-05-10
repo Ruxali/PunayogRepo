@@ -14,10 +14,15 @@
     <color name="primaryTextColor">#1B2638</color>
     <color name="Aqua">#87bcbf</color>
     <color name="lightAqua_Item"> #D5E7E9 </color>
+<<<<<<< HEAD
     <color name="colorPrimary2">#008577</color>
     <color name="colorPrimaryDark2">#00574B</color>
     <color name="graylight">#BEBEBE</color>
     <color name="start_blue">#2F4F4F</color>
     <color name="endblue">#32CD32</color>
     <color name="colorAccent2" tools:ignore="DuplicateDefinition">#D81B60</color>
+=======
+    <color name="navigation">#E3E9EA</color>
+
+>>>>>>> f6bf2f0dd1bfaf614d47e9e36c550d82f4bb3c6e
 </resources>

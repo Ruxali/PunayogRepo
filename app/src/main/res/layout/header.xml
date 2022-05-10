@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="#E3E9EA"
+    android:background="@color/navigation"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -15,6 +15,7 @@
         <TextView
             android:id="@+id/allCategoriesTextView"
             android:layout_width="0dp"
+            android:gravity="center_vertical"
             android:layout_height="match_parent"
             android:text="All Categories"
             android:fontFamily="@font/bold"
@@ -23,15 +24,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="0.85"/>
 
-        <ImageView
-            android:id="@+id/clear"
-            android:layout_width="0dp"
-            android:layout_gravity="end"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_clear_24"
-            android:onClick="onCancelClick"
-            android:layout_weight="0.15"
-            android:paddingTop="7dp"/>
+
 
 
     </LinearLayout>
