@@ -28,6 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
+            android:name=".cart"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -35,11 +38,10 @@
             android:exported="false" />
         <activity
             android:name=".ProductDetailsActivity"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".OtpSendActivity"-->
-<!--            android:exported="false"-->
-<!--            tools:ignore="Instantiatable" />-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".OtpSendActivity" -->
+        <!-- android:exported="false" -->
+        <!-- tools:ignore="Instantiatable" /> -->
         <activity
             android:name=".OtpVerifyActivity"
             android:exported="false" />

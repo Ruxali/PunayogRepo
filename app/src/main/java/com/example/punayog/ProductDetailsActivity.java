@@ -32,7 +32,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         productBottomNavigationView.setBackground(null);
 
         //view pager
-        viewPager = findViewById(R.id.viewPager);
+        //viewPager = findViewById(R.id.viewPager);
 
         List<Integer> imageList = new ArrayList<>();
         imageList.add(R.drawable.accessories);
@@ -42,6 +42,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         ImageAdapter imageAdapter = new ImageAdapter(imageList);
         viewPager.setAdapter(imageAdapter);
+
 
     }
     public void statusBarColor() {
