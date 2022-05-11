@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.TextView;
+
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,8 +21,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.punayog.adapter.BannerAdapter;
 import com.example.punayog.adapter.HorizontalScrollAdapter;
 import com.example.punayog.adapter.ProductAdapter;
+
 import com.example.punayog.model.Banner;
 import com.example.punayog.model.HorizontalScrollModel;
+
+import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.Product;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,10 +44,11 @@ public class HomeFragment extends Fragment {
 
     private ProductAdapter adapter;
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,rv;
 
     //Firebase
-    private DatabaseReference myRef;
+    private DatabaseReference myRef, ref;
+    private ArrayList<SearchDeal>list;
 
     //variables
     private ArrayList<Product> productArrayList;
@@ -63,8 +70,8 @@ public class HomeFragment extends Fragment {
     //horizontal product
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_home,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = rootView.findViewById(R.id.productRecyclerView);
 
@@ -75,8 +82,7 @@ public class HomeFragment extends Fragment {
 
         //firebase
         myRef = FirebaseDatabase.getInstance().getReference();
-
-
+//        ref = FirebaseDatabase.getInstance().getReference().child("uploads");
         clearAll();
 
         GetDataFromFirebase();
@@ -207,6 +213,9 @@ public class HomeFragment extends Fragment {
     }
         //bannerslider
 
+    //for searching purpose
+
+
     private void GetDataFromFirebase() {
         productArrayList = new ArrayList<>();
 
@@ -215,7 +224,7 @@ public class HomeFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Product product = new Product();
 
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
@@ -229,7 +238,7 @@ public class HomeFragment extends Fragment {
 
                 }
 
-                productAdapter = new ProductAdapter(context,productArrayList);
+                productAdapter = new ProductAdapter(context, productArrayList);
                 recyclerView.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
             }
@@ -241,11 +250,11 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void clearAll(){
-        if(productArrayList!=null){
+    private void clearAll() {
+        if (productArrayList != null) {
             productArrayList.clear();
 
-            if(productAdapter !=null){
+            if (productAdapter != null) {
                 productAdapter.notifyDataSetChanged();
             }
         }

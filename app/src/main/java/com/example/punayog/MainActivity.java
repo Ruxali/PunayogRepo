@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,17 +22,27 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.punayog.adapter.CustomExpandableListAdapter;
+import com.example.punayog.adapter.SearchAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -56,10 +67,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String[] items;
     private ExpandableListAdapter adapter;
     private List<String> lstTitle;
+
     private Map<String,List<String>> lstChild;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
+    private Map<String, List<String>> lstChild;
+    private DatabaseReference ref;
+    private RecyclerView rv;
+    private ArrayList<SearchDeal> list;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +87,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView.setBackground(null);
 
         listView = findViewById(R.id.productListView);
-
-
+        //for searchitem
+        searchView = findViewById(R.id.searchView);
+        ref = FirebaseDatabase.getInstance().getReference().child("uploads");
+        rv = findViewById(R.id.searchRecyclerView);
         statusBarColor();
 
         //side navigation
@@ -86,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         expandableListView = findViewById(R.id.navList);
         initItems();
 
-        View listHeaderView = getLayoutInflater().inflate(R.layout.header,null,false);
+        View listHeaderView = getLayoutInflater().inflate(R.layout.header, null, false);
         expandableListView.addHeaderView(listHeaderView);
 
         genData();
@@ -156,17 +175,71 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    //for searching purpose
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ref != null) {
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        list = new ArrayList<>();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            list.add(ds.getValue(SearchDeal.class));
+                        }
+                        SearchAdapter adapter = new SearchAdapter(list);
+                        rv.setAdapter(adapter);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if(searchView!=null){
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    search(s);
+                    return true;
+                }
+            });
+        }
+        
+    }
+
+    private void search(String str) {
+        ArrayList<SearchDeal>myList=new ArrayList<>();
+        for(SearchDeal object:list){
+            if(object.getProductName().toLowerCase().contains(str.toLowerCase())){
+                myList.add(object);
+            }
+            SearchAdapter adapter=new SearchAdapter(myList);
+            rv.setAdapter(adapter);
+            
+        }
+    }
+
+
 
 
     private void setUpDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
-            public void onDrawerOpened (View drawerView){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getSupportActionBar().setTitle("");
                 invalidateOptionsMenu();
             }
 
-            public void onDrawerClosed (View drawerView){
+            public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getSupportActionBar().setTitle("");
                 invalidateOptionsMenu();
@@ -177,23 +250,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void addDrawersItem() {
-        adapter = new CustomExpandableListAdapter(this,lstTitle,lstChild);
+        adapter = new CustomExpandableListAdapter(this, lstTitle, lstChild);
         expandableListView.setAdapter(adapter);
     }
 
     private void genData() {
-        List<String> title = Arrays.asList("Accessories","Apparels","Books","Electronics");
-        List<String> childItem=Arrays.asList("Bags", "Shoes", "Sunglasses", "Watches");
-        List<String> childItem2=Arrays.asList("Children", "Men", "Unisex", "Women");
-        List<String> childItem3=Arrays.asList("Course", "Fantasy", "Fiction", "Non-Fiction");
-        List<String> childItem4=Arrays.asList("Laptop", "Microwave", "Mobile Phones", "Television");
+        List<String> title = Arrays.asList("Accessories", "Apparels", "Books", "Electronics");
+        List<String> childItem = Arrays.asList("Bags", "Shoes", "Sunglasses", "Watches");
+        List<String> childItem2 = Arrays.asList("Children", "Men", "Unisex", "Women");
+        List<String> childItem3 = Arrays.asList("Course", "Fantasy", "Fiction", "Non-Fiction");
+        List<String> childItem4 = Arrays.asList("Laptop", "Microwave", "Mobile Phones", "Television");
 
 
         lstChild = new TreeMap<>();
-        lstChild.put(title.get(0),childItem);
-        lstChild.put(title.get(1),childItem2);
-        lstChild.put(title.get(2),childItem3);
-        lstChild.put(title.get(3),childItem4);
+        lstChild.put(title.get(0), childItem);
+        lstChild.put(title.get(1), childItem2);
+        lstChild.put(title.get(2), childItem3);
+        lstChild.put(title.get(3), childItem4);
 
         lstTitle = new ArrayList<>(lstChild.keySet());
     }

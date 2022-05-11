@@ -27,6 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -35,10 +38,12 @@
         <activity
             android:name=".ProductDetailsActivity"
             android:exported="false" />
+
         <!--        <activity-->
         <!--            android:name=".OtpSendActivity"-->
         <!--            android:exported="false"-->
         <!--            tools:ignore="Instantiatable" />-->
+
         <activity
             android:name=".OtpVerifyActivity"
             android:exported="false" />
@@ -54,8 +59,8 @@
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/SplashTheme"
             android:exported="true"
+            android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,6 +68,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".ForgetPassword" />
 
 
         <receiver
