@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/total_price_cart_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:paddingEnd="30dp"
+        android:textColor="@color/darkTextColor"
+
+        android:textSize="20sp"
+
+        android:textStyle="bold"
+
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cart_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_price_cart_text_view"
+
+        android:layout_margin="10dp" />
+
+    <TextView
+        android:id="@+id/msg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cart_list_recycler_view"
+        android:layout_margin="15dp"
+        android:text="Congratulation your order has been placed succesfully soon you will reccive that at yoyr door steps"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+
+    <Button
+        android:id="@+id/next_cartList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:text="Proceed to next"
+
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>
