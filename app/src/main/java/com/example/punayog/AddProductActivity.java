@@ -225,7 +225,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddProductActivity.this, "Something is Wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddProductActivity.this, "Something is Wrong: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 

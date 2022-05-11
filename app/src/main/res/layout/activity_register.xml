@@ -60,8 +60,7 @@
                 android:textSize="30sp"
                 android:textColor="@color/primaryTextColor"
                 android:layout_gravity="center"
-                android:textStyle="italic"
-                android:fontFamily="@font/bold"/>
+                android:textStyle="italic"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputName"
@@ -258,17 +257,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="50dp"
-                android:text="REGISTER" />
+                android:text="REGISTER"
+                android:textSize="20sp"
+                tools:ignore="UsingOnClickInXml" />
 
             <ProgressBar
-                android:layout_marginTop="10dp"
                 android:id="@+id/registerProgressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progressTint="@color/primaryTextColor"
-                android:progressDrawable="@color/primaryTextColor" />
-
+                android:layout_marginTop="10dp"
+                android:progressDrawable="@color/primaryTextColor"
+                android:progressTint="#03040C"
+                android:visibility="invisible" />
 
             <TextView
                 style="@style/parent"
@@ -279,7 +280,6 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
 
         </LinearLayout>
 
@@ -301,7 +301,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
-        android:onClick="onBackClick"
+    android:onClick="onBackClick"
         android:src="@drawable/ic_back_img" />
 
 

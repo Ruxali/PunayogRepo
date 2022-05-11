@@ -19,8 +19,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,8 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton radioMale, radioFemale, radioOthers;
     private RadioGroup radioGrp;
     private CheckBox tcCheckBox;
-    private ProgressBar registerProgressBar;
-
 
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
@@ -60,18 +61,17 @@ public class RegisterActivity extends AppCompatActivity {
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
         tcCheckBox = findViewById(R.id.tcCheckBox);
-        registerProgressBar = findViewById(R.id.registerProgressBar);
 
         mAuth = FirebaseAuth.getInstance();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
-                        !validatePassword() || !validateTC() || !validateUser()) {
-                    return;
+                if (validateUserName() || validateDoB() || validateContact() || validateEmail() || validateLocation() ||
+                        validatePassword() || validateTC()) {
+                    validateUser();
                 } else {
-                    onRegisterClick();
+                    return;
                 }
             }
         });
@@ -79,12 +79,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private Boolean validateUserName() {
+    private boolean validateUserName() {
         String inputUsername = textName.getText().toString().trim();
         if (inputUsername.isEmpty()) {
             Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (textName.length() < 10) {
+        } else if (textName.length() < 6) {
             Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
             return false;
 
@@ -96,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean validateDoB() {
+    private boolean validateDoB() {
 
         String inputDOB = dateOfBirth.getText().toString().trim();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -131,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private Boolean validateTC() {
+    private boolean validateTC() {
 
         if (!tcCheckBox.isChecked()) {
             Toast.makeText(this, "Please Accept the Terms and Conditions", Toast.LENGTH_SHORT).show();
@@ -141,7 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean validateContact() {
+    private boolean validateContact() {
         String phoneInput = phoneNum.getText().toString().trim();
         if (phoneInput.isEmpty()) {
             Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
@@ -155,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean validateEmail() {
+    private boolean validateEmail() {
 
         String emailInput = textEmail.getText().toString().trim();
         if (emailInput.isEmpty()) {
@@ -170,10 +170,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean validateLocation() {
+    private boolean validateLocation() {
         String addInput = address.getText().toString().trim();
         if (addInput.isEmpty()) {
-            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please provide location", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -192,13 +192,13 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Password pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
         } else if (pswInput.length() < 10) {
-            Toast.makeText(this, "Password cannot be this short", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password cannot be less than 10 digits", Toast.LENGTH_SHORT).show();
             return false;
         } else if (pswTwoInput.isEmpty()) {
             Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             return false;
         } else if (!pswInput.equals(pswTwoInput)) {
-            Toast.makeText(this, "Passwords are not matched", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Passwords do not matched", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -239,7 +239,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public boolean validateUser() {
+    public void validateUser() {
         String inputDOB = dateOfBirth.getText().toString().trim();
         String inputUsername = textName.getText().toString().trim();
         String emailInput = textEmail.getText().toString().trim();
@@ -253,7 +253,6 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isComplete()) {
                     User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput, userGender);
 
-                    registerProgressBar.setVisibility(View.VISIBLE);
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -262,13 +261,12 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
                                 Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, UserProfile.class);
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
 
                             } else {
-                                registerProgressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
 
                             }
@@ -276,12 +274,11 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
-        return true;
     }
 
 

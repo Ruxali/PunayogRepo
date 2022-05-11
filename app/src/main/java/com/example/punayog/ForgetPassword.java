@@ -1,7 +1,9 @@
 package com.example.punayog;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,32 +28,31 @@ public class ForgetPassword extends AppCompatActivity {
         emailEditText=findViewById(R.id.editTextEmail);
         resetPassword=findViewById(R.id.resetButton);
         auth=FirebaseAuth.getInstance();
+
         resetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                forgetPassword();
-            }
-
-            private void forgetPassword() {
-                String email=emailEditText.getText().toString().trim();
+                String email=emailEditText.getText().toString();
                 if(email.isEmpty()){
                     Toast.makeText(ForgetPassword.this, "Email is empty", Toast.LENGTH_SHORT).show();
                 }
                 else if(!email.matches("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")){
                     Toast.makeText(ForgetPassword.this,"Pattern is not valid",Toast.LENGTH_SHORT).show();
-                }
+                }else{
                 auth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(ForgetPassword.this,"Check your email to reset your password",Toast.LENGTH_SHORT).show();
-
+                            startActivity(new Intent(ForgetPassword.this, LoginActivity.class));
+                            finish();
                         }
                         else{
                             Toast.makeText(ForgetPassword.this,"Something went wrong please try again",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+                }
             }
         });
         statusBarColor();
@@ -62,5 +63,10 @@ public class ForgetPassword extends AppCompatActivity {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.themeColor2));
         }
+    }
+
+    public void onBackClick(View view) {
+        startActivity(new Intent(this, LoginActivity.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
     }
 }

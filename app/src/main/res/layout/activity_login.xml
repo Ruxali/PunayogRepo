@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LoginActivity"
     android:background="@color/login_bk_color"
     android:focusableInTouchMode="true">
@@ -42,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="LOGIN TO PUNAYOG!"
+                android:text="@string/login_to_punayog"
                 android:textSize="30sp"
                 android:fontFamily="@font/bold"
                 android:gravity="center"
@@ -59,7 +60,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputEmail"
                     style="@style/parent"
-                    android:layout_marginTop="50dp">
+                    android:layout_marginTop="50dp"
+                    android:paddingEnd="10dp">
 
                     <EditText
                         android:id="@+id/editTextEmail"
@@ -75,8 +77,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputPassword"
+                    app:passwordToggleEnabled="true"
                     style="@style/parent"
-                    android:layout_marginTop="25dp">
+                    android:layout_marginTop="25dp"
+                    android:paddingEnd="10dp">
 
                     <EditText
                         android:id="@+id/editTextPassword"
@@ -128,10 +132,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="35dp"
-                    android:onClick="onLoginButtonClick"
                     android:text="@string/login"
-                    android:textSize="20sp"
-                    tools:ignore="OnClick" />
+                    android:textSize="20sp"/>
 
                 <ProgressBar
                     android:id="@+id/loginProgressBar"
@@ -175,7 +177,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
-        android:onClick="onAddClick"
+        android:onClick="onLoginClick"
         android:src="@drawable/ic_add_img" />
 
 </RelativeLayout>

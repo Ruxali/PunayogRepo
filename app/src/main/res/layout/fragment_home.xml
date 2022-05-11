@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/whiteTextColor">
 
 
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:id="@+id/bannerLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <include layout="@layout/sliding_add_layout"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:id="@+id/horizontalScrollLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bannerLinearLayout">
+                <include layout="@layout/horizontal_scroll_layout"/>
+        </LinearLayout>
+
         <TextView
+            android:layout_marginTop="15dp"
             android:id="@+id/topic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="19dp"
             android:fontFamily="@font/bold"
             android:text="Recent Products"
+            android:layout_below="@id/horizontalScrollLinearLayout"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp" />
-
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/list_item"
-            android:layout_below="@+id/topic"/>
+            android:layout_below="@+id/topic"
+            tools:listitem="@layout/list_item" />
+
 
 
 
