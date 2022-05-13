@@ -2,6 +2,7 @@ package com.example.punayog.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,15 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listTitle;
     private Map<String, List<String>> listItem;
+    private Bundle arguments;
+
+    public Bundle getArguments() {
+        return arguments;
+    }
+
+    public void setArguments(Bundle arguments) {
+        this.arguments = arguments;
+    }
 
     public CustomExpandableListAdapter(Context context, List<String> listTitle, Map<String, List<String>> listItem) {
         this.context = context;
@@ -32,7 +42,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        return listItem.size();
+        return this.listItem.get(this.listTitle.get(i)).size();
     }
 
     @Override

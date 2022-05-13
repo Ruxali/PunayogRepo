@@ -1,11 +1,14 @@
 package com.example.punayog;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +39,8 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference reference;
     private ArrayList<User> userArrayList;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +61,14 @@ public class ProfileFragment extends Fragment {
             showUserProfile();
         }
         return view;
+
+    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+        View rootView =  inflater.inflate(R.layout.fragment_profile,container,false);
+
+
+
+
+     return rootView;
 
     }
 

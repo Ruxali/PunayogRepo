@@ -40,9 +40,12 @@
             android:dividerHeight="0.5dp" />
     </com.google.android.material.navigation.NavigationView>
 
+    
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="50dp">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,8 +73,19 @@
                             android:layout_height="80dp"
                             android:layout_gravity="start"
                             android:layout_marginStart="5dp"
-                            android:layout_weight="2"
+                            android:layout_weight="1.8"
                             android:src="@drawable/logo" />
+
+                        <ImageButton
+                            android:id="@+id/logoutButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_weight="0.2"
+                            android:padding="10dp"
+                            android:layout_marginLeft="25dp"
+                            android:layout_gravity="end"
+                            android:background="@color/whiteTextColor"
+                            android:src="@drawable/ic_baseline_logout_24" />
 
                     </LinearLayout>
 
@@ -102,8 +116,20 @@
 
                             <include layout="@layout/activity_search"
                                 android:layout_weight="1.75"
+
                                 android:layout_height="50dp"
                                 android:layout_width="0dp"/>
+                                android:background="@drawable/edit_text_style"
+                                android:iconifiedByDefault="false"
+                                android:padding="10dp"
+                                android:queryHint="Search Products" />
+
+<!--                            <androidx.recyclerview.widget.RecyclerView-->
+<!--                                android:id="@+id/searchRecyclerView"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
+
                         </LinearLayout>
                     </RelativeLayout>
 
@@ -131,9 +157,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
 
     <include layout="@layout/activity_bottom_navigation" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

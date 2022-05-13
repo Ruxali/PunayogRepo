@@ -1,25 +1,23 @@
 package com.example.punayog;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import com.example.punayog.adapter.ImageAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
-
-    ViewPager viewPager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,18 +29,31 @@ public class ProductDetailsActivity extends AppCompatActivity {
         productBottomNavigationView = findViewById(R.id.productBottomNavigationView);
         productBottomNavigationView.setBackground(null);
 
-        //view pager
-        //viewPager = findViewById(R.id.viewPager);
+        productBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.call:
+                        String s = "tel:" + "1234567890";
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse(s));
+                        startActivity(intent);
 
-        List<Integer> imageList = new ArrayList<>();
-        imageList.add(R.drawable.accessories);
-        imageList.add(R.drawable.books);
-        imageList.add(R.drawable.accessories);
-        imageList.add(R.drawable.clothes);
+                        return true;
 
-        ImageAdapter imageAdapter = new ImageAdapter(imageList);
-        viewPager.setAdapter(imageAdapter);
+                    case R.id.email:
+                        Intent intent1 = new Intent(Intent.ACTION_SENDTO);
+                        String receipent = "abcd@gmail.com";
+                        String str = "mailto:";
 
+                        intent1.setData(Uri.parse(str));
+                        intent1.putExtra(Intent.EXTRA_EMAIL,new String[]{receipent});
+                        startActivity(intent1);
+                        return true;
+                }
+                return false;
+            }
+        });
 
     }
     public void statusBarColor() {

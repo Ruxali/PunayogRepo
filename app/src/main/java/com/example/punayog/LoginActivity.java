@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -24,6 +23,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -31,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText textInputPassword;
     private Button loginButton, forgetPassword;
     private CheckBox rememberMeCheckBox;
-    private ProgressBar loginProgressBar;
 
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -41,64 +42,72 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         statusBarColor();
-
         textInputPassword = findViewById(R.id.editTextPassword);
         textInputEmail = findViewById(R.id.editTextEmail);
         loginButton = findViewById(R.id.loginButton);
         forgetPassword = findViewById(R.id.forgetPassword);
         rememberMeCheckBox = findViewById(R.id.rememberMeCheckBox);
-        loginProgressBar = findViewById(R.id.loginProgressBar);
 
         mAuth = FirebaseAuth.getInstance();
 
-        //for remember me
-        SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-        String checkbox = sharedPreferences.getString("remember","");
-        if(checkbox.equals("true")){
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-            startActivity(intent);
-        }else if(checkbox.equals("false")){
-            return;
-        }
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateEmail() || !validatePassword() || !validateUser()) {
+                if (!validateEmail() || !validatePassword()) {
                     return;
                 } else {
-                    onLoginButtonClick();
+                    validateUser();
                 }
-
-                switch (view.getId()) {
-                    case R.id.forgetPassword:
-                        startActivity(new Intent(LoginActivity.this, ForgetPassword.class));
-                }
-
             }
         });
-
-        //for remember me
-        rememberMeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked()){
-                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("remember","true");
-                    editor.apply();
-                }else if(!compoundButton.isChecked()){
-                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("remember","false");
-                    editor.apply();
-                }
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,ForgetPassword.class));
+                finish();
             }
         });
-
+//        //for remember me
+//        SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
+//        String checkbox = sharedPreferences.getString("remember","");
+//        if(checkbox.equals("true")){
+//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//            finish();
+//        }else if(checkbox.equals("false")){
+//            Toast.makeText(LoginActivity.this,"Please login",Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//
+//        //for remember me
+//        rememberMeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if(compoundButton.isChecked()){
+//                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putString("remember", "true");
+//                    editor.apply();
+//                }else if(!compoundButton.isChecked()){
+//                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putString("remember", "false");
+//                    editor.apply();
+//                }
+//            }
+//        });
     }
 
-    private Boolean validateEmail() {
+    @Override
+    public void onBackPressed(){
+        finishAffinity();
+        System.exit(0);
+    }
+
+
+    private boolean validateEmail() {
 
         String emailInput = textInputEmail.getText().toString().trim();
         if (emailInput.isEmpty()) {
@@ -131,17 +140,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public boolean validateUser() {
+
+
+    public void validateUser() {
+
         String emailInput = textInputEmail.getText().toString().trim();
         String pswInput = textInputPassword.getText().toString().trim();
         mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
-                    loginProgressBar.setVisibility(View.VISIBLE);
-
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    FirebaseUser user = mAuth.getCurrentUser();
 
                     if (user.isEmailVerified()) {
                         Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
@@ -149,26 +158,20 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        loginProgressBar.setVisibility(View.INVISIBLE);
                         user.sendEmailVerification();
                         Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
                         mAuth.signOut();
                         showAlertDialog();
                     }
                 } else {
-                    try {
-                        throw task.getException();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    Toast.makeText(LoginActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
 
         });
-        return true;
     }
-//if email is not verified
+    //if email is not verified
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setTitle("Email is not verified");
@@ -208,7 +211,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void onAddClick(View view) {
+    public void onLoginClick(View view) {
         startActivity(new Intent(this, RegisterActivity.class));
         overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
     }
@@ -219,11 +222,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick() {
-
-//       Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
-
-
+       Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void onForgotPassword(View view) {
@@ -232,8 +232,4 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void onLoginClick(View view) {
-        startActivity(new Intent(this, RegisterActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
-    }
 }
