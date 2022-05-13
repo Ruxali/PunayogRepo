@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class ProfileFragment extends Fragment {
     TextView emailText;
     TextView genderText;
-    View userNameText;
+    TextView userNameText;
     TextView phoneText;
     TextView addressText;
     TextView textDoB;
@@ -62,15 +62,9 @@ public class ProfileFragment extends Fragment {
         }
         return view;
 
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_profile,container,false);
 
 
-
-
-     return rootView;
-
-    }
+}
 
     private void showUserProfile() {
         String userID = firebaseuser.getUid();
@@ -81,10 +75,10 @@ public class ProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot s:snapshot.getChildren()){
-                    userNameText = (View) s.child("inputUsername").getValue();
+                System.out.println(snapshot.getChildren());
+                String userName = snapshot.child("inputUsername").getValue(String.class);
+                userNameText.setText(userName);
 
-                }
 
             }
 
@@ -94,6 +88,4 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-
-}
+    }

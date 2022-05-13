@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
 
     //Firebase
 
-    private DatabaseReference myRef, ref;
+
 //    private ArrayList<SearchDeal>list;
     private DatabaseReference myRef;
     private ArrayList<SearchDeal>list;
@@ -172,6 +172,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    if(snapshot.child("subCategory").getValue(String.class) == ((MainActivity) getActivity()).getTitleLabel()){
+
                     HorizontalScrollModel horizontalScrollModel = new HorizontalScrollModel();
 
                     horizontalScrollModel.setProductImage((String) snapshot.child("mImageUrl").getValue());
@@ -181,6 +184,7 @@ public class HomeFragment extends Fragment {
 
                     horizontalScrollModelList.add(horizontalScrollModel);
 
+                }
                 }
 
                 horizontalScrollAdapter = new HorizontalScrollAdapter(context,horizontalScrollModelList);
