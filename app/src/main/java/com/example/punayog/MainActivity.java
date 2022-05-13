@@ -49,6 +49,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<String> lstTitle;
     private Map<String, List<String>> lstChild;
     private NavigationManager navigationManager;
+    private String titleLabel;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addDrawersItem();
         setUpDrawer();
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             selectFirstItemAsDefault();
         }
 
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                                editor.apply();
 //                                finish();
                                 auth.signOut();
-                                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             }
                         })
@@ -200,8 +202,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
     }
-
-
 
 
     //for searching purpose
@@ -260,12 +260,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //side navigation
 
     private void selectFirstItemAsDefault() {
-        if(navigationManager !=null){
+        if (navigationManager != null) {
             String firstItem = lstTitle.get(0);
             navigationManager.showFragment(firstItem);
             getSupportActionBar().setTitle(firstItem);
         }
     }
+
     private void setUpDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerOpened(View drawerView) {
@@ -303,21 +304,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
 
-                String selectedItem = ((List)(lstChild.get(lstTitle.get(groupPosition))))
+                String selectedItem = ((List) (lstChild.get(lstTitle.get(groupPosition))))
                         .get(childPosition).toString();
+                titleLabel = selectedItem;
+                System.out.println(titleLabel);
 
-                if(items[0].equals(lstTitle.get(groupPosition))){
+
+                if (items[0].equals(lstTitle.get(groupPosition))) {
                     navigationManager.showFragment(selectedItem);
-                }
-                else if(items[1].equals(lstTitle.get(groupPosition))){
+                } else if (items[1].equals(lstTitle.get(groupPosition))) {
                     navigationManager.showFragment(selectedItem);
-                }
-                else if(items[2].equals(lstTitle.get(groupPosition))){
+                } else if (items[2].equals(lstTitle.get(groupPosition))) {
                     navigationManager.showFragment(selectedItem);
-                }
-                else if(items[3].equals(lstTitle.get(groupPosition))){
+                } else if (items[3].equals(lstTitle.get(groupPosition))) {
                     navigationManager.showFragment(selectedItem);
-                }else{
+                } else {
                     throw new IllegalArgumentException();
                 }
 
@@ -327,7 +328,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-
+    public String getTitleLabel() {
+        return titleLabel;
+    }
 
     private void genData() {
         List<String> title = Arrays.asList("Accessories", "Apparels", "Books", "Electronics");
@@ -413,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if(mDrawerToggle.onOptionsItemSelected(item)){
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

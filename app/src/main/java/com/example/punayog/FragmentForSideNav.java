@@ -51,13 +51,17 @@ public class FragmentForSideNav extends Fragment {
     private Context context;
     private ProductAdapter productAdapter;
 
-public static String titleLabel;
+    private static TextView categoryTitle;
+
+    public static String titleLabel;
+
     public FragmentForSideNav() {
         // Required empty public constructor
     }
 
 
     public static FragmentForSideNav newInstance(String title) {
+        titleLabel = title;
 
         titleLabel = title;
 
@@ -65,6 +69,10 @@ public static String titleLabel;
         Bundle args = new Bundle();
         args.putString(KEY_TITLE, title);
         fragment.setArguments(args);
+
+        if(categoryTitle != null){
+            categoryTitle.setText(titleLabel);
+        }
 
         return fragment;
     }
@@ -107,8 +115,9 @@ public static String titleLabel;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //for setting category title
-        TextView categoryTitle = view.findViewById(R.id.categoryTitle);
+        categoryTitle = view.findViewById(R.id.categoryTitle);
         categoryTitle.setText(titleLabel);
+        System.out.println(titleLabel);
 
     }
 

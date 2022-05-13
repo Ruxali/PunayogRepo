@@ -26,7 +26,9 @@
             app:defaultQueryHint="Search Here..."
             android:padding="10dp"
             android:background="@drawable/edit_text_style"
-            app:iconifiedByDefault="false" />
+            app:iconifiedByDefault="false" 
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"/>
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
