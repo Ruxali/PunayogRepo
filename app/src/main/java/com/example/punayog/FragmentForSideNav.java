@@ -51,13 +51,15 @@ public class FragmentForSideNav extends Fragment {
     private Context context;
     private ProductAdapter productAdapter;
 
-
+public static String titleLabel;
     public FragmentForSideNav() {
         // Required empty public constructor
     }
 
 
     public static FragmentForSideNav newInstance(String title) {
+
+        titleLabel = title;
 
         FragmentForSideNav fragment = new FragmentForSideNav();
         Bundle args = new Bundle();
@@ -106,7 +108,7 @@ public class FragmentForSideNav extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //for setting category title
         TextView categoryTitle = view.findViewById(R.id.categoryTitle);
-
+        categoryTitle.setText(titleLabel);
 
     }
 

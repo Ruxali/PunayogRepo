@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ExpandableListAdapter adapter;
     private List<String> lstTitle;
     private Map<String, List<String>> lstChild;
-    private Map<String,List<String>> lstChild;
     private NavigationManager navigationManager;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();

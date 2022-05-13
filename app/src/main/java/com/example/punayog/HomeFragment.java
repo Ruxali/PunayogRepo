@@ -52,8 +52,6 @@ public class HomeFragment extends Fragment {
 
     //Firebase
 
-    private DatabaseReference myRef, ref;
-//    private ArrayList<SearchDeal>list;
     private DatabaseReference myRef;
     private ArrayList<SearchDeal>list;
 

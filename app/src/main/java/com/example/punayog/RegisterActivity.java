@@ -10,21 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.punayog.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +32,6 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton radioMale, radioFemale, radioOthers;
     private RadioGroup radioGrp;
     private CheckBox tcCheckBox;
-
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -71,15 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
                         !validatePassword() || !validateTC() || !validateUser()) {
                     return;
-                }
-                else {
-                    onRegisterClick();
-
-                if (validateUserName() || validateDoB() || validateContact() || validateEmail() || validateLocation() ||
-                        validatePassword() || validateTC()) {
-                    validateUser();
                 } else {
-                    return;
+                    onRegisterClick();
                 }
             }
         });
@@ -87,12 +74,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private boolean validateUserName() {
+    private Boolean validateUserName() {
         String inputUsername = textName.getText().toString().trim();
         if (inputUsername.isEmpty()) {
             Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (textName.length() < 6) {
+        } else if (textName.length() < 10) {
             Toast.makeText(this, "Name cannot be this short", Toast.LENGTH_SHORT).show();
             return false;
 
@@ -104,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateDoB() {
+    private Boolean validateDoB() {
 
         String inputDOB = dateOfBirth.getText().toString().trim();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -139,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private boolean validateTC() {
+    private Boolean validateTC() {
 
         if (!tcCheckBox.isChecked()) {
             Toast.makeText(this, "Please Accept the Terms and Conditions", Toast.LENGTH_SHORT).show();
@@ -149,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateContact() {
+    private Boolean validateContact() {
         String phoneInput = phoneNum.getText().toString().trim();
         if (phoneInput.isEmpty()) {
             Toast.makeText(this, "Phone-Number is required", Toast.LENGTH_SHORT).show();
@@ -163,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateEmail() {
+    private Boolean validateEmail() {
 
         String emailInput = textEmail.getText().toString().trim();
         if (emailInput.isEmpty()) {
@@ -176,13 +163,12 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             return true;
         }
-
     }
 
-    private boolean validateLocation() {
+    private Boolean validateLocation() {
         String addInput = address.getText().toString().trim();
         if (addInput.isEmpty()) {
-            Toast.makeText(this, "Please provide location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Address is required", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -248,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void validateUser() {
+    public boolean validateUser() {
         String inputDOB = dateOfBirth.getText().toString().trim();
         String inputUsername = textName.getText().toString().trim();
         String emailInput = textEmail.getText().toString().trim();
@@ -261,7 +247,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete()) {
                     User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput, userGender);
-
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -270,19 +255,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
                                 Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(getApplicationContext(), ProfileFragment.class);
-//                                intent.putExtra("name",inputUsername);
-//                                intent.putExtra("dob",inputDOB);
-//                                intent.putExtra("gender",userGender);
-//                                intent.putExtra("phone",phoneInput);
-//                                intent.putExtra("email",emailInput);
-//                                intent.putExtra("location",addInput);
-//                                startActivity(intent);
-//                                finish();
-
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-//                                Intent intent = new Intent(RegisterActivity.this, ProfileFragment.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
@@ -295,11 +268,12 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
+        return true;
     }
 
 
