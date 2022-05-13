@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
-    private Context context;
+private Context context;
     private ArrayList<Product> productArrayList;
 
     public ProductAdapter(Context context, ArrayList<Product> productArrayList) {
@@ -34,9 +34,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
         return new ProductViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(ProductViewHolder productViewHolder, int index) {

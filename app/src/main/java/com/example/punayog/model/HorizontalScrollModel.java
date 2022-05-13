@@ -2,23 +2,27 @@ package com.example.punayog.model;
 
 public class HorizontalScrollModel {
 
-    private int productImage;
+    private String productImage;
     private String productTitle;
     private String productShortDesc;
     private String productPrice;
 
-    public HorizontalScrollModel(int productImage, String productTitle, String productShortDesc, String productPrice) {
+    public HorizontalScrollModel(String productImage, String productTitle, String productShortDesc, String productPrice) {
         this.productImage = productImage;
         this.productTitle = productTitle;
         this.productShortDesc = productShortDesc;
         this.productPrice = productPrice;
     }
 
-    public int getProductImage() {
+    public HorizontalScrollModel() {
+
+    }
+
+    public String getProductImage() {
         return productImage;
     }
 
-    public void setProductImage(int productImage) {
+    public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 

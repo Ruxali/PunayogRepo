@@ -8,12 +8,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -42,12 +45,12 @@ import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
 
-    private ProductAdapter adapter;
 
-    private RecyclerView recyclerView,rv;
+    private RecyclerView recyclerView;
+    private ImageButton listImageButton, gridImageButoon;
 
     //Firebase
-    private DatabaseReference myRef, ref;
+    private DatabaseReference myRef;
     private ArrayList<SearchDeal>list;
 
     //variables
@@ -67,6 +70,8 @@ public class HomeFragment extends Fragment {
     //horizontal product
         private TextView horizontalLayoutTitle;
         private RecyclerView horizontalRecyclerView;
+        private ArrayList<HorizontalScrollModel> horizontalScrollModelList;
+        private HorizontalScrollAdapter horizontalScrollAdapter;
     //horizontal product
 
     @Override
@@ -75,6 +80,9 @@ public class HomeFragment extends Fragment {
 
         recyclerView = rootView.findViewById(R.id.productRecyclerView);
 
+        listImageButton = rootView.findViewById(R.id.listImageButton);
+        gridImageButoon = rootView.findViewById(R.id.gridImageButton);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -82,7 +90,7 @@ public class HomeFragment extends Fragment {
 
         //firebase
         myRef = FirebaseDatabase.getInstance().getReference();
-//        ref = FirebaseDatabase.getInstance().getReference().child("uploads");
+
         clearAll();
 
         GetDataFromFirebase();
@@ -153,23 +161,38 @@ public class HomeFragment extends Fragment {
          horizontalLayoutTitle = rootView.findViewById(R.id.horizontalScrollTitle);
          horizontalRecyclerView = rootView.findViewById(R.id.horizontalScrollRecyclerView);
 
-         List<HorizontalScrollModel> horizontalScrollModelList = new ArrayList<>();
-         horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_facebook,"Facebook","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.accessories,"ASDF","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_baseline_person_24,"Facebook","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_baseline_shopping_cart_24,"Facebook","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_baseline_home_24,"Facebook","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_baseline_login_24,"Facebook","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_baseline_call_24,"Facebook","Used for 3 months","Rs.5999"));
-        horizontalScrollModelList.add(new HorizontalScrollModel(R.drawable.ic_baseline_email,"Facebook","Used for 3 months","Rs.5999"));
+          horizontalScrollModelList = new ArrayList<>();
+            Query query = myRef.child("uploads").orderByChild("subCategory");
 
-         HorizontalScrollAdapter horizontalScrollAdapter = new HorizontalScrollAdapter(horizontalScrollModelList);
-         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext());
-         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-         horizontalRecyclerView.setLayoutManager(linearLayoutManager);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    HorizontalScrollModel horizontalScrollModel = new HorizontalScrollModel();
 
-         horizontalRecyclerView.setAdapter(horizontalScrollAdapter);
-         horizontalScrollAdapter.notifyDataSetChanged();
+                    horizontalScrollModel.setProductImage((String) snapshot.child("mImageUrl").getValue());
+                    horizontalScrollModel.setProductTitle((String) snapshot.child("productName").getValue());
+                    horizontalScrollModel.setProductPrice((String) snapshot.child("price").getValue());
+                    horizontalScrollModel.setProductShortDesc((String) snapshot.child("shortDesc").getValue());
+
+                    horizontalScrollModelList.add(horizontalScrollModel);
+
+                }
+
+                horizontalScrollAdapter = new HorizontalScrollAdapter(context,horizontalScrollModelList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                horizontalRecyclerView.setLayoutManager(linearLayoutManager);
+                horizontalRecyclerView.setAdapter(horizontalScrollAdapter);
+            }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+
+            });
+
 
         //horizontal Layout
 
@@ -216,6 +239,7 @@ public class HomeFragment extends Fragment {
     //for searching purpose
 
 
+    //for poducts
     private void GetDataFromFirebase() {
         productArrayList = new ArrayList<>();
 
@@ -239,6 +263,23 @@ public class HomeFragment extends Fragment {
                 }
 
                 productAdapter = new ProductAdapter(context, productArrayList);
+                listImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LinearLayoutManager linearLayoutManager;
+                        linearLayoutManager = new LinearLayoutManager(getContext());
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                    }
+                });
+
+                gridImageButoon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
+                        recyclerView.setLayoutManager(gridLayoutManager);
+                    }
+                });
+
                 recyclerView.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
             }

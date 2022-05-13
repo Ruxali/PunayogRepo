@@ -2,12 +2,14 @@ package com.example.punayog;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,24 +35,24 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class AddProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int PICK_IMAGES_CODE = 0;
     private Spinner spinnerCategory, spinnerSubCategory;
     private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile;
-    private ImageSwitcher imageSwitcher;
-    private ArrayList<Uri> imageUris;
-    private Button previousBtn, nextBtn, choseBtn, mButtonUpload;
+    private ImageView imageViewer;
+    private Button  choseBtn, mButtonUpload;
     private int position = 0;
     private FirebaseDatabase firebaseDatabase;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private StorageTask mUploadTask;
     private Uri imageUri;
-    private int uploads;
     private String item;
     private String[] category = {"Choose a category", "Accessories", "Apparels", "Books", "Electronics"};
 
@@ -66,7 +68,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         statusBarColor();
-        imageUris = new ArrayList<>();//inti list
+        
+        
         mEdittextFile = findViewById(R.id.edit_text_file_name);
         editTextPrice = findViewById(R.id.editTextPrice);
         editTextLongDesc = findViewById(R.id.editTextLongDesc);
@@ -74,11 +77,11 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         editTextLocation = findViewById(R.id.editTextLocation);
         spinnerCategory = findViewById(R.id.spinnerCategory);
         spinnerSubCategory = findViewById(R.id.spinnerSubCategory);
-        imageSwitcher = findViewById(R.id.image_view_picture);
+        imageViewer = findViewById(R.id.image_view_picture);
         choseBtn = findViewById(R.id.button_choose_image);
-        previousBtn = findViewById(R.id.previous);
-        nextBtn = findViewById(R.id.next);
         mButtonUpload = findViewById(R.id.button_upload_file);
+
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
@@ -123,38 +126,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
 
 
-
-        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                ImageView imageView = new ImageView(getApplicationContext());
-                return imageView;
-            }
-        });
-
-
-        previousBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (position > 0) {
-                    position--;
-                    imageSwitcher.setImageURI(imageUris.get(position));
-                } else {
-                    Toast.makeText(AddProductActivity.this, "No previous image", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (position < imageUris.size() - 1) {
-                    position++;
-                    imageSwitcher.setImageURI(imageUris.get(position));
-                } else {
-                    Toast.makeText(AddProductActivity.this, "No more images", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         choseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,13 +151,18 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
     }
 
+    private String getFileExtension(Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
     private void uploadFile() {
        // local array banaune ani tesma value pathayera for loop bahira upload lai pathaune
 
-        for (uploads = 0; uploads < imageUris.size(); uploads++) {
-            Uri image = imageUris.get(uploads);
-            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads" + image.getLastPathSegment());
-            mUploadTask = (StorageTask) fileReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            if(imageUri !=null){
+                StorageReference fileReference = storageReference.child(System.currentTimeMillis()+ "." + getFileExtension(imageUri));
+            mUploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
@@ -228,8 +204,9 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                     Toast.makeText(AddProductActivity.this, "Something is Wrong: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+            }
 
-        }
+
     }
 
 
@@ -244,24 +221,10 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     //for choosing multiple images at a time
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK ) {
-                if (data.getClipData() != null) {
-                    //picked multiple images
-                    int count = data.getClipData().getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        imageUri = data.getClipData().getItemAt(i).getUri();
-                        imageUris.add(imageUri);
-                    }
-                    //set 1st image to imageSwitcher
-                    imageSwitcher.setImageURI(imageUris.get(0));
-                    position = 0;
-                } else {
-                    Uri imageUri = data.getData();
-                    imageUris.add(imageUri);
-                }
-                //set  image to imageSwitcher
-                imageSwitcher.setImageURI(imageUris.get(0));
-                position = 0;
+        if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK  && data !=null &&  data.getData()!=null) {
+                imageUri = data.getData();
+
+            Picasso.get().load(imageUri).into(imageViewer);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

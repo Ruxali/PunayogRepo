@@ -23,7 +23,8 @@
             app:itemIconSize="25dp"
             app:itemTextColor="@color/primaryTextColor"
             app:itemIconTint="@color/primaryTextColor"
-            app:labelVisibilityMode="selected"/>
+            app:labelVisibilityMode="selected"
+            />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -27,9 +28,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -37,13 +35,10 @@
             android:exported="false" />
         <activity
             android:name=".ProductDetailsActivity"
-            android:exported="false" />
-
-        <!--        <activity-->
-        <!--            android:name=".OtpSendActivity"-->
-        <!--            android:exported="false"-->
-        <!--            tools:ignore="Instantiatable" />-->
-
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".OtpSendActivity" -->
+        <!-- android:exported="false" -->
+        <!-- tools:ignore="Instantiatable" /> -->
         <activity
             android:name=".OtpVerifyActivity"
             android:exported="false" />
@@ -53,7 +48,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ForgetPassword"
             android:exported="false" />
@@ -68,11 +63,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".ForgetPassword" />
-
 
         <receiver
             android:name=".OTP_Receiver"
