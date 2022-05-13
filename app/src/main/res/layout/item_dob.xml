@@ -31,13 +31,13 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:padding="3dp"
-                    android:src="@drawable/ic_baseline_email_24" />
+                    android:src="@drawable/ic_dob" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:text="Email"
+                    android:text="DOB"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
                     android:textStyle="bold|normal" />
@@ -56,11 +56,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/emailText"
+                    android:id="@+id/textDoB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:hint="ram@gmail.com"
+                    android:hint="2002-01-25"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="17sp"
                     android:textStyle="bold"

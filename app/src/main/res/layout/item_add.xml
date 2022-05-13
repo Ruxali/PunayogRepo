@@ -30,13 +30,13 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_person_24" />
+                    android:padding="3dp"
+                    android:src="@drawable/ic_baseline_person_pin_circle_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="3dp"
                     android:text="Address"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
@@ -50,24 +50,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="10dp"
-                android:padding="2dp"
-                android:src="@drawable/ic_baseline_home_24"
-                app:tint="@color/colorPrimaryDark" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/addressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Lubhoo,Lalitpur"
+                    android:hint="Lubhoo,Lalitpur"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="17sp"
                     android:textStyle="bold" />

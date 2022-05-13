@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.punayog.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -70,7 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
                         !validatePassword() || !validateTC() || !validateUser()) {
                     return;
-                } else {
+                }
+                else {
                     onRegisterClick();
                 }
             }
@@ -168,6 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             return true;
         }
+
     }
 
     private Boolean validateLocation() {
@@ -262,7 +265,15 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
                                 Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, ProfileFragment.class);
+                                Intent intent = new Intent(getApplicationContext(), ProfileFragment.class);
+//                                intent.putExtra("name",inputUsername);
+//                                intent.putExtra("dob",inputDOB);
+//                                intent.putExtra("gender",userGender);
+//                                intent.putExtra("phone",phoneInput);
+//                                intent.putExtra("email",emailInput);
+//                                intent.putExtra("location",addInput);
+//                                startActivity(intent);
+//                                finish();
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
