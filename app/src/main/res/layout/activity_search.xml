@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultQueryHint="Search Here..."
-            android:padding="10dp"
             android:background="@drawable/edit_text_style"
             app:iconifiedByDefault="false" 
             android:padding="10dp"

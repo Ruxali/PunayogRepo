@@ -16,10 +16,14 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -28,13 +32,13 @@ import android.widget.SearchView;
 
 import com.example.punayog.adapter.CustomExpandableListAdapter;
 
+import com.example.punayog.adapter.ProductAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.helper.FragmentNavigationManager;
 import com.example.punayog.interfaces.NavigationManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -91,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference ref;
     private RecyclerView rv;
     private ArrayList<SearchDeal> list;
-    private SearchView searchView;
+    //search
+    private EditText searchView;
+    private ProductAdapter productAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +109,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         listView = findViewById(R.id.productListView);
 
-        //for searchitem
-//        searchView = findViewById(R.id.searchView);
-//        ref = FirebaseDatabase.getInstance().getReference().child("uploads");
-//        rv = findViewById(R.id.searchRecyclerView);
+
+
 
 
         statusBarColor();

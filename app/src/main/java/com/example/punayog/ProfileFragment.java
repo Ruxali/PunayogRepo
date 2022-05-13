@@ -65,7 +65,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-}
 
     private void showUserProfile() {
         String userID = firebaseuser.getUid();
@@ -89,4 +88,5 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+}
     
