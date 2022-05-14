@@ -10,10 +10,7 @@ import android.view.ViewGroup;
 
 
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,9 +24,7 @@ import com.example.punayog.adapter.HorizontalScrollAdapter;
 import com.example.punayog.adapter.ProductAdapter;
 
 import com.example.punayog.model.Banner;
-import com.example.punayog.model.HorizontalScrollModel;
 
-import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.Product;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,7 +69,7 @@ public class HomeFragment extends Fragment {
     //horizontal product
         private TextView horizontalLayoutTitle;
         private RecyclerView horizontalRecyclerView;
-        private ArrayList<HorizontalScrollModel> horizontalScrollModelList;
+        private ArrayList<Product> horizontalScrollModelList;
         private HorizontalScrollAdapter horizontalScrollAdapter;
     //horizontal product
 
@@ -97,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         clearAll();
 
-        GetDataFromFirebase();
+        getDataFromFirebase();
 
 
         //banner slider
@@ -173,15 +168,18 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
+                    Product product = new Product();
 
-                    HorizontalScrollModel horizontalScrollModel = new HorizontalScrollModel();
+                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
+                    product.setProductName((String) snapshot.child("productName").getValue());
+                    product.setPrice((String) snapshot.child("price").getValue());
+                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
+                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
+                    product.setLocation((String) snapshot.child("location").getValue());
 
-                    horizontalScrollModel.setProductImage((String) snapshot.child("mImageUrl").getValue());
-                    horizontalScrollModel.setProductTitle((String) snapshot.child("productName").getValue());
-                    horizontalScrollModel.setProductPrice((String) snapshot.child("price").getValue());
-                    horizontalScrollModel.setProductShortDesc((String) snapshot.child("shortDesc").getValue());
+                    horizontalScrollModelList.add(product);
 
-                    horizontalScrollModelList.add(horizontalScrollModel);
                 }
 
                 horizontalScrollAdapter = new HorizontalScrollAdapter(context,horizontalScrollModelList);
@@ -245,7 +243,7 @@ public class HomeFragment extends Fragment {
 
 
     //for poducts
-    private void GetDataFromFirebase() {
+    private void getDataFromFirebase() {
         productArrayList = new ArrayList<>();
 
         Query query = myRef.child("uploads");
@@ -262,6 +260,7 @@ public class HomeFragment extends Fragment {
                     product.setLocation((String) snapshot.child("location").getValue());
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
 
                     productArrayList.add(product);
 
@@ -300,10 +299,7 @@ public class HomeFragment extends Fragment {
         if (productArrayList != null) {
             productArrayList.clear();
 
-            if (productAdapter != null) {
-                productAdapter.notifyDataSetChanged();
-            }
+
         }
-        productArrayList = new ArrayList<>();
     }
 }

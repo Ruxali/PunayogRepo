@@ -13,21 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.ProductDetailsActivity;
 import com.example.punayog.R;
-import com.example.punayog.model.HorizontalScrollModel;
+import com.example.punayog.model.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScrollAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<HorizontalScrollModel> horizontalScrollModelList;
+    private ArrayList<Product> productArrayList;
 
 
-    public HorizontalScrollAdapter(Context context, ArrayList<HorizontalScrollModel> horizontalScrollModelList) {
+    public HorizontalScrollAdapter(Context context, ArrayList<Product> productArrayList) {
         this.context = context;
-        this.horizontalScrollModelList = horizontalScrollModelList;
+        this.productArrayList = productArrayList;
     }
 
     public HorizontalScrollAdapter() {
@@ -44,17 +43,22 @@ public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScro
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        HorizontalScrollModel horizontalScrollModel = horizontalScrollModelList.get(position);
+        Product product = productArrayList.get(position);
 
-        Picasso.get().load(horizontalScrollModel.getProductImage()).into(holder.productImage);
-        holder.productTitle.setText(horizontalScrollModel.getProductTitle());
-        holder.productShortDesc.setText(horizontalScrollModel.getProductShortDesc());
-        holder.productPrice.setText(horizontalScrollModel.getProductPrice());
+        Picasso.get().load(product.getmImageUrl()).into(holder.productImage);
+        holder.productTitle.setText(product.getProductName());
+        holder.productShortDesc.setText(product.getShortDesc());
+        holder.productPrice.setText(product.getPrice());
+        holder.productLocation.setText(product.getLocation());
+        holder.productLongDesc.setText(product.getLongDesc());
+        holder.productSubCategory.setText(product.getSubCategory());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ProductDetailsActivity.class);
+                intent.putExtra("product",product);
                 view.getContext().startActivity(intent);
             }
         });
@@ -63,13 +67,13 @@ public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScro
 
     @Override
     public int getItemCount() {
-        return horizontalScrollModelList.size();
+        return productArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView productImage;
-        private TextView productTitle, productShortDesc,productPrice;
+        private TextView productTitle, productShortDesc,productPrice,productLocation,productLongDesc,productSubCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +82,9 @@ public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScro
             productTitle = itemView.findViewById(R.id.h_s_ProductTitle);
             productShortDesc = itemView.findViewById(R.id.h_s_productShortDesc);
             productPrice = itemView.findViewById(R.id.h_s_productPrice);
+            productLocation = itemView.findViewById(R.id.h_s_productLocation);
+            productLongDesc = itemView.findViewById(R.id.h_s_productLongDesc);
+            productSubCategory = itemView.findViewById(R.id.h_s_productSubCategory);
         }
 
     }

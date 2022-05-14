@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -40,16 +41,17 @@ public class FragmentForSideNav extends Fragment {
 
     public static final String KEY_TITLE = "Contents";
 
-    private RecyclerView recyclerView;
-    private ImageButton listImageButton, gridImageButton;
+    private static RecyclerView recyclerView;
+    private static ImageButton listImageButton;
+    private static ImageButton gridImageButton;
 
     //Firebase
-    private DatabaseReference myRef;
+    private static DatabaseReference myRef;
 
     //variables
-    private ArrayList<Product> productArrayList;
-    private Context context;
-    private ProductAdapter productAdapter;
+    private static ArrayList<Product> productArrayList;
+    private static Context context;
+    private static ProductAdapter productAdapter;
 
     private static TextView categoryTitle;
 
@@ -70,7 +72,9 @@ public class FragmentForSideNav extends Fragment {
 
         if(categoryTitle != null){
             categoryTitle.setText(titleLabel);
+            getDataFromFirebase(titleLabel);
         }
+
 
         return fragment;
     }
@@ -102,7 +106,6 @@ public class FragmentForSideNav extends Fragment {
 
         clearAll();
 
-        GetDataFromFirebase();
 
 
 
@@ -115,31 +118,32 @@ public class FragmentForSideNav extends Fragment {
         //for setting category title
         categoryTitle = view.findViewById(R.id.categoryTitle);
         categoryTitle.setText(titleLabel);
-        System.out.println(titleLabel);
 
     }
 
     //for products
-    private void GetDataFromFirebase() {
+    private static void getDataFromFirebase(String titleLabel) {
         productArrayList = new ArrayList<>();
 
         Query query = myRef.child("uploads");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.orderByChild("subCategory").equalTo(titleLabel).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    com.example.punayog.model.Product product = new Product();
 
-                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
-                    product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice((String) snapshot.child("price").getValue());
-                    product.setLocation((String) snapshot.child("location").getValue());
-                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
-                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                        Product product = new Product();
 
-                    productArrayList.add(product);
+                        product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
+                        product.setProductName(snapshot.child("productName").getValue(String.class));
+                        product.setPrice( snapshot.child("price").getValue(String.class));
+                        product.setLocation( snapshot.child("location").getValue(String.class));
+                        product.setLongDesc( snapshot.child("longDesc").getValue(String.class));
+                        product.setShortDesc( snapshot.child("shortDesc").getValue(String.class));
 
+                        productArrayList.add(product);
+
+//                    }
                 }
 
                 productAdapter = new ProductAdapter(context, productArrayList);
@@ -147,7 +151,7 @@ public class FragmentForSideNav extends Fragment {
                     @Override
                     public void onClick(View view) {
                         LinearLayoutManager linearLayoutManager;
-                        linearLayoutManager = new LinearLayoutManager(getContext());
+                        linearLayoutManager = new LinearLayoutManager(context.getApplicationContext());
                         recyclerView.setLayoutManager(linearLayoutManager);
                     }
                 });
@@ -155,7 +159,7 @@ public class FragmentForSideNav extends Fragment {
                 gridImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(context.getApplicationContext(),2);
                         recyclerView.setLayoutManager(gridLayoutManager);
                     }
                 });

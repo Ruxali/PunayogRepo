@@ -75,7 +75,10 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    //for fetching data of user from database
+    }
+
+
+
     private void showUserProfile() {
         String userID = firebaseuser.getUid();
         reference = FirebaseDatabase.getInstance().getReference();
@@ -108,5 +111,5 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
 }
+    

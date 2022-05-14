@@ -7,6 +7,8 @@ import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +23,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>  {
 
-private Context context;
-    private ArrayList<Product> productArrayList;
+    private Context context;
+    public ArrayList<Product> productArrayList;
+
 
     public ProductAdapter(Context context, ArrayList<Product> productArrayList) {
         this.context = context;
@@ -50,12 +53,16 @@ private Context context;
         productViewHolder.productPrice.setText(product.getPrice());
         productViewHolder.productShortDesc.setText(product.getShortDesc());
         productViewHolder.productLocation.setText(product.getLocation());
+        productViewHolder.productLongDesc.setText(product.getLongDesc());
+        productViewHolder.productSubCategory.setText(product.getSubCategory());
+
         Picasso.get().load(product.getmImageUrl()).into(productViewHolder.productImage);
 
         productViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ProductDetailsActivity.class);
+                intent.putExtra("product",product);
                 view.getContext().startActivity(intent);
             }
         });
@@ -69,12 +76,16 @@ private Context context;
     }
 
 
+
+
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         private ImageView productImage;
         private TextView productName;
         private TextView productPrice;
         private TextView productShortDesc;
         private TextView productLocation;
+        private TextView productLongDesc;
+        private TextView productSubCategory;
 
 
 
@@ -86,6 +97,8 @@ private Context context;
             productPrice = itemView.findViewById(R.id.productPrice);
             productShortDesc = itemView.findViewById(R.id.productShortDescription);
             productLocation = itemView.findViewById(R.id.productLocation);
+            productLongDesc = itemView.findViewById(R.id.productLongDesc);
+            productSubCategory = itemView.findViewById(R.id.productsubCategory);
         }
 
     }
