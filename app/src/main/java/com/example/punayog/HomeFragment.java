@@ -166,14 +166,13 @@ public class HomeFragment extends Fragment {
          horizontalRecyclerView = rootView.findViewById(R.id.horizontalScrollRecyclerView);
 
           horizontalScrollModelList = new ArrayList<>();
-            Query query = myRef.child("uploads").orderByChild("subCategory");
+            Query query = myRef.child("uploads");
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    if(snapshot.child("subCategory").getValue(String.class) == ((MainActivity) getActivity()).getTitleLabel()){
 
                     HorizontalScrollModel horizontalScrollModel = new HorizontalScrollModel();
 
@@ -183,8 +182,6 @@ public class HomeFragment extends Fragment {
                     horizontalScrollModel.setProductShortDesc((String) snapshot.child("shortDesc").getValue());
 
                     horizontalScrollModelList.add(horizontalScrollModel);
-
-                }
                 }
 
                 horizontalScrollAdapter = new HorizontalScrollAdapter(context,horizontalScrollModelList);

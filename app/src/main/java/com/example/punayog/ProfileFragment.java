@@ -1,10 +1,15 @@
 package com.example.punayog;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.punayog.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +33,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -33,13 +48,10 @@ public class ProfileFragment extends Fragment {
     TextView phoneText;
     TextView addressText;
     TextView textDoB;
-    private String email, password;
     private FirebaseAuth database;
     FirebaseUser firebaseuser;
     private DatabaseReference reference;
-    private ArrayList<User> userArrayList;
-
-
+    private ShapeableImageView shapeableImageView;
 
     @Nullable
     @Override
@@ -52,7 +64,7 @@ public class ProfileFragment extends Fragment {
         addressText = view.findViewById(R.id.addressText);
         textDoB = view.findViewById(R.id.textDoB);
         database = FirebaseAuth.getInstance();
-
+        shapeableImageView = view.findViewById(R.id.shapeableImageView2);
 
         firebaseuser = database.getCurrentUser();
         if (firebaseuser == null) {
@@ -61,24 +73,32 @@ public class ProfileFragment extends Fragment {
             showUserProfile();
         }
         return view;
+    }
 
-
-
-}
-
+    //for fetching data of user from database
     private void showUserProfile() {
         String userID = firebaseuser.getUid();
         reference = FirebaseDatabase.getInstance().getReference();
 
         Query query = reference.child("users").child(userID);
-        System.out.println(query);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println(snapshot.getChildren());
+//                String imageLink = snapshot.child("imageUri").getValue(String.class);
+//                System.out.println(imageLink);
+//                Picasso.get().load(imageLink).into(shapeableImageView);
                 String userName = snapshot.child("inputUsername").getValue(String.class);
                 userNameText.setText(userName);
-
+                String dob = snapshot.child("inputDOB").getValue(String.class);
+                textDoB.setText(dob);
+                String gender = snapshot.child("userGender").getValue(String.class);
+                genderText.setText(gender);
+                String phone = snapshot.child("phoneInput").getValue(String.class);
+                phoneText.setText(phone);
+                String email = snapshot.child("emailInput").getValue(String.class);
+                emailText.setText(email);
+                String location = snapshot.child("addInput").getValue(String.class);
+                addressText.setText(location);
 
             }
 
@@ -88,4 +108,5 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-    }
+
+}

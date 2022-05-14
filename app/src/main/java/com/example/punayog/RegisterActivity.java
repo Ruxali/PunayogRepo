@@ -3,9 +3,12 @@ package com.example.punayog;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +18,10 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -25,19 +31,29 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
 public class RegisterActivity extends AppCompatActivity {
     private EditText textName, dateOfBirth, phoneNum, textEmail, address, textPassword, finalPassword;
     private Button registerButton;
     private String userGender = "";
     private RadioButton radioMale, radioFemale, radioOthers;
-    private RadioGroup radioGrp;
     private CheckBox tcCheckBox;
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String numRegex = "^[+]?[0-9]{10,13}$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
-
+    private StorageReference storageReference;
+    private static final int PICK_IMAGES_CODE = 0;
+    private FloatingActionButton floatingActionButton;
+    private ShapeableImageView shapeableImageView;
+    private Uri imageUri;
+    private StorageTask mUploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +72,17 @@ public class RegisterActivity extends AppCompatActivity {
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
         tcCheckBox = findViewById(R.id.tcCheckBox);
-
+        floatingActionButton = findViewById(R.id.floatingActionButton);
+        shapeableImageView = findViewById(R.id.shapeableImageView);
         mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference("users");
+        reference = FirebaseDatabase.getInstance().getReference("users");
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickImageIntent();
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +99,25 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    //for opening the gallery
+    private void pickImageIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGES_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            Picasso.get().load(imageUri).into(shapeableImageView);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //for validation
     private Boolean validateUserName() {
         String inputUsername = textName.getText().toString().trim();
         if (inputUsername.isEmpty()) {
@@ -247,23 +291,35 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete()) {
                     User user = new User(inputUsername, inputDOB, emailInput, phoneInput, pswInput, pswTwoInput, addInput, userGender);
+                    StorageReference filepath = storageReference.child(System.currentTimeMillis() + ".");
                     FirebaseDatabase.getInstance().getReference("users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    mUploadTask = filepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+                            downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    reference = FirebaseDatabase.getInstance().getReference().child("users");
+                                    user.setImageUri(String.valueOf(uri));
+                                    String uploadId = reference.push().getKey();
+                                    assert uploadId != null;
+                                    reference.child(uploadId).setValue(user);
+                                    if (task.isSuccessful()) {
 
-                                Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
+                                        Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
 
-                            } else {
-                                Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
 
-                            }
+                                    }
+                                }
+                            });
                         }
                     });
 
@@ -273,6 +329,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+
         return true;
     }
 
