@@ -104,7 +104,17 @@ public class HomeFragment extends Fragment {
         bannerSliderViewPager = rootView.findViewById(R.id.bannerSliderViewPager);
         bannerList = new ArrayList<Banner>();
 
-        
+        bannerList.add(new Banner(R.drawable.banner4,"#FFFFFF"));
+        bannerList.add(new Banner(R.drawable.banner5,"#FFFFFF"));
+        bannerList.add(new Banner(R.drawable.banner,"#FFFFFF"));
+
+        bannerList.add(new Banner(R.drawable.banner2,"#FFFFFF"));
+        bannerList.add(new Banner(R.drawable.banner3,"#FFFFFF"));
+        bannerList.add(new Banner(R.drawable.banner4,"#FFFFFF"));
+
+        bannerList.add(new Banner(R.drawable.banner5,"#FFFFFF"));
+        bannerList.add(new Banner(R.drawable.banner,"#FFFFFF"));
+        bannerList.add(new Banner(R.drawable.banner2,"#FFFFFF"));
 
         BannerAdapter bannerAdapter = new BannerAdapter(bannerList);
         bannerSliderViewPager.setAdapter(bannerAdapter);

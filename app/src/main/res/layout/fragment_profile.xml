@@ -26,7 +26,6 @@
                 android:text="My Profile"
                 android:textAlignment="center"
                 android:textSize="30sp"
-                android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold|normal"
                 android:layout_marginStart="15dp"

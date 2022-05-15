@@ -75,7 +75,7 @@
         android:fontFamily="@font/bold"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
-        android:textSize="12sp"
+        android:textSize="0sp"
         android:visibility="invisible"
         tools:ignore="MissingConstraints" />
     <TextView
@@ -85,7 +85,7 @@
         android:fontFamily="@font/bold"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
-        android:textSize="12sp"
+        android:textSize="0sp"
         android:visibility="invisible"
         tools:ignore="MissingConstraints" />
     <TextView
@@ -95,7 +95,7 @@
         android:fontFamily="@font/bold"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
-        android:textSize="12sp"
+        android:textSize="0sp"
         android:visibility="invisible"
         tools:ignore="MissingConstraints" />
 

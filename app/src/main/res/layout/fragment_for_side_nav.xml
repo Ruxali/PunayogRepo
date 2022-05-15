@@ -55,6 +55,13 @@
         android:background="@drawable/scroll_background"
         tools:itemCount="20" />
 
+    <ImageView
+        android:id="@+id/errorImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/accessories"
+        android:layout_marginTop="200dp"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>

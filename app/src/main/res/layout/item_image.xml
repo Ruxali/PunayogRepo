@@ -38,6 +38,8 @@
             android:layout_height="25dp"
             android:layout_gravity="bottom"
             android:gravity="center"
+            android:fontFamily="@font/bold"
+            android:textAllCaps="true"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             card_view:layout_editor_absoluteX="16dp"

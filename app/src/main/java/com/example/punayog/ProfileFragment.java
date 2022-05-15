@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
         addressText = view.findViewById(R.id.addressText);
         textDoB = view.findViewById(R.id.textDoB);
         database = FirebaseAuth.getInstance();
-        shapeableImageView = view.findViewById(R.id.shapeableImageView2);
+
 
         firebaseuser = database.getCurrentUser();
         if (firebaseuser == null) {
@@ -75,9 +75,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    }
-
-
 
     private void showUserProfile() {
         String userID = firebaseuser.getUid();
@@ -87,9 +84,6 @@ public class ProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                String imageLink = snapshot.child("imageUri").getValue(String.class);
-//                System.out.println(imageLink);
-//                Picasso.get().load(imageLink).into(shapeableImageView);
                 String userName = snapshot.child("inputUsername").getValue(String.class);
                 userNameText.setText(userName);
                 String dob = snapshot.child("inputDOB").getValue(String.class);

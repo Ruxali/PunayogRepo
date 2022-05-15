@@ -13,7 +13,6 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.punayog.R;
 import com.example.punayog.model.Banner;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class BannerAdapter extends PagerAdapter {
         ConstraintLayout bannerContainer = view.findViewById(R.id.bannerContainer);
         bannerContainer.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(bannerList.get(position).getBackgroundColor())));
         ImageView banner = view.findViewById(R.id.bannerImageView);
-        Picasso.get().load(bannerList.get(position).getBanner()).into(banner);
+        banner.setImageResource(bannerList.get(position).getBanner());
         container.addView(view,0);
         return view;
     }

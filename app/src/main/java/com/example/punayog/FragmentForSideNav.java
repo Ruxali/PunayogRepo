@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class FragmentForSideNav extends Fragment {
     private static RecyclerView recyclerView;
     private static ImageButton listImageButton;
     private static ImageButton gridImageButton;
+    private static ImageView errorImageView;
 
     //Firebase
     private static DatabaseReference myRef;
@@ -94,6 +96,7 @@ public class FragmentForSideNav extends Fragment {
 
         listImageButton = rootView.findViewById(R.id.listImageButton);
         gridImageButton = rootView.findViewById(R.id.gridImageButton);
+        errorImageView = rootView.findViewById(R.id.errorImageView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -123,6 +126,7 @@ public class FragmentForSideNav extends Fragment {
 
     //for products
     private static void getDataFromFirebase(String titleLabel) {
+
         productArrayList = new ArrayList<>();
 
         Query query = myRef.child("uploads");
@@ -144,15 +148,15 @@ public class FragmentForSideNav extends Fragment {
 
                         productArrayList.add(product);
 
-//                    }
                 }
 
                 productAdapter = new ProductAdapter(context, productArrayList);
+
                 listImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         LinearLayoutManager linearLayoutManager;
-                        linearLayoutManager = new LinearLayoutManager(context.getApplicationContext());
+                        linearLayoutManager = new LinearLayoutManager(view.getContext());
                         recyclerView.setLayoutManager(linearLayoutManager);
                     }
                 });
@@ -160,31 +164,34 @@ public class FragmentForSideNav extends Fragment {
                 gridImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(context.getApplicationContext(),2);
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 2);
                         recyclerView.setLayoutManager(gridLayoutManager);
                     }
                 });
 
                 recyclerView.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
+
+                if (! dataSnapshot.exists()){
+                    errorImageView.setVisibility(View.VISIBLE);
+                }
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
         });
+
     }
 
     private void clearAll() {
         if (productArrayList != null) {
             productArrayList.clear();
 
-            if (productAdapter != null) {
-                productAdapter.notifyDataSetChanged();
-            }
         }
-        productArrayList = new ArrayList<>();
     }
 
 
