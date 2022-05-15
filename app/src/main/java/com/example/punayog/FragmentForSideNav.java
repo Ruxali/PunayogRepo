@@ -140,6 +140,7 @@ public class FragmentForSideNav extends Fragment {
                         product.setLocation( snapshot.child("location").getValue(String.class));
                         product.setLongDesc( snapshot.child("longDesc").getValue(String.class));
                         product.setShortDesc( snapshot.child("shortDesc").getValue(String.class));
+                        product.setSubCategory( snapshot.child("subCategory").getValue(String.class));
 
                         productArrayList.add(product);
 

@@ -32,7 +32,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -58,9 +62,10 @@ public class HomeFragment extends Fragment {
     private ProductAdapter productAdapter;
 
     //banner slider
+    private StorageReference mStorageReference;
     private ViewPager bannerSliderViewPager;
     private List<Banner> bannerList;
-    private int currentPage = 2;
+    private int currentPage = 0;
     private Timer timer;
     final private long DELAY_TIME = 3000;
     final private long PERIOD_TIME = 3000;
@@ -99,20 +104,7 @@ public class HomeFragment extends Fragment {
         bannerSliderViewPager = rootView.findViewById(R.id.bannerSliderViewPager);
         bannerList = new ArrayList<Banner>();
 
-        bannerList.add(new Banner(R.drawable.ic_baseline_shopping_cart_24,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.slider,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.accessories,"#ADD8E6"));
-
-        bannerList.add(new Banner(R.drawable.ic_baseline_person_24,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.add_button,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.ic_baseline_logout_24,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.clothes,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.ic_baseline_call_24,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.ic_baseline_shopping_cart_24,"#ADD8E6"));
-
-        bannerList.add(new Banner(R.drawable.slider,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.accessories,"#ADD8E6"));
-        bannerList.add(new Banner(R.drawable.ic_baseline_person_24,"#ADD8E6"));
+        
 
         BannerAdapter bannerAdapter = new BannerAdapter(bannerList);
         bannerSliderViewPager.setAdapter(bannerAdapter);
@@ -140,6 +132,8 @@ public class HomeFragment extends Fragment {
         };
 
         bannerSliderViewPager.addOnPageChangeListener(onPageChangeListener);
+
+        bannerAdapter.notifyDataSetChanged();
 
         startBannerSlideShow();
 

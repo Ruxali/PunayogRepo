@@ -1,19 +1,23 @@
 package com.example.punayog.model;
 
 public class Banner {
-    private int banner;
+    private String banner;
     private String backgroundColor;
 
-    public Banner(int banner, String backgroundColor) {
+    public Banner(String banner, String backgroundColor) {
         this.banner = banner;
         this.backgroundColor = backgroundColor;
     }
 
-    public int getBanner() {
+    public Banner() {
+
+    }
+
+    public String getBanner() {
         return banner;
     }
 
-    public void setBanner(int banner) {
+    public void setBanner(String banner) {
         this.banner = banner;
     }
 
