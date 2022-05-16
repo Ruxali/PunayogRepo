@@ -244,6 +244,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputPassword"
+                app:passwordToggleEnabled="true"
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin">
 
@@ -251,7 +252,7 @@
                     android:id="@+id/editTextPassword"
                     style="@style/modifiedEditText"
                     android:backgroundTint="@color/colorPrimary"
-                    android:hint="Password"
+                    android:hint="Password ()"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:textColorHint="@color/colorPrimaryDark"
@@ -261,6 +262,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textRePassword"
+                app:passwordToggleEnabled="true"
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin">
 

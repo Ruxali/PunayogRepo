@@ -25,6 +25,8 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,6 +34,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -89,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
-                        !validatePassword() || !validateTC() || !validateUser()) {
+                        !validatePassword() || !validateTC() || !validateUser() || !checkEmail() || !checkPhone()) {
                     return;
                 } else {
                     onRegisterClick();
@@ -190,9 +194,29 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Number pattern is not correct", Toast.LENGTH_SHORT).show();
             return false;
 
-        } else {
+        }
+        else {
             return true;
         }
+    }
+
+    public boolean checkPhone(){
+         String phoneNumber = phoneNum.getText().toString().trim();
+        reference.orderByChild("phoneInput").equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+               if(snapshot.getValue() != null){
+                  Toast.makeText(RegisterActivity.this, "Phone Number is already taken!", Toast.LENGTH_SHORT).show();
+              }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return true;
     }
 
     private Boolean validateEmail() {
@@ -220,6 +244,19 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    public boolean checkEmail(){
+          mAuth.fetchSignInMethodsForEmail(textEmail.getText().toString())
+                  .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                      @Override
+                      public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                         boolean check = !task.getResult().getSignInMethods().isEmpty();
+                         if(check){
+                            Toast.makeText(RegisterActivity.this, "This email address is already present! Try another enail.", Toast.LENGTH_SHORT).show();
+                         }
+                      }
+                  }) ;
+          return false;
+    }
 
     private boolean validatePassword() {
         String pswInput = textPassword.getText().toString().trim();
