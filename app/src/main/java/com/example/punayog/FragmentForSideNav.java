@@ -102,14 +102,10 @@ public class FragmentForSideNav extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-
-
         //firebase
         myRef = FirebaseDatabase.getInstance().getReference();
 
         clearAll();
-
-
 
 
         return rootView;
@@ -172,15 +168,10 @@ public class FragmentForSideNav extends Fragment {
                 recyclerView.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
 
-                if (! dataSnapshot.exists()){
-                    errorImageView.setVisibility(View.VISIBLE);
-                }
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                errorImageView.setVisibility(View.VISIBLE);
             }
 
         });
@@ -190,8 +181,8 @@ public class FragmentForSideNav extends Fragment {
     private void clearAll() {
         if (productArrayList != null) {
             productArrayList.clear();
-
         }
+
     }
 
 

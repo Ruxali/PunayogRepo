@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
 
 //    private ArrayList<SearchDeal>list;
     private DatabaseReference myRef;
-    private ArrayList<SearchDeal>list;
+//    private ArrayList<SearchDeal>list;
 
     //variables
     private ArrayList<Product> productArrayList;

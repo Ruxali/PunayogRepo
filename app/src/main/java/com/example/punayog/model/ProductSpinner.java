@@ -1,6 +1,6 @@
-package com.example.punayog;
+package com.example.punayog.model;
 
-public class Product {
+public class ProductSpinner{
     private String spinnerCat;
 
     public String getSpinnerCat() {
@@ -11,7 +11,7 @@ public class Product {
         this.spinnerCat = spinnerCat;
     }
 
-    public  Product(){
+    public  ProductSpinner(){
 
     }
 }

@@ -19,11 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.punayog.model.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,7 +63,7 @@ public class ProfileFragment extends Fragment {
 
         firebaseuser = database.getCurrentUser();
         if (firebaseuser == null) {
-            Toast.makeText(getContext(), "User is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No User logged in", Toast.LENGTH_SHORT).show();
         } else {
             showUserProfile();
         }

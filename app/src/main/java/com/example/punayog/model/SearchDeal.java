@@ -1,4 +1,4 @@
-package com.example.punayog;
+package com.example.punayog.model;
 
 public class SearchDeal {
     private String location,longDesc,image,price,productName,shortDesc;

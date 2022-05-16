@@ -1,10 +1,9 @@
 package com.example.punayog.model;
 
-import android.view.View;
-
 public class User {
-    public String inputUsername, inputDOB ,emailInput,phoneInput ,pswInput,pswTwoInput,addInput,userGender,mImageUrl;
-    public User(){}
+    public String inputUsername, inputDOB ,emailInput,phoneInput ,pswInput,pswTwoInput,addInput,userGender;
+    public String imageUri;
+    User(){}
 
     public String getInputUsername() {
         return inputUsername;
@@ -70,15 +69,15 @@ public class User {
         this.userGender = userGender;
     }
 
-    public String getmImageUrl() {
-        return mImageUrl;
+    public String getImageUri() {
+        return imageUri;
     }
 
-    public void setmImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
-    public User(String inputUsername, String inputDOB, String emailInput, String phoneInput, String pswInput, String pswTwoInput, String addInput, String userGender, String mImageUrl){
+    public User(String inputUsername, String inputDOB, String emailInput, String phoneInput, String pswInput, String pswTwoInput, String addInput, String userGender){
         this.inputUsername=inputUsername;
         this.inputDOB=inputDOB;
         this.emailInput=emailInput;
@@ -87,7 +86,6 @@ public class User {
         this.pswTwoInput=pswTwoInput;
         this.addInput=addInput;
         this.userGender=userGender;
-        this.mImageUrl=mImageUrl;
 
     }
 }

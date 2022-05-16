@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DatabaseReference ref;
     private RecyclerView rv;
-    private ArrayList<SearchDeal> list;
+//    private ArrayList<SearchDeal> list;
     //search
     private EditText searchView;
     private ProductAdapter productAdapter;
