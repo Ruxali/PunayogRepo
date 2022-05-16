@@ -11,6 +11,20 @@ public class Upload {
     private String longDesc;
     private String location;
     private String category;
+    private String subCategory;
+
+    Upload(){}
+
+    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category){
+        this.mImageUrl = mImageUrl;
+        this.productName = productName;
+        this.price = price;
+        this.shortDesc = shortDesc;
+        this.longDesc = longDesc;
+        this.location = location;
+        this.category = category;
+        this.subCategory = subCategory;
+    }
 
     public String getCategory() {
         return category;
@@ -28,8 +42,6 @@ public class Upload {
         this.subCategory = subCategory;
     }
 
-    private String subCategory;
-    Upload(){}
 
     public String getmImageUrl() {
         return mImageUrl;
@@ -78,17 +90,5 @@ public class Upload {
     public void setLocation(String location) {
         this.location = location;
     }
-
-    public Upload( String productName, String price, String shortDesc, String longDesc, String location,String category, String subCategory)
-    {
-        this.productName=productName;
-        this.price=price;
-        this.shortDesc=shortDesc;
-        this.longDesc=longDesc;
-        this.location=location;
-        this.category=category;
-        this.subCategory = subCategory;
-    }
-
 
 }

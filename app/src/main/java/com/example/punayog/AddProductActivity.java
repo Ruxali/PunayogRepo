@@ -27,6 +27,8 @@ import com.example.punayog.model.Upload;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -49,6 +51,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private FirebaseDatabase firebaseDatabase;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
+    FirebaseUser firebaseuser;
     private StorageTask mUploadTask;
     private Uri imageUri;
     private String item;
@@ -156,7 +159,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     }
 
     private void uploadFile() {
-       // local array banaune ani tesma value pathayera for loop bahira upload lai pathaune
 
             if(imageUri !=null){
                 StorageReference fileReference = storageReference.child(System.currentTimeMillis()+ "." + getFileExtension(imageUri));
@@ -170,6 +172,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                         @Override
                         public void onSuccess(Uri uri) {
 
+                            firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("uploads");
                             Upload upload = new Upload(
                                     mEdittextFile.getText().toString().trim(),
