@@ -46,16 +46,8 @@
                     android:fontFamily="@font/bold"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="20dp"
-                    android:textStyle="italic" />
-
-                <TextView
-                    android:id="@+id/cartProductShortDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Brand New"
-                    android:fontFamily="@font/roboto"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="16dp" />
+                    android:textStyle="italic"
+                    android:layout_marginBottom="20dp"/>
 
                 <TextView
                     android:id="@+id/cartProductPrice"
@@ -65,26 +57,9 @@
                     android:fontFamily="@font/bold"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"/>
 
-                <TextView
-                    android:id="@+id/cartProductLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sunakothi, Lalitpur"
-                    android:fontFamily="@font/roboto"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/cartProductLongDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sunakothi, Lalitpur"
-                    android:fontFamily="@font/roboto"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="16dp"
-                    android:visibility="invisible"/>
 
             </LinearLayout>
             <ImageButton
