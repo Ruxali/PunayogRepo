@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/whiteTextColor">
     <LinearLayout
@@ -9,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        tools:ignore="MissingConstraints">
         <TextView
             android:id="@+id/topic"
             android:layout_width="wrap_content"
@@ -43,13 +45,82 @@
         </LinearLayout>
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/productRecyclerView"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/recentLinearLayout"
-        android:background="@drawable/scroll_background"
-        tools:itemCount="20" />
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recentLinearLayout"
+        tools:ignore="MissingConstraints">
 
-</RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/recentLinearLayout"
+            android:background="@drawable/scroll_background"
+            app:layout_constraintTop_toBottomOf="@+id/recentLinearLayout"
+            tools:listitem="@layout/list_item" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.98"
+        tools:layout_editor_absoluteX="0dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.8"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_margin="10sp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOTAL: "
+                android:layout_weight="0.1"
+                android:textSize="30sp"
+                android:textColor="@color/primaryTextColor"
+                android:fontFamily="@font/bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs."
+                android:layout_weight="0.08"
+                android:textSize="30sp"
+                android:textColor="@color/primaryTextColor"
+                android:fontFamily="@font/bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2345"
+                android:layout_weight="0.8"
+                android:textSize="30sp"
+                android:textColor="@color/primaryTextColor"
+                android:fontFamily="@font/bold"/>
+
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="133dp"
+            android:layout_height="43dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="0.1"
+            android:background="@drawable/button_background_blue"
+            android:fontFamily="@font/roboto"
+            android:text="next"
+            android:textColor="@color/whiteTextColor"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

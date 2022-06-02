@@ -29,8 +29,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -44,14 +48,17 @@ import java.util.HashMap;
 public class AddProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int PICK_IMAGES_CODE = 0;
     private Spinner spinnerCategory, spinnerSubCategory;
-    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile;
+    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile,sellerName,sellerNumber,sellerEmail;
     private ImageView imageViewer;
     private Button  choseBtn, mButtonUpload;
     private int position = 0;
+
     private FirebaseDatabase firebaseDatabase;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     FirebaseUser firebaseuser;
+    private FirebaseAuth database;
+
     private StorageTask mUploadTask;
     private Uri imageUri;
     private String item;
@@ -81,9 +88,13 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         imageViewer = findViewById(R.id.image_view_picture);
         choseBtn = findViewById(R.id.button_choose_image);
         mButtonUpload = findViewById(R.id.button_upload_file);
+        sellerName = findViewById(R.id.sellerName);
+        sellerNumber = findViewById(R.id.sellerNumber);
+        sellerEmail = findViewById(R.id.sellerEmail);
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
+        database = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
 
@@ -159,12 +170,33 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     }
 
     private void uploadFile() {
+        firebaseuser = database.getCurrentUser();
+        String userID = firebaseuser.getUid();
+        Query query = databaseReference.child("users").child(userID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String userName = snapshot.child("inputUsername").getValue(String.class);
+                sellerName.setText(userName);
+                String phone = snapshot.child("phoneInput").getValue(String.class);
+                sellerNumber.setText(phone);
+                String email = snapshot.child("emailInput").getValue(String.class);
+                sellerEmail.setText(email);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
             if(imageUri !=null){
                 StorageReference fileReference = storageReference.child(System.currentTimeMillis()+ "." + getFileExtension(imageUri));
             mUploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
 
                     Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
                     downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
