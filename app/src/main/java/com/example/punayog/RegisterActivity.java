@@ -253,7 +253,9 @@ public class RegisterActivity extends AppCompatActivity {
                          if(check){
                             Toast.makeText(RegisterActivity.this, "This email address is already present! Try another enail.", Toast.LENGTH_SHORT).show();
                          }
+
                       }
+
                   }) ;
           return false;
     }
