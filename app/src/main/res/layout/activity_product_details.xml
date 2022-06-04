@@ -35,11 +35,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/detail_page_bg"
+
+            android:paddingBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent"
+
             android:paddingBottom="50dp"
             tools:ignore="ExtraText">
 
@@ -90,12 +93,54 @@
                 android:id="@+id/productDetailsTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="@+id/categoryTextField"
+                app:layout_constraintTop_toBottomOf="@+id/categoryTextField" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:weightSum="2"
+                app:layout_constraintBottom_toTopOf="@+id/productDetailsTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/productNameTextView">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:fontFamily="@font/bold"
+                    android:text="Rs."
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/productPriceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.9"
+                    android:fontFamily="@font/bold"
+                    android:text="15.00"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/productDetailsTextView"
+                android:layout_width="358dp"
+                android:layout_height="105dp"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/roboto"
                 android:lineSpacingExtra="2dp"
                 android:text="A moisturizing body with a sweet and refreshing aroma of Japanese cherry blossom, peony, musk, and strawberry. Will make the skin feel moist and smooth. The combination also makes long-lasting fragrance."
                 android:textColor="@android:color/background_dark"
                 app:layout_constraintEnd_toEndOf="@+id/productPriceTextView"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/productNameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/productNameTextView" />
 
@@ -200,6 +245,7 @@
 
             <Button
                 android:id="@+id/commentButton"
+                android:id="@+id/button"
                 style="@style/Circular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -207,11 +253,13 @@
                 android:text="Add"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.876"
+                app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/editComment"
                 tools:ignore="MissingConstraints" />
 
             <androidx.recyclerview.widget.RecyclerView
+
                 android:id="@+id/recycle_view"
                 android:layout_width="278dp"
                 android:layout_height="26dp"
@@ -239,9 +287,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
+        <include
         android:id="@+id/productBottomNav"
         layout="@layout/activity_product_bottom_navigation"
         />
 
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

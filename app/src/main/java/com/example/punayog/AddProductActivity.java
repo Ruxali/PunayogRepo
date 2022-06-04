@@ -29,8 +29,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -44,17 +48,21 @@ import java.util.HashMap;
 public class AddProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int PICK_IMAGES_CODE = 0;
     private Spinner spinnerCategory, spinnerSubCategory;
-    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile;
+    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile,sellerName,sellerNumber,sellerEmail;
     private ImageView imageViewer;
     private Button  choseBtn, mButtonUpload;
     private int position = 0;
+
     private FirebaseDatabase firebaseDatabase;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     FirebaseUser firebaseuser;
+    private FirebaseAuth database;
+
     private StorageTask mUploadTask;
     private Uri imageUri;
     private String item;
+
     private String[] category = {"Choose a category", "Accessories", "Apparels", "Books", "Electronics"};
 
     private String[] subCategory1 = {"Choose a sub category", "Bags", "Shoes", "Sunglasses", "Watches"};
@@ -81,15 +89,19 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         imageViewer = findViewById(R.id.image_view_picture);
         choseBtn = findViewById(R.id.button_choose_image);
         mButtonUpload = findViewById(R.id.button_upload_file);
+        sellerName = findViewById(R.id.sellerName);
+        sellerNumber = findViewById(R.id.sellerNumber);
+        sellerEmail = findViewById(R.id.sellerEmail);
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
+        database = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
 
         progressDialog = new ProgressDialog(this);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, category);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, category);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(arrayAdapter);
 
@@ -98,22 +110,22 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelect = category[position];
                 if(position == 1){
-                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory1);
+                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory1);
                     arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter1);
                 }
                 if(position == 2){
-                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory2);
+                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory2);
                     arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter2);
                 }
                 if(position == 3){
-                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory3);
+                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory3);
                     arrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter3);
                 }
                 if(position == 4){
-                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory4);
+                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory4);
                     arrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter4);
                 }
@@ -138,6 +150,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             public void onClick(View view) {
                 if (validateProductName() || validatePrice() || validateLong() || validateLocation() || validateShort()) {
                     progressDialog.setTitle("Uploading...");
+                    progressDialog.setMessage("Your product is being listed!");
                     progressDialog.show();
                     uploadFile();
 
@@ -159,12 +172,33 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     }
 
     private void uploadFile() {
+        firebaseuser = database.getCurrentUser();
+        String userID = firebaseuser.getUid();
+        Query query = databaseReference.child("users").child(userID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String userName = snapshot.child("inputUsername").getValue(String.class);
+                sellerName.setText(userName);
+                String phone = snapshot.child("phoneInput").getValue(String.class);
+                sellerNumber.setText(phone);
+                String email = snapshot.child("emailInput").getValue(String.class);
+                sellerEmail.setText(email);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
             if(imageUri !=null){
                 StorageReference fileReference = storageReference.child(System.currentTimeMillis()+ "." + getFileExtension(imageUri));
             mUploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
 
                     Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
                     downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -175,6 +209,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                             firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("uploads");
                             Upload upload = new Upload(
+                                    imageViewer.toString(),
                                     mEdittextFile.getText().toString().trim(),
                                     editTextPrice.getText().toString().trim(),
                                     editTextShortText.getText().toString().trim(),

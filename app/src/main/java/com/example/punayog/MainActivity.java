@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     HomeFragment homeFragment = new HomeFragment();
     ProfileFragment profileFragment = new ProfileFragment();
-    ChatFragment chatFragment = new ChatFragment();
+    YourListingsFragment listingsFragment = new YourListingsFragment();
     CartFragment cartFragment = new CartFragment();
 
     private ImageButton logoutButton;
@@ -192,8 +192,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
                         return true;
 
-                    case R.id.chat:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
+                    case R.id.yourListings:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container,listingsFragment ).commit();
                         return true;
 
                     case R.id.cart:

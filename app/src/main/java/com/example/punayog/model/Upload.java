@@ -15,7 +15,7 @@ public class Upload {
 
     Upload(){}
 
-    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category){
+    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category,String subCategory){
         this.mImageUrl = mImageUrl;
         this.productName = productName;
         this.price = price;
@@ -25,6 +25,7 @@ public class Upload {
         this.category = category;
         this.subCategory = subCategory;
     }
+
 
     public String getCategory() {
         return category;

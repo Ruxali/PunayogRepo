@@ -50,24 +50,44 @@
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
         android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/h_s_productPrice"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutHS"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/h_s_ProductTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/h_s_ProductTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/h_s_productPrice"
+    <LinearLayout
+        android:id="@+id/linearLayoutHS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold"
-        android:text="Rs.5999"
-        android:textAlignment="center"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="12sp"
+        android:orientation="horizontal"
+        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:fontFamily="@font/bold"
+            android:text="Rs. "
+            android:textAlignment="center"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/h_s_productPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:fontFamily="@font/bold"
+            android:text="5999"
+            android:textAlignment="center"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="12sp" />
+    </LinearLayout>
     <TextView
         android:id="@+id/h_s_productLocation"
         android:layout_width="wrap_content"
@@ -98,5 +118,8 @@
         android:textSize="0sp"
         android:visibility="invisible"
         tools:ignore="MissingConstraints" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
