@@ -69,7 +69,7 @@
                 android:text="Japanese Cherry Blossom"
                 android:textAllCaps="true"
                 android:textColor="@android:color/background_dark"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="@+id/categoryTextField"
                 app:layout_constraintTop_toBottomOf="@+id/categoryTextField" />
 
@@ -78,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:orientation="horizontal"
+                android:gravity="end"
                 android:weightSum="2"
                 app:layout_constraintBottom_toTopOf="@+id/productDetailsTextView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +91,7 @@
                     android:fontFamily="@font/bold"
                     android:text="Rs."
                     android:textColor="@color/primaryTextColor"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/productPriceTextView"
@@ -100,20 +101,21 @@
                     android:fontFamily="@font/bold"
                     android:text="15.00"
                     android:textColor="@color/primaryTextColor"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/productDetailsTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="358dp"
+                android:layout_height="105dp"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/roboto"
                 android:lineSpacingExtra="2dp"
                 android:text="A moisturizing body with a sweet and refreshing aroma of Japanese cherry blossom, peony, musk, and strawberry. Will make the skin feel moist and smooth. The combination also makes long-lasting fragrance."
                 android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
 
                 app:layout_constraintStart_toStartOf="@+id/productNameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/productNameTextView" />

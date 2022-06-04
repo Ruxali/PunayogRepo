@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -59,12 +60,14 @@ public class RegisterActivity extends AppCompatActivity {
     private ShapeableImageView shapeableImageView;
     private Uri imageUri;
     private StorageTask mUploadTask;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         statusBarColor();
+
         textName = findViewById(R.id.editTextName);
         dateOfBirth = findViewById(R.id.editTextDoB);
         phoneNum = findViewById(R.id.editTextNumber);
@@ -77,11 +80,16 @@ public class RegisterActivity extends AppCompatActivity {
         radioFemale = findViewById(R.id.radioFemale);
         radioOthers = findViewById(R.id.radioOthers);
         tcCheckBox = findViewById(R.id.tcCheckBox);
+
         floatingActionButton = findViewById(R.id.floatingActionButton);
         shapeableImageView = findViewById(R.id.shapeableImageView);
+
         mAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("users");
         reference = FirebaseDatabase.getInstance().getReference("users");
+
+        progressDialog = new ProgressDialog(this);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +104,9 @@ public class RegisterActivity extends AppCompatActivity {
                         !validatePassword() || !validateTC() || !validateUser() || !checkEmail() || !checkPhone()) {
                     return;
                 } else {
+                    progressDialog.setTitle("Registering...");
+                    progressDialog.setMessage("Your account is being created!");
+                    progressDialog.show();
                     onRegisterClick();
                 }
             }
@@ -346,7 +357,9 @@ public class RegisterActivity extends AppCompatActivity {
                                     reference.child(uploadId).setValue(user);
                                     if (task.isSuccessful()) {
 
+                                        progressDialog.dismiss();
                                         Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
+
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);

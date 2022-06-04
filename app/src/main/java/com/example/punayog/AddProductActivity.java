@@ -62,6 +62,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private StorageTask mUploadTask;
     private Uri imageUri;
     private String item;
+
     private String[] category = {"Choose a category", "Accessories", "Apparels", "Books", "Electronics"};
 
     private String[] subCategory1 = {"Choose a sub category", "Bags", "Shoes", "Sunglasses", "Watches"};
@@ -100,7 +101,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
         progressDialog = new ProgressDialog(this);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, category);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, category);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(arrayAdapter);
 
@@ -109,22 +110,22 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelect = category[position];
                 if(position == 1){
-                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory1);
+                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory1);
                     arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter1);
                 }
                 if(position == 2){
-                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory2);
+                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory2);
                     arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter2);
                 }
                 if(position == 3){
-                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory3);
+                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory3);
                     arrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter3);
                 }
                 if(position == 4){
-                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<String>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory4);
+                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory4);
                     arrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter4);
                 }
@@ -149,6 +150,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             public void onClick(View view) {
                 if (validateProductName() || validatePrice() || validateLong() || validateLocation() || validateShort()) {
                     progressDialog.setTitle("Uploading...");
+                    progressDialog.setMessage("Your product is being listed!");
                     progressDialog.show();
                     uploadFile();
 
@@ -207,6 +209,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                             firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("uploads");
                             Upload upload = new Upload(
+                                    imageViewer.toString(),
                                     mEdittextFile.getText().toString().trim(),
                                     editTextPrice.getText().toString().trim(),
                                     editTextShortText.getText().toString().trim(),
