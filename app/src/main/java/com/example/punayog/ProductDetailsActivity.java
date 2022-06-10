@@ -106,10 +106,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         //product details
         categoryTextField.setText(product.getSubCategory());
 
-
-        //product details values
-        categorytextField.setText(product.getSubCategory());
-
         productNameTextView.setText(product.getProductName());
          productPriceTextView.setText(product.getPrice());
         productDetailsTextView.setText(product.getLongDesc());

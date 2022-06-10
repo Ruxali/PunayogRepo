@@ -2,15 +2,20 @@ package com.example.punayog;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.SearchDeal;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +31,7 @@ public class SearchActivity extends Activity {
     private DatabaseReference mRef;
     public ArrayList<SearchDeal> list;
     private Query query;
+    TextView searchTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,10 +39,10 @@ public class SearchActivity extends Activity {
         setContentView(R.layout.activity_search);
         searchView = findViewById(R.id.search_view);
 
-        recyclerView = findViewById(R.id.recycle_view);
+        recyclerView = findViewById(R.id.searchRecyclerView);
         mRef = FirebaseDatabase.getInstance().getReference("uploads");
         query = mRef.orderByChild("productName");
-        textView = findViewById(R.id.textView);
+        searchTextView = findViewById(R.id.searchTextView);
         recyclerView = findViewById(R.id.searchRecyclerView);
         recyclerView.setVisibility(View.VISIBLE);
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);
