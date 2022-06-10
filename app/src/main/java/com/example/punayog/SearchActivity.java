@@ -30,7 +30,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         searchView = findViewById(R.id.search_view);
         textView = findViewById(R.id.textView);
-        recyclerView = findViewById(R.id.recycle_view);
+        recyclerView = findViewById(R.id.searchRecyclerView);
         recyclerView.setVisibility(View.VISIBLE);
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);
         linearLayout.setOrientation(LinearLayoutManager.VERTICAL);

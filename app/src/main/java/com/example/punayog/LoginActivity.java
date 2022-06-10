@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,11 +29,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String FILE_NAME = "myFile";
     private FirebaseAuth mAuth;
     private EditText textInputEmail;
     private EditText textInputPassword;
     private Button loginButton, forgetPassword;
     private CheckBox rememberMeCheckBox;
+
+    private ProgressDialog loginProgressDialog;
 
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
     private static final String pswRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -50,15 +54,28 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        loginProgressDialog = new ProgressDialog(LoginActivity.this);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME,MODE_PRIVATE);
+        String emailInput = sharedPreferences.getString("email","");
+        textInputEmail.setText(emailInput);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validateEmail() || !validatePassword()) {
-                    return;
-                } else {
+               String email =  textInputEmail.getText().toString().trim();
+                if (validateEmail() || validatePassword()) {
+                    loginProgressDialog.setTitle("Logging in...");
+                    loginProgressDialog.setMessage("You are being redirected to the app!");
+                    loginProgressDialog.show();
                     validateUser();
+
+                } else {
+                    return;
+                }
+
+                if (rememberMeCheckBox.isChecked()){
+                    StoredDataUsingSharedPref(email);
                 }
             }
         });
@@ -69,35 +86,14 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-//        //for remember me
-//        SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-//        String checkbox = sharedPreferences.getString("remember","");
-//        if(checkbox.equals("true")){
-//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//            finish();
-//        }else if(checkbox.equals("false")){
-//            Toast.makeText(LoginActivity.this,"Please login",Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//
-//        //for remember me
-//        rememberMeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                if(compoundButton.isChecked()){
-//                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("remember", "true");
-//                    editor.apply();
-//                }else if(!compoundButton.isChecked()){
-//                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("remember", "false");
-//                    editor.apply();
-//                }
-//            }
-//        });
+
+    }
+
+    //for remember me
+    private void StoredDataUsingSharedPref(String email) {
+        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME,MODE_PRIVATE).edit();
+        editor.putString("email",email);
+        editor.apply();
     }
 
     @Override
@@ -151,6 +147,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
+
+                    loginProgressDialog.dismiss();
 
                     if (user.isEmailVerified()) {
                         Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
