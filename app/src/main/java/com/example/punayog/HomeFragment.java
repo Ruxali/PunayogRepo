@@ -49,8 +49,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private ImageButton listImageButton, gridImageButoon;
 
-    //Firebase
-
 
 //    private ArrayList<SearchDeal>list;
     private DatabaseReference myRef;
@@ -246,7 +244,7 @@ public class HomeFragment extends Fragment {
     //for searching purpose
 
 
-    //for poducts
+    //for products
     private void getDataFromFirebase() {
         productArrayList = new ArrayList<>();
 
@@ -290,6 +288,7 @@ public class HomeFragment extends Fragment {
 
                 recyclerView.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
+
             }
 
             @Override

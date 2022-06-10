@@ -21,6 +21,8 @@
     <color name="endblue">#32CD32</color>
     <color name="colorAccent2" tools:ignore="DuplicateDefinition">#D81B60</color>
     <color name="navigation">#E3E9EA</color>
+    <color name="edit">#08A60B</color>
+    <color name="delete">#AA0505</color>
 
 
 </resources>

@@ -61,6 +61,7 @@ import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String FILE_NAME = "myFile";
     BottomNavigationView bottomNavigationView;
 
     ListView listView;
@@ -148,11 +149,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-//                                SharedPreferences sharedPreferences = getSharedPreferences("checkbox",MODE_PRIVATE);
-//                                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                                editor.putString("remember", "false");
-//                                editor.apply();
-//                                finish();
+                                SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME,MODE_PRIVATE);
+
+                                finish();
                                 auth.signOut();
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);

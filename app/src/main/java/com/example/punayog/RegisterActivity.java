@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ShapeableImageView shapeableImageView;
     private Uri imageUri;
     private StorageTask mUploadTask;
-    private ProgressDialog progressDialog;
+    private ProgressDialog registerProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference("users");
         reference = FirebaseDatabase.getInstance().getReference("users");
 
-        progressDialog = new ProgressDialog(this);
+        registerProgressDialog = new ProgressDialog(RegisterActivity.this);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,15 +100,18 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                registerProgressDialog.setTitle("Registering...");
+                registerProgressDialog.setMessage("Your account is being created!");
+                registerProgressDialog.show();
                 if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
-                        !validatePassword() || !validateTC() || !validateUser() || !checkEmail() || !checkPhone()) {
-                    return;
+                        !validatePassword() || !validateTC() || !validateUser()|| !checkEmail() || !checkPhone()) {
+                   return;
                 } else {
-                    progressDialog.setTitle("Registering...");
-                    progressDialog.setMessage("Your account is being created!");
-                    progressDialog.show();
+
                     onRegisterClick();
+                    registerProgressDialog.dismiss();
                 }
+
             }
         });
 
@@ -359,7 +362,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     reference.child(uploadId).setValue(user);
                                     if (task.isSuccessful()) {
 
-                                        progressDialog.dismiss();
                                         Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
 
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -368,7 +370,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         finish();
 
                                     } else {
-                                        Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
@@ -377,7 +379,7 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Registration is failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -403,6 +405,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onRegisterClick() {
+
         startActivity(new Intent(this, LoginActivity.class));
         overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
     }

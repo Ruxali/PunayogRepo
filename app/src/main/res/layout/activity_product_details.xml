@@ -240,7 +240,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
 
-                android:id="@+id/recycle_view"
+                android:id="@+id/commentRecyclerView"
                 android:layout_width="278dp"
                 android:layout_height="26dp"
                 android:layout_marginTop="10dp"
@@ -272,6 +272,5 @@
         layout="@layout/activity_product_bottom_navigation"
         tools:layout_editor_absoluteX="24dp"
         tools:layout_editor_absoluteY="-323dp" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
