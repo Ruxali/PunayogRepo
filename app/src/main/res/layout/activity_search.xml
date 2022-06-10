@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:layout_height="match_parent">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -25,7 +24,7 @@
             android:layout_height="match_parent"
             app:defaultQueryHint="Search Here..."
             android:background="@drawable/edit_text_style"
-            app:iconifiedByDefault="false" 
+            app:iconifiedByDefault="false"
             android:padding="10dp"
             android:layout_marginBottom="10dp"/>
     </androidx.appcompat.widget.Toolbar>
@@ -48,7 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        android:background="@color/whiteTextColor"
+        android:background="@color/darkTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent"

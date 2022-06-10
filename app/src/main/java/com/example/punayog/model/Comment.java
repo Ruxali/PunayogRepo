@@ -4,6 +4,20 @@ public class Comment {
     private String content;
     private String uid;
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    private String date;
+
+    public Comment(String date) {
+        this.date = date;
+    }
+
     public Comment(String content, String uid, String uname) {
         this.content = content;
         this.uid = uid;

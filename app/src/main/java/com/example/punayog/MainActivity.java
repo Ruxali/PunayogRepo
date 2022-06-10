@@ -28,11 +28,8 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.SearchView;
 
 import com.example.punayog.adapter.CustomExpandableListAdapter;
-
-import com.example.punayog.adapter.ProductAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -94,10 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DatabaseReference ref;
     private RecyclerView rv;
-//    private ArrayList<SearchDeal> list;
-    //search
-    private EditText searchView;
-    private ProductAdapter productAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         listView = findViewById(R.id.productListView);
 
 
-
-
-
         statusBarColor();
-
+        ref = FirebaseDatabase.getInstance().getReference("uploads");
         //side navigation
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -193,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         return true;
 
                     case R.id.yourListings:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container,listingsFragment ).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, listingsFragment).commit();
                         return true;
 
                     case R.id.cart:
@@ -206,60 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
     }
-
-
-    //for searching purpose
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        if (ref != null) {
-//            ref.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    if (snapshot.exists()) {
-//                        list = new ArrayList<>();
-//                        for (DataSnapshot ds : snapshot.getChildren()) {
-//                            list.add(ds.getValue(SearchDeal.class));
-//                        }
-//                        SearchAdapter adapter = new SearchAdapter(list);
-//                        rv.setAdapter(adapter);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                    Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
-//        if(searchView!=null){
-//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextSubmit(String s) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public boolean onQueryTextChange(String s) {
-//                    search(s);
-//                    return true;
-//                }
-//            });
-//        }
-//
-//    }
-//
-//    private void search(String str) {
-//        ArrayList<SearchDeal>myList=new ArrayList<>();
-//        for(SearchDeal object:list){
-//            if(object.getProductName().toLowerCase().contains(str.toLowerCase())){
-//                myList.add(object);
-//            }
-//            SearchAdapter adapter=new SearchAdapter(myList);
-//            rv.setAdapter(adapter);
-//
-//        }
-//    }
 
     //side navigation
 

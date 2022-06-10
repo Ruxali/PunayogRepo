@@ -42,8 +42,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent"
-
-            android:paddingBottom="50dp"
             tools:ignore="ExtraText">
 
 
@@ -76,26 +74,6 @@
                 app:layout_constraintStart_toStartOf="@+id/categoryTextField"
                 app:layout_constraintTop_toBottomOf="@+id/categoryTextField" />
 
-            <TextView
-                android:id="@+id/productPriceTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:fontFamily="@font/bold"
-                android:text="$ 15.00"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/productNameTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/productNameTextView" />
-
-            <TextView
-                android:id="@+id/productDetailsTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                app:layout_constraintStart_toStartOf="@+id/categoryTextField"
-                app:layout_constraintTop_toBottomOf="@+id/categoryTextField" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -134,13 +112,14 @@
                 android:id="@+id/productDetailsTextView"
                 android:layout_width="358dp"
                 android:layout_height="105dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto"
                 android:lineSpacingExtra="2dp"
                 android:text="A moisturizing body with a sweet and refreshing aroma of Japanese cherry blossom, peony, musk, and strawberry. Will make the skin feel moist and smooth. The combination also makes long-lasting fragrance."
                 android:textColor="@android:color/background_dark"
-                app:layout_constraintEnd_toEndOf="@+id/productPriceTextView"
                 android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/productNameTextView"
+                app:layout_constraintHorizontal_bias="0.017"
                 app:layout_constraintStart_toStartOf="@+id/productNameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/productNameTextView" />
 
@@ -237,6 +216,9 @@
                 android:hint="Write a Comment"
                 android:inputType="textPersonName"
                 android:maxLines="15"
+                android:fontFamily="@font/roboto"
+                android:textSize="15sp"
+                android:textColor="@color/darkTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/view2"
@@ -245,14 +227,12 @@
 
             <Button
                 android:id="@+id/commentButton"
-                android:id="@+id/button"
                 style="@style/Circular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/register_bk_color"
                 android:text="Add"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.876"
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/editComment"
@@ -267,7 +247,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/editComment"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="47dp"
-                tools:listitem="@layout/list_item"/>
+                tools:listitem="@layout/row_comment"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -287,11 +267,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <include
+    <include
         android:id="@+id/productBottomNav"
         layout="@layout/activity_product_bottom_navigation"
-        />
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="-323dp" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

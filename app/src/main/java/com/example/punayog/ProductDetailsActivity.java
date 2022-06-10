@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,10 +45,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
 
-    TextView productNameTextView, categorytextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, editComment;
+    TextView productNameTextView, categoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, editComment;
     ImageView productImageView;
     Button addToCartButton, commentButton;
-    RecyclerView recyclerView;
+   private RecyclerView recyclerView;
     private Product product;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -55,20 +56,22 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> listComment;
     private static String COMMENT_KEY = "Comment";
+    private String key;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
         statusBarColor();
-        //onRecyclerViewComment();
+        // onRecyclerViewComment();
         Intent intent = getIntent();
         if (intent != null) {
             product = (Product) intent.getParcelableExtra("product");
         }
 
         //product details init
-        categorytextField = findViewById(R.id.categoryTextField);
+        categoryTextField = findViewById(R.id.categoryTextField);
         productNameTextView = findViewById(R.id.productNameTextView);
         productPriceTextView = findViewById(R.id.productPriceTextView);
         productDetailsTextView = findViewById(R.id.productDetailsTextView);
@@ -86,8 +89,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference("uploads");
+        key = reference.push().getKey();
         //product details
-        categorytextField.setText(product.getSubCategory());
+        categoryTextField.setText(product.getSubCategory());
         productNameTextView.setText(product.getProductName());
         productPriceTextView.setText(product.getPrice());
         productDetailsTextView.setText(product.getLongDesc());
@@ -102,25 +107,46 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 commentButton.setVisibility(View.INVISIBLE);
-                DatabaseReference commentReference = firebaseDatabase.getReference().child("uploads").child("comments").push();
+                DatabaseReference commentReference = reference.child("comments");
                 String comment_content = editComment.getText().toString();
                 String uid = firebaseUser.getUid();
                 String uname = firebaseUser.getDisplayName();
-                Comment comment = new Comment(comment_content, uid, uname);
 
-                commentReference.setValue(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
+                commentReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onSuccess(Void avoid) {
-                        showMessage("comment added");
-                        editComment.setText("");
-                        commentButton.setVisibility(View.VISIBLE);
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        HashMap<String,Object>hashMap=new HashMap<>();
+                        hashMap.put("userId",uid);
+                        hashMap.put("userName",uname);
+                        hashMap.put("comment",comment_content);
+                        hashMap.put("productKey",key);
+                        commentReference.child(key).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(ProductDetailsActivity.this, "Comment Added", Toast.LENGTH_SHORT).show();
+                                commentButton.setVisibility(View.VISIBLE);
+                            }
+                        });
+
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+
                     @Override
-                    public void onFailure(@android.support.annotation.NonNull Exception e) {
-                        showMessage("fail to add comment : " + e.getMessage());
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
+//                    @Override
+//                    public void onSuccess(Void avoid) {
+//                        showMessage("comment added");
+//                        editComment.setText("");
+//                        commentButton.setVisibility(View.VISIBLE);
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+//                        showMessage("fail to add comment : " + e.getMessage());
+//                    }
+//                });
 
 
             }
@@ -140,11 +166,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                     case R.id.email:
                         Intent intent1 = new Intent(Intent.ACTION_SENDTO);
-                        String receipent = "abcd@gmail.com";
+                        String recipient = "abcd@gmail.com";
                         String str = "mailto:";
 
                         intent1.setData(Uri.parse(str));
-                        intent1.putExtra(Intent.EXTRA_EMAIL, new String[]{receipent});
+                        intent1.putExtra(Intent.EXTRA_EMAIL, new String[]{recipient});
                         startActivity(intent1);
                         return true;
                 }
@@ -155,10 +181,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     }
 
+    //for fetching comments
 //    private void onRecyclerViewComment() {
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //
-//        DatabaseReference commentRef = firebaseDatabase.getReference().child("uploads");
+//        DatabaseReference commentRef = firebaseDatabase.getReference("uploads").child("uploadsId").child("comments");
 //        commentRef.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@android.support.annotation.NonNull DataSnapshot dataSnapshot) {
@@ -182,7 +209,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 //
 //            }
 //        });
-
+//
 //    }
 
     private void showMessage(String comment_added) {
