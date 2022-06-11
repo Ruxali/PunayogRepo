@@ -48,7 +48,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
 
-    TextView productNameTextView, categoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, editComment;
+    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, editComment;
     ImageView productImageView;
     Button addToCartButton;
     ImageButton commentButton;
@@ -84,6 +84,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         //product details init
         categoryTextField = findViewById(R.id.categoryTextField);
+        subCategoryTextField = findViewById(R.id.subCategoryTextField);
         productNameTextView = findViewById(R.id.productNameTextView);
         productPriceTextView = findViewById(R.id.productPriceTextView);
         productDetailsTextView = findViewById(R.id.productDetailsTextView);
@@ -104,6 +105,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
         reference = FirebaseDatabase.getInstance().getReference("comment");
         upRef = FirebaseDatabase.getInstance().getReference("uploads").child("productName");
         key = upRef.push().getKey();
@@ -111,9 +113,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
         //product details
         categoryTextField.setText(product.getSubCategory());
 
+        reference = FirebaseDatabase.getInstance().getReference("uploads");
+        key = reference.push().getKey();
+
+
+        //product details
+        categoryTextField.setText(product.getCategory());
+        subCategoryTextField.setText(product.getSubCategory());
         productNameTextView.setText(product.getProductName());
         productPriceTextView.setText(product.getPrice());
         productDetailsTextView.setText(product.getLongDesc());
+        sellerNameTextView.setText(product.getSellerName());
+        sellerNumberTextView.setText(product.getSellerNumber());
+        sellerEmailTextView.setText(product.getSellerEmail());
         Picasso.get().load(product.getmImageUrl()).into(productImageView);
 
         //Bottom Navigation init
@@ -177,7 +189,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.call:
-                        String s = "tel:" + "1234567890";
+                        String s = "tel:" + sellerNumberTextView.getText().toString();
                         Intent intent = new Intent(Intent.ACTION_CALL);
                         intent.setData(Uri.parse(s));
                         startActivity(intent);
@@ -186,7 +198,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                     case R.id.email:
                         Intent intent1 = new Intent(Intent.ACTION_SENDTO);
-                        String recipient = "abcd@gmail.com";
+                        String recipient = sellerEmailTextView.getText().toString();
                         String str = "mailto:";
 
                         intent1.setData(Uri.parse(str));

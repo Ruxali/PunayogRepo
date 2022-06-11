@@ -12,12 +12,15 @@ public class Product  implements Parcelable {
     private String longDesc;
     private String category;
     private String subCategory;
+    private String sellerName;
+    private String sellerNumber;
+    private String sellerEmail;
 
     public Product(){
 
     }
 
-    public Product(String mImageUrl, String productName, String price, String shortDesc, String location, String longDesc, String category, String subCategory) {
+    public Product(String mImageUrl, String productName, String price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
         this.mImageUrl = mImageUrl;
         this.productName = productName;
         this.price = price;
@@ -26,6 +29,9 @@ public class Product  implements Parcelable {
         this.longDesc = longDesc;
         this.category = category;
         this.subCategory = subCategory;
+        this.sellerEmail = sellerEmail;
+        this.sellerName = sellerName;
+        this.sellerNumber = sellerNumber;
     }
 
     protected Product(Parcel in) {
@@ -37,6 +43,9 @@ public class Product  implements Parcelable {
         longDesc = in.readString();
         category = in.readString();
         subCategory = in.readString();
+        sellerName = in.readString();
+        sellerEmail = in.readString();
+        sellerNumber = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -115,6 +124,31 @@ public class Product  implements Parcelable {
         this.subCategory = subCategory;
     }
 
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getSellerNumber() {
+        return sellerNumber;
+    }
+
+    public void setSellerNumber(String sellerNumber) {
+        this.sellerNumber = sellerNumber;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -130,6 +164,9 @@ public class Product  implements Parcelable {
         parcel.writeString(longDesc);
         parcel.writeString(category);
         parcel.writeString(subCategory);
+        parcel.writeString(sellerName);
+        parcel.writeString(sellerEmail);
+        parcel.writeString(sellerNumber);
     }
 
     @Override
@@ -143,6 +180,9 @@ public class Product  implements Parcelable {
                 ", longDesc='" + longDesc + '\'' +
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +
+                ", sellerName='" + sellerName + '\'' +
+                ", sellerEmail='" + sellerEmail + '\'' +
+                ", sellerNumber='" + sellerNumber + '\'' +
                 '}';
     }
 }

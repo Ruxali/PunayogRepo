@@ -1,8 +1,10 @@
 package com.example.punayog;
 
 import android.app.Activity;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.SearchAdapter;
+import com.example.punayog.model.Product;
 import com.example.punayog.model.SearchDeal;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -27,15 +31,24 @@ import java.util.ArrayList;
 
 public class SearchActivity extends Activity {
     private SearchView searchView;
+
     private RecyclerView recyclerView;
     private DatabaseReference mRef;
     public ArrayList<SearchDeal> list;
     private Query query;
 
+    private RecyclerView searchRecyclerView;
+    private ImageButton searchInputButton;
+    private String searchInput;
+
+    private DatabaseReference searchReference;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
 //        searchView = findViewById(R.id.search_view);
 
         recyclerView = findViewById(R.id.searchRecyclerView);
@@ -48,81 +61,31 @@ public class SearchActivity extends Activity {
         linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayout);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                String tags[] = query.split(" ");
-                for (String tag : tags) {
-                    FirebaseDatabase.getInstance().getReference().child("uploads").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()) {
 
-                            } else {
-                                String error=task.getException().getMessage();
-                                Toast.makeText(SearchActivity.this, error, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
-                return false;
-            }
+
+        searchView = findViewById(R.id.search_view);
+        searchInputButton = findViewById(R.id.searchImageButton);
+        searchRecyclerView = findViewById(R.id.searchRecyclerView);
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        searchInputButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
+            public void onClick(View view) {
+                searchInput = searchView.getQuery().toString();
+
+                onStart();
             }
         });
+
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart(){
         super.onStart();
-        if (query != null) {
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        list = new ArrayList<>();
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            list.add(ds.getValue(SearchDeal.class));
-                        }
-                        SearchAdapter adapter = new SearchAdapter(list);
-                        recyclerView.setAdapter(adapter);
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(SearchActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        if (searchView != null) {
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String s) {
-                    return false;
-                }
+        searchReference = FirebaseDatabase.getInstance().getReference().child("uploads");
 
-                @Override
-                public boolean onQueryTextChange(String s) {
-                    search(s);
-                    return true;
-                }
-            });
-        }
 
-    }
-
-    private void search(String str) {
-        ArrayList<SearchDeal> myList = new ArrayList<>();
-        for (SearchDeal object : list) {
-            if (object.getProductName().toLowerCase().contains(str.toLowerCase())) {
-                myList.add(object);
-            }
-            SearchAdapter adapter = new SearchAdapter(myList);
-            recyclerView.setAdapter(adapter);
-
-        }
     }
 }

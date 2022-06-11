@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
 
 
 //    private ArrayList<SearchDeal>list;
-    private DatabaseReference myRef;
+    private DatabaseReference  myRef;
 //    private ArrayList<SearchDeal>list;
 
     //variables
@@ -179,6 +179,10 @@ public class HomeFragment extends Fragment {
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setSubCategory((String) snapshot.child("subCategory").getValue());
                     product.setLocation((String) snapshot.child("location").getValue());
+                    product.setCategory((String) snapshot.child("category").getValue());
+                    product.setSellerName((String) snapshot.child("sellerName").getValue());
+                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
                     horizontalScrollModelList.add(product);
 
@@ -263,6 +267,10 @@ public class HomeFragment extends Fragment {
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setShortDesc((String) snapshot.child("shortDesc").getValue());
                     product.setSubCategory((String) snapshot.child("subCategory").getValue());
+                    product.setCategory((String) snapshot.child("category").getValue());
+                    product.setSellerName((String) snapshot.child("sellerName").getValue());
+                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
                     productArrayList.add(product);
 

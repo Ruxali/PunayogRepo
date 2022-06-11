@@ -135,7 +135,7 @@
                     android:text="Sunakothi, Lalitpur"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="0dp"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/productsubCategory"
@@ -145,7 +145,47 @@
                     android:text="Sunakothi, Lalitpur"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="0dp"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/productCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Sunakothi, Lalitpur"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="0dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/productSellerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Sunakothi, Lalitpur"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="0dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/productSellerEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Sunakothi, Lalitpur"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="0dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/productSellerNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Sunakothi, Lalitpur"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="0dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -12,10 +12,13 @@ public class Upload {
     private String location;
     private String category;
     private String subCategory;
+    private String sellerName;
+    private String sellerNumber;
+    private String sellerEmail;
 
     Upload(){}
 
-    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category,String subCategory){
+    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category, String subCategory, String sellerName, String sellerNumber, String sellerEmail) {
         this.mImageUrl = mImageUrl;
         this.productName = productName;
         this.price = price;
@@ -24,25 +27,10 @@ public class Upload {
         this.location = location;
         this.category = category;
         this.subCategory = subCategory;
+        this.sellerName = sellerName;
+        this.sellerNumber = sellerNumber;
+        this.sellerEmail = sellerEmail;
     }
-
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(String subCategory) {
-        this.subCategory = subCategory;
-    }
-
 
     public String getmImageUrl() {
         return mImageUrl;
@@ -92,4 +80,43 @@ public class Upload {
         this.location = location;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getSellerNumber() {
+        return sellerNumber;
+    }
+
+    public void setSellerNumber(String sellerNumber) {
+        this.sellerNumber = sellerNumber;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
+    }
 }

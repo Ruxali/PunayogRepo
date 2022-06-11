@@ -57,6 +57,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     FirebaseUser firebaseuser;
+
     private FirebaseAuth database;
     private String key;
     private DatabaseReference upRef;
@@ -96,11 +97,13 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        database = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
+
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
         upRef = FirebaseDatabase.getInstance().getReference("uploads").child("productName");
         key = upRef.push().getKey();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, category);
@@ -173,18 +176,29 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     }
 
     private void uploadFile() {
-        firebaseuser = database.getCurrentUser();
-        String userID = firebaseuser.getUid();
-        Query query = databaseReference.child("users").child(userID);
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Query query = databaseReference.child("users");
+        query.keepSynced(true);
+        System.out.println("Query: " + query);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String userName = snapshot.child("inputUsername").getValue(String.class);
-                sellerName.setText(userName);
-                String phone = snapshot.child("phoneInput").getValue(String.class);
-                sellerNumber.setText(phone);
-                String email = snapshot.child("emailInput").getValue(String.class);
-                sellerEmail.setText(email);
+
+                DataSnapshot teamSnapshot = null;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    if (data.child("emailInput").getValue(String.class).equals(userID)) {
+                        teamSnapshot = data;
+                        break;
+                    }
+                }
+                        String userName = teamSnapshot.child("inputUsername").getValue(String.class);
+                        sellerName.setText(userName);
+                        String phone = teamSnapshot.child("phoneInput").getValue(String.class);
+                        sellerNumber.setText(phone);
+                        String email = teamSnapshot.child("emailInput").getValue(String.class);
+                        sellerEmail.setText(email);
+
+
 
             }
 
@@ -216,11 +230,13 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                                     editTextLongDesc.getText().toString().trim(),
                                     editTextLocation.getText().toString().trim(),
                                     spinnerCategory.getSelectedItem().toString().trim(),
-                                    spinnerSubCategory.getSelectedItem().toString().trim());
+                                    spinnerSubCategory.getSelectedItem().toString().trim(),
+                                    sellerName.getText().toString().trim(),
+                                    sellerNumber.getText().toString().trim(),
+                                    sellerEmail.getText().toString().trim());
 
                             upload.setmImageUrl(String.valueOf(uri));
                             String uploadId = databaseReference.push().getKey();
-                            assert uploadId != null;
                             databaseReference.child(uploadId).setValue(upload);
 //
                             Toast.makeText(AddProductActivity.this, "Product Added Successfully", Toast.LENGTH_SHORT).show();
