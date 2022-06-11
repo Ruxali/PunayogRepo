@@ -122,15 +122,11 @@
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:navigationIcon="@drawable/ic_baseline_menu_24" />
 
-                            <include layout="@layout/activity_search"
+                            <include layout="@layout/fragment_search"
                                 android:layout_weight="1.75"
 
                                 android:layout_height="50dp"
                                 android:layout_width="0dp"/>
-                                android:background="@drawable/edit_text_style"
-                                android:iconifiedByDefault="false"
-                                android:padding="10dp"
-                                android:queryHint="Search Products" />
 
 <!--                            <androidx.recyclerview.widget.RecyclerView-->
 <!--                                android:id="@+id/searchRecyclerView"-->

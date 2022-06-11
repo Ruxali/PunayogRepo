@@ -55,6 +55,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         productViewHolder.productLocation.setText(product.getLocation());
         productViewHolder.productLongDesc.setText(product.getLongDesc());
         productViewHolder.productSubCategory.setText(product.getSubCategory());
+        productViewHolder.sellerName.setText(product.getSellerName());
+        productViewHolder.sellerNumber.setText(product.getSellerNumber());
+        productViewHolder.sellerEmail.setText(product.getSellerEmail());
+
 
         Picasso.get().load(product.getmImageUrl()).into(productViewHolder.productImage);
 
@@ -86,7 +90,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView productLocation;
         private TextView productLongDesc;
         private TextView productSubCategory;
-
+        private TextView productCategory;
+        private TextView sellerName;
+        private TextView sellerEmail;
+        private TextView sellerNumber;
 
 
         public ProductViewHolder(View itemView) {
@@ -98,7 +105,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productShortDesc = itemView.findViewById(R.id.productShortDescription);
             productLocation = itemView.findViewById(R.id.productLocation);
             productLongDesc = itemView.findViewById(R.id.productLongDesc);
+            productCategory = itemView.findViewById(R.id.productCategory);
             productSubCategory = itemView.findViewById(R.id.productsubCategory);
+            sellerName = itemView.findViewById(R.id.productSellerName);
+            sellerEmail = itemView.findViewById(R.id.productSellerEmail);
+            sellerNumber = itemView.findViewById(R.id.productSellerNumber);
         }
 
     }
