@@ -147,6 +147,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
+                   String show= user.getUid();
+                    System.out.println(show);
 
                     loginProgressDialog.dismiss();
 

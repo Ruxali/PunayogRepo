@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth database;
     FirebaseUser firebaseuser;
     private DatabaseReference reference;
-    private ShapeableImageView shapeableImageView;
+    private ShapeableImageView profileImageView;
 
     @Nullable
     @Override
@@ -58,10 +58,11 @@ public class ProfileFragment extends Fragment {
         phoneText = view.findViewById(R.id.phoneText);
         addressText = view.findViewById(R.id.addressText);
         textDoB = view.findViewById(R.id.textDoB);
+        profileImageView=view.findViewById(R.id.profileImageView);
         database = FirebaseAuth.getInstance();
 
-
         firebaseuser = database.getCurrentUser();
+        System.out.println();
         if (firebaseuser == null) {
             Toast.makeText(getContext(), "No User logged in", Toast.LENGTH_SHORT).show();
         } else {
@@ -72,24 +73,33 @@ public class ProfileFragment extends Fragment {
 
 
     private void showUserProfile() {
-        String userID = firebaseuser.getUid();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         reference = FirebaseDatabase.getInstance().getReference();
-
-        Query query = reference.child("users").child(userID);
+        Query query = reference.child("users");
+        query.keepSynced(true);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String userName = snapshot.child("inputUsername").getValue(String.class);
+                System.out.println(snapshot);
+                DataSnapshot tempSnapshot = null;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    if (data.child("emailInput").getValue(String.class).equals(userID)) {
+                        tempSnapshot = data;
+                        break;
+                    }
+                }
+                Picasso.get().load(tempSnapshot.child("imageUri").getValue(String.class)).into(profileImageView);
+                String userName = tempSnapshot.child("inputUsername").getValue(String.class);
                 userNameText.setText(userName);
-                String dob = snapshot.child("inputDOB").getValue(String.class);
+                String dob = tempSnapshot.child("inputDOB").getValue(String.class);
                 textDoB.setText(dob);
-                String gender = snapshot.child("userGender").getValue(String.class);
+                String gender = tempSnapshot.child("userGender").getValue(String.class);
                 genderText.setText(gender);
-                String phone = snapshot.child("phoneInput").getValue(String.class);
+                String phone = tempSnapshot.child("phoneInput").getValue(String.class);
                 phoneText.setText(phone);
-                String email = snapshot.child("emailInput").getValue(String.class);
+                String email = tempSnapshot.child("emailInput").getValue(String.class);
                 emailText.setText(email);
-                String location = snapshot.child("addInput").getValue(String.class);
+                String location = tempSnapshot.child("addInput").getValue(String.class);
                 addressText.setText(location);
 
             }

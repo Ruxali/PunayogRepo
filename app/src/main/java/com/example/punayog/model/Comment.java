@@ -1,8 +1,12 @@
 package com.example.punayog.model;
 
+import com.google.firebase.database.DataSnapshot;
+
 public class Comment {
     private String content;
     private String uid;
+    private String uname;
+    private String date;
 
     public String getDate() {
         return date;
@@ -12,7 +16,7 @@ public class Comment {
         this.date = date;
     }
 
-    private String date;
+
 
     public Comment(String date) {
         this.date = date;
@@ -24,7 +28,7 @@ public class Comment {
         this.uname = uname;
     }
 
-    private String uname;
+
     public Comment() {
     }
 

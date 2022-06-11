@@ -31,18 +31,17 @@ public class SearchActivity extends Activity {
     private DatabaseReference mRef;
     public ArrayList<SearchDeal> list;
     private Query query;
-    TextView searchTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        searchView = findViewById(R.id.search_view);
+//        searchView = findViewById(R.id.search_view);
 
         recyclerView = findViewById(R.id.searchRecyclerView);
         mRef = FirebaseDatabase.getInstance().getReference("uploads");
         query = mRef.orderByChild("productName");
-        searchTextView = findViewById(R.id.searchTextView);
+//        searchTextView = findViewById(R.id.searchTextView);
         recyclerView = findViewById(R.id.searchRecyclerView);
         recyclerView.setVisibility(View.VISIBLE);
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);

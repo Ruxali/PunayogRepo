@@ -8,7 +8,7 @@
     android:layout_gravity="center">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/shapeableImageView2"
+        android:id="@+id/profileImageView"
         android:layout_width="98dp"
         android:layout_height="98dp"
         android:layout_centerHorizontal="true"

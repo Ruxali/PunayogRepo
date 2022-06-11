@@ -48,9 +48,9 @@ import java.util.HashMap;
 public class AddProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final int PICK_IMAGES_CODE = 0;
     private Spinner spinnerCategory, spinnerSubCategory;
-    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile,sellerName,sellerNumber,sellerEmail;
+    private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile, sellerName, sellerNumber, sellerEmail;
     private ImageView imageViewer;
-    private Button  choseBtn, mButtonUpload;
+    private Button choseBtn, mButtonUpload;
     private int position = 0;
 
     private FirebaseDatabase firebaseDatabase;
@@ -58,7 +58,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private DatabaseReference databaseReference;
     FirebaseUser firebaseuser;
     private FirebaseAuth database;
-
+    private String key;
+    private DatabaseReference upRef;
     private StorageTask mUploadTask;
     private Uri imageUri;
     private String item;
@@ -77,8 +78,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         statusBarColor();
-        
-        
+
+
         mEdittextFile = findViewById(R.id.edit_text_file_name);
         editTextPrice = findViewById(R.id.editTextPrice);
         editTextLongDesc = findViewById(R.id.editTextLongDesc);
@@ -98,7 +99,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         database = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
-
+        upRef = FirebaseDatabase.getInstance().getReference("uploads").child("productName");
+        key = upRef.push().getKey();
         progressDialog = new ProgressDialog(this);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, category);
@@ -109,23 +111,23 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelect = category[position];
-                if(position == 1){
-                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory1);
+                if (position == 1) {
+                    ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item, subCategory1);
                     arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter1);
                 }
-                if(position == 2){
-                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory2);
+                if (position == 2) {
+                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item, subCategory2);
                     arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter2);
                 }
-                if(position == 3){
-                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory3);
+                if (position == 3) {
+                    ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item, subCategory3);
                     arrayAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter3);
                 }
-                if(position == 4){
-                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item,subCategory4);
+                if (position == 4) {
+                    ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<>(AddProductActivity.this, android.R.layout.simple_spinner_dropdown_item, subCategory4);
                     arrayAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSubCategory.setAdapter(arrayAdapter4);
                 }
@@ -136,7 +138,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
             }
         });
-
 
 
         choseBtn.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +166,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
     }
 
-    private String getFileExtension(Uri uri){
+    private String getFileExtension(Uri uri) {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
@@ -192,8 +193,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
             }
         });
 
-            if(imageUri !=null){
-                StorageReference fileReference = storageReference.child(System.currentTimeMillis()+ "." + getFileExtension(imageUri));
+        if (imageUri != null) {
+            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
             mUploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -239,7 +240,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                     Toast.makeText(AddProductActivity.this, "Something is Wrong: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-            }
+        }
 
 
     }
@@ -256,8 +257,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     //for choosing multiple images at a time
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK  && data !=null &&  data.getData()!=null) {
-                imageUri = data.getData();
+        if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
 
             Picasso.get().load(imageUri).into(imageViewer);
         }
