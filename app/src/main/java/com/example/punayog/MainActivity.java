@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.EditText;
@@ -81,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CartFragment cartFragment = new CartFragment();
     SearchFragment searchFragment = new SearchFragment();
     private ImageButton logoutButton, searchButton;
-    BroadcastReceiver broadcastReceiver = null;
+
+
+
     //side navigation
     ExpandableListView expandableListView;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DatabaseReference ref;
     private RecyclerView rv;
+    String searchText;
 
 
     @Override
@@ -108,11 +114,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView.setBackground(null);
 
         listView = findViewById(R.id.productListView);
-        searchButton = findViewById(R.id.searchButton);
-        searchEdittext = findViewById(R.id.searchEdittext);
 
         statusBarColor();
         ref = FirebaseDatabase.getInstance().getReference("uploads");
+
         //side navigation
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -122,10 +127,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         //search
         searchButton = findViewById(R.id.searchButton);
-        broadcastReceiver = new InternetReceiver();
-        internetStatus();
+        searchEdittext = findViewById(R.id.searchEdittext);
+
+
         expandableListView = findViewById(R.id.navList);
         navigationManager = FragmentNavigationManager.getmInstance(this);
         initItems();
@@ -141,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             selectFirstItemAsDefault();
         }
-
+//
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle("");
@@ -186,20 +194,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.homeButton:
-
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-
                         return true;
-
                     case R.id.profile:
-
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
                         return true;
-
                     case R.id.yourListings:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, listingsFragment).commit();
                         return true;
-
                     case R.id.cart:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, cartFragment).commit();
                         return true;
@@ -214,32 +216,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this,SearchFragment.class));
-//                finish();
-                FragmentTransaction fragmentTransaction =
-                        getSupportFragmentManager().beginTransaction();
-                Bundle data = new Bundle();
-                data.putString("data", searchEdittext.getText().toString());
-                fragmentTransaction.replace(R.id.container, searchFragment).commit();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("searchText",searchEdittext.getText().toString());
+//                searchFragment.setArguments(bundle);
+                searchText = searchEdittext.getText().toString();
+                fragmentTransaction.replace(R.id.container,searchFragment).commit();
+                closeKeyboard();
             }
         });
     }
 
-    
+    public String getMyData() {
+        return searchText;
+    }
+
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if(view != null){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
+    }
+
+
 
     //side navigation
-//internet connection checking
-    private void internetStatus() {
-        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
-    }
-
-
     private void selectFirstItemAsDefault() {
         if (navigationManager != null) {
             String firstItem = lstTitle.get(0);

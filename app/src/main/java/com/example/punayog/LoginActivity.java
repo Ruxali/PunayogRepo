@@ -1,9 +1,15 @@
 package com.example.punayog;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,12 +17,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +45,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton, forgetPassword;
     private CheckBox rememberMeCheckBox;
 
+    private ImageView registerImageView;
+    private View registerView;
+    private LinearLayout loginLinearLayout;
+    private LinearLayout noInternetlayout;
+    private Button reloadButton;
+    BroadcastReceiver broadcastReceiver = null;
+
     private ProgressDialog loginProgressDialog;
 
     private static final String emailRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
@@ -54,6 +70,21 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        //internet status
+        registerImageView = findViewById(R.id.registerImageView);
+        registerView = findViewById(R.id.registerView);
+        loginLinearLayout = findViewById(R.id.loginLinearLayout);
+        noInternetlayout = findViewById(R.id.noInternetLayout);
+        reloadButton = findViewById(R.id.reloadButton);
+        internetStatus();
+
+        reloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                internetStatus();
+            }
+        });
+
         loginProgressDialog = new ProgressDialog(LoginActivity.this);
 
         SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME,MODE_PRIVATE);
@@ -63,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               String email =  textInputEmail.getText().toString().trim();
+                String email =  textInputEmail.getText().toString().trim();
                 if (validateEmail() || validatePassword()) {
                     loginProgressDialog.setTitle("Logging in...");
                     loginProgressDialog.setMessage("You are being redirected to the app!");
@@ -88,6 +119,34 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+    //internet connection checking
+    private void internetStatus() {
+        ConnectivityManager manager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+
+        if(info != null){
+            if(info.isConnected()){
+                loginLinearLayout.setVisibility(View.VISIBLE);
+                registerView.setVisibility(View.VISIBLE);
+                registerImageView.setVisibility(View.VISIBLE);
+                noInternetlayout.setVisibility(View.GONE);
+                reloadButton.setVisibility(View.GONE);
+            }else{
+                loginLinearLayout.setVisibility(View.GONE);
+                registerView.setVisibility(View.GONE);
+                registerImageView.setVisibility(View.GONE);
+                noInternetlayout.setVisibility(View.VISIBLE);
+                reloadButton.setVisibility(View.VISIBLE);
+            }
+        }else{
+            loginLinearLayout.setVisibility(View.GONE);
+            registerView.setVisibility(View.GONE);
+            registerImageView.setVisibility(View.GONE);
+            noInternetlayout.setVisibility(View.VISIBLE);
+            reloadButton.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     //for remember me
     private void StoredDataUsingSharedPref(String email) {
@@ -139,7 +198,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void validateUser() {
-
         String emailInput = textInputEmail.getText().toString().trim();
         String pswInput = textInputPassword.getText().toString().trim();
         mAuth.signInWithEmailAndPassword(emailInput, pswInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -147,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
-                   String show= user.getUid();
+                    String show= user.getUid();
                     System.out.println(show);
 
                     loginProgressDialog.dismiss();
@@ -224,7 +282,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick() {
-       Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 

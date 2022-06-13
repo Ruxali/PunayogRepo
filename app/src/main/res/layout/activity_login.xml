@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +10,8 @@
     android:focusableInTouchMode="true">
 
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/loginLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -135,15 +138,6 @@
                     android:text="@string/login"
                     android:textSize="20sp"/>
 
-                <ProgressBar
-                    android:id="@+id/loginProgressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:progressDrawable="@color/primaryTextColor"
-                    android:progressTint="#03040C"
-                    android:visibility="invisible" />
 
                 <TextView
                     style="@style/parent"
@@ -155,14 +149,12 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-
-
-
             </LinearLayout>
 
         </LinearLayout>
 
     <View
+        android:id="@+id/registerView"
         android:layout_width="11dp"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -171,6 +163,7 @@
         android:background="@drawable/ic_side_bg"/>
 
     <ImageView
+        android:id="@+id/registerImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -178,6 +171,37 @@
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
         android:onClick="onLoginClick"
-        android:src="@drawable/ic_add_img" />
+        android:src="@drawable/ic_add_img"/>
+
+    <LinearLayout
+        android:layout_marginTop="200dp"
+        android:id="@+id/noInternetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:weightSum="2"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1.5"
+            android:padding="10dp"
+            android:src="@drawable/no_internet" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/reloadButton"
+            style="@style/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.5"
+            android:text="Reload"
+            android:textSize="20sp"
+            />
+
+
+    </LinearLayout>
 
 </RelativeLayout>
