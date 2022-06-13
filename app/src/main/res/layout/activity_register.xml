@@ -233,7 +233,7 @@
                     android:id="@+id/editTextLocation"
                     style="@style/modifiedEditText"
                     android:backgroundTint="@color/colorPrimary"
-                    android:hint="Location"
+                    android:hint="Address"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColorHint="@color/colorPrimaryDark"

@@ -251,10 +251,10 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/edit_text_style"
                     android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:hint="Location"
+                    android:hint="Address"
                     android:inputType="text"
                     android:maxLines="1"
+                    android:paddingStart="10dp"
                     android:textColorHint="@color/colorPrimaryDark"
                     android:textSize="20sp" />
 
