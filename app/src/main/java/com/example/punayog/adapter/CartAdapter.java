@@ -1,10 +1,6 @@
 package com.example.punayog.adapter;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.CartFragment;
-import com.example.punayog.LoginActivity;
-import com.example.punayog.MainActivity;
-import com.example.punayog.ProductDetailsActivity;
 import com.example.punayog.R;
+import com.example.punayog.interfaces.SetOnPriceChange;
 import com.example.punayog.model.CartModel;
-import com.example.punayog.model.Product;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,20 +26,24 @@ import java.util.ArrayList;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>  {
 
-    private Context context;
+    SetOnPriceChange setOnPriceChange;
+    TextView totalPrice;
+    private CartFragment context;
     public ArrayList<CartModel> cartArrayList;
+    double overAllTotalAmount = 0.0;
 
 
-    public CartAdapter(Context context, ArrayList<CartModel> cartArrayList) {
-        this.context = context;
+    public CartAdapter(TextView totalPrice, ArrayList<CartModel> cartArrayList,SetOnPriceChange setOnPriceChange) {
+        this.totalPrice = totalPrice;
         this.cartArrayList = cartArrayList;
+        this.setOnPriceChange = setOnPriceChange;
     }
 
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder( ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cart_item_list, viewGroup, false);
-        return new CartAdapter.CartViewHolder(view);
+        return new CartViewHolder(view);
     }
 
     @Override
@@ -57,8 +53,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         //setting value
         cartViewHolder.productName.setText(cartModel.getName());
         cartViewHolder.productPrice.setText(cartModel.getPrice());
+        cartViewHolder.buyerName.setText(cartModel.getBuyerName());
+        cartViewHolder.buyerEmail.setText(cartModel.getBuyerEmail());
+        cartViewHolder.buyerNumber.setText(cartModel.getBuyerNumber());
         Picasso.get().load(cartModel.getImage()).into(cartViewHolder.productImage);
 
+        double singlePrice = ((Double.parseDouble(cartModel.getPrice())));
+        overAllTotalAmount = overAllTotalAmount + singlePrice;
+        totalPrice.setText(String.valueOf(overAllTotalAmount));
 
 
 
@@ -90,8 +92,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                                             Toast.makeText(view.getContext(), "Error:" +error.getMessage(), Toast.LENGTH_SHORT).show();
                                         }else{
                                             int pos = cartArrayList.indexOf(cartModel);
-                                            cartArrayList.remove(pos);
-                                            notifyItemRemoved(pos);
+                                            double singlePrice = ((Double.parseDouble(cartArrayList.get(pos).getPrice())));
+                                            overAllTotalAmount = overAllTotalAmount - singlePrice;
+                                            System.out.println("overall amount:" +overAllTotalAmount);
+                                            setOnPriceChange.onPriceChange(pos);
+//                                            cartArrayList.remove(pos);
+//                                            notifyItemRemoved(pos);
+                                            notifyDataSetChanged();
 
                                             Toast.makeText(view.getContext(), "Deleted From Cart!", Toast.LENGTH_SHORT).show();
                                         }
@@ -121,8 +128,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         private ImageView productImage;
         private TextView productName;
         private TextView productPrice;
-        private TextView totalPrice;
+        private TextView totalAmount;
         private ImageButton deleteButton;
+        private TextView buyerName, buyerEmail,  buyerNumber;
 
         public CartViewHolder(View itemView) {
             super(itemView);
@@ -130,11 +138,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             productImage = itemView.findViewById(R.id.cartProductImage);
             productName = itemView.findViewById(R.id.cartProductTitle);
             productPrice = itemView.findViewById(R.id.cartProductPrice);
-            totalPrice = itemView.findViewById(R.id.totalPrice);
+            totalAmount = itemView.findViewById(R.id.totalPrice);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            buyerName = itemView.findViewById(R.id.buyerName);
+            buyerNumber = itemView.findViewById(R.id.buyerNumber);
+            buyerEmail = itemView.findViewById(R.id.buyerEmail);
         }
 
     }
 
 }
+
 

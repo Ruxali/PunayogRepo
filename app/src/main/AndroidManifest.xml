@@ -28,9 +28,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog" >
         <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity

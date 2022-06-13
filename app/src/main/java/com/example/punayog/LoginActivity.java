@@ -153,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginProgressDialog.dismiss();
 
                     if (user.isEmailVerified()) {
+                        loginProgressDialog.dismiss();
                         Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         finish();
@@ -164,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                         showAlertDialog();
                     }
                 } else {
+                    loginProgressDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 

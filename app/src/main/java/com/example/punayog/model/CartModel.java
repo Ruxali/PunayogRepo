@@ -1,19 +1,46 @@
 package com.example.punayog.model;
 
 public class CartModel {
-    private String image, name, price,key;
-    private float totalPrice;
+    private String image, name, price,key,buyerName,buyerEmail,buyerNumber;
 
-    public CartModel(String image, String name, String price, float totalPrice) {
+    public CartModel(String image, String name, String price,String buyerName,String buyerEmail, String buyerNumber) {
         this.image = image;
         this.name = name;
         this.price = price;
-        this.totalPrice = totalPrice;
+        this.buyerEmail = buyerEmail;
+        this.buyerName = buyerName;
+        this.buyerNumber = buyerNumber;
     }
 
     public CartModel() {
 
     }
+
+    public String getBuyerName() {
+        return buyerName;
+    }
+
+    public void setBuyerName(String buyerName) {
+        this.buyerName = buyerName;
+    }
+
+    public String getBuyerEmail() {
+        return buyerEmail;
+    }
+
+    public void setBuyerEmail(String buyerEmail) {
+        this.buyerEmail = buyerEmail;
+    }
+
+    public String getBuyerNumber() {
+        return buyerNumber;
+    }
+
+    public void setBuyerNumber(String buyerNumber) {
+        this.buyerNumber = buyerNumber;
+    }
+
+
 
     public String getKey() {
         return key;
@@ -48,11 +75,11 @@ public class CartModel {
         this.price = price;
     }
 
-    public float getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
-    }
+//    public double getTotalPrice() {
+//        return totalPrice;
+//    }
+//
+//    public void setTotalPrice(double totalPrice) {
+//        this.totalPrice = totalPrice;
+//    }
 }

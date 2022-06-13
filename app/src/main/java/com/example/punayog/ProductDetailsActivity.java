@@ -1,5 +1,7 @@
 package com.example.punayog;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -25,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.common.net.InternetDomainName;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +35,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.punayog.model.Product;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.core.Query;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -69,7 +72,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private static String COMMENT_KEY = "Comment";
     private String key;
     private DatabaseReference reference, upRef;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,7 +216,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
         addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addToCart();
+                firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser == null) {
+                    AlertDialog.Builder profileAlert = new AlertDialog.Builder(ProductDetailsActivity.this);
+                    profileAlert.setTitle("You are not Logged in yet!");
+                    profileAlert.setMessage("Do you want to login?");
+                    profileAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(ProductDetailsActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    profileAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(ProductDetailsActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            dialogInterface.cancel();
+                        }
+                    });
+                    profileAlert.create();
+                    profileAlert.show();
+                } else {
+                    addToCart();
+                }
+
             }
         });
     }
@@ -254,7 +281,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     }
 
+    //for adding to cart
     private void addToCart() {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String saveCurrentTime, saveCurrentDate;
 
         Calendar calForData = Calendar.getInstance();
@@ -267,10 +296,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         String cartID = cartReference.push().getKey();
 
+
         cartReference.child(cartID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child(cartID).exists()) {
+                if (snapshot.child("cartID").exists()) {
                     Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -280,6 +310,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     cartMap.put("productPrice", productPriceTextView.getText().toString());
                     cartMap.put("currentTime", saveCurrentTime);
                     cartMap.put("currentDate", saveCurrentDate);
+                    cartMap.put("buyerEmail",userID);
 
                     cartReference.child(cartID).updateChildren(cartMap).
                             addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -1,7 +1,9 @@
 package com.example.punayog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -62,9 +64,27 @@ public class ProfileFragment extends Fragment {
         database = FirebaseAuth.getInstance();
 
         firebaseuser = database.getCurrentUser();
-        System.out.println();
         if (firebaseuser == null) {
-            Toast.makeText(getContext(), "No User logged in", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder profileAlert = new AlertDialog.Builder(getContext());
+            profileAlert.setTitle("You are not Logged in yet!");
+            profileAlert.setMessage("Do you want to login?");
+            profileAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                   Intent intent = new Intent(getActivity(),LoginActivity.class);
+                   startActivity(intent);
+                }
+            });
+            profileAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(getActivity(),MainActivity.class);
+                    startActivity(intent);
+                    dialogInterface.cancel();
+                }
+            });
+            profileAlert.create();
+            profileAlert.show();
         } else {
             showUserProfile();
         }

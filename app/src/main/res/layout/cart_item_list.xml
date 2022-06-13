@@ -5,8 +5,7 @@
     android:background="@drawable/scroll_background"
     android:layout_margin="8dp"
     android:elevation="3dp"
-    android:layout_height="160dp"
-    tools:context=".HomeFragment">
+    android:layout_height="160dp">
 
 
     <RelativeLayout
@@ -49,16 +48,69 @@
                     android:textSize="25dp"
                     android:textStyle="italic" />
 
-                <TextView
-                    android:id="@+id/cartProductPrice"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/bold"
-                    android:text="Rs. 1,00,000"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/bold"
+                        android:text="Rs. "
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/cartProductPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/bold"
+                        android:text="1,00,000"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/buyerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/bold"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/buyerEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/bold"
+                        android:text="1,00,000"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/buyerNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/bold"
+                        android:text="1,00,000"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+
 
 
             </LinearLayout>
