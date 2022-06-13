@@ -11,11 +11,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CartFragment cartFragment = new CartFragment();
     SearchFragment searchFragment = new SearchFragment();
     private ImageButton logoutButton, searchButton;
-
+    BroadcastReceiver broadcastReceiver = null;
     //side navigation
     ExpandableListView expandableListView;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -122,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         //search
         searchButton = findViewById(R.id.searchButton);
-
+        broadcastReceiver = new InternetReceiver();
+        internetStatus();
         expandableListView = findViewById(R.id.navList);
         navigationManager = FragmentNavigationManager.getmInstance(this);
         initItems();
@@ -213,12 +216,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
 //                startActivity(new Intent(MainActivity.this,SearchFragment.class));
 //                finish();
-                FragmentTransaction fragmentTransaction=
-                getSupportFragmentManager().beginTransaction();
-                Bundle data=new Bundle();
-                data.putString("data",searchEdittext.getText().toString());
-                fragmentTransaction.replace(R.id.container,searchFragment).commit();
-
+                FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                Bundle data = new Bundle();
+                data.putString("data", searchEdittext.getText().toString());
+                fragmentTransaction.replace(R.id.container, searchFragment).commit();
             }
         });
     }
@@ -226,6 +228,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     
 
     //side navigation
+//internet connection checking
+    private void internetStatus() {
+        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+
     private void selectFirstItemAsDefault() {
         if (navigationManager != null) {
             String firstItem = lstTitle.get(0);
