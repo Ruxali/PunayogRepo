@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
@@ -74,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProfileFragment profileFragment = new ProfileFragment();
     YourListingsFragment listingsFragment = new YourListingsFragment();
     CartFragment cartFragment = new CartFragment();
-
-    private ImageButton logoutButton;
+    SearchFragment searchFragment = new SearchFragment();
+    private ImageButton logoutButton, searchButton;
 
     //side navigation
     ExpandableListView expandableListView;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Map<String, List<String>> lstChild;
     private NavigationManager navigationManager;
     private String titleLabel;
-
+    private EditText searchEdittext;
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private DatabaseReference ref;
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView.setBackground(null);
 
         listView = findViewById(R.id.productListView);
-
+        searchButton = findViewById(R.id.searchButton);
+        searchEdittext = findViewById(R.id.searchEdittext);
 
         statusBarColor();
         ref = FirebaseDatabase.getInstance().getReference("uploads");
@@ -116,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //search
+        searchButton = findViewById(R.id.searchButton);
 
         expandableListView = findViewById(R.id.navList);
         navigationManager = FragmentNavigationManager.getmInstance(this);
@@ -149,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME,MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
 
                                 finish();
                                 auth.signOut();
@@ -195,9 +199,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.setNavigationItemSelectedListener(this);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this,SearchFragment.class));
+//                finish();
+                FragmentTransaction fragmentTransaction=
+                getSupportFragmentManager().beginTransaction();
+                Bundle data=new Bundle();
+                data.putString("data",searchEdittext.getText().toString());
+                fragmentTransaction.replace(R.id.container,searchFragment).commit();
+            }
+        });
     }
 
     //side navigation
+
 
     private void selectFirstItemAsDefault() {
         if (navigationManager != null) {

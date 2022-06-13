@@ -40,7 +40,8 @@
                     android:text="Address"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
-                    android:textStyle="bold|normal" />
+                    android:textStyle="bold|normal"
+                    android:fontFamily="@font/roboto"/>
 
             </LinearLayout>
         </RelativeLayout>
@@ -62,7 +63,9 @@
                     android:gravity="center"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textStyle="normal"
+                    android:padding="3dp"
+                    android:fontFamily="@font/roboto"/>
 
             </LinearLayout>
         </LinearLayout>
