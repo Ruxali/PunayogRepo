@@ -95,5 +95,5 @@ public class YourListingsFragment extends Fragment {
         listProductAdapter.startListening();
 
     }
-    
+
 }

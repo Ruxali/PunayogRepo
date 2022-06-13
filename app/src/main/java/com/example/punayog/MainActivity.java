@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
@@ -204,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        //search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,13 +218,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Bundle data=new Bundle();
                 data.putString("data",searchEdittext.getText().toString());
                 fragmentTransaction.replace(R.id.container,searchFragment).commit();
+
             }
         });
     }
 
+    
+
     //side navigation
-
-
     private void selectFirstItemAsDefault() {
         if (navigationManager != null) {
             String firstItem = lstTitle.get(0);
