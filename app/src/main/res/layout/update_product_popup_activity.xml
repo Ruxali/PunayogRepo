@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Update Product Details"
+        android:background="@color/navigation"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:textColor="@color/primaryTextColor"
+        android:fontFamily="@font/bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto"
+        android:layout_marginBottom="5dp"
+        android:text="Product Name"
+        android:textColor="@color/primaryTextColor"/>
+
+    <EditText
+        android:id="@+id/updateProductName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textSize="20sp"
+        android:background="@drawable/edittext_button_style_rounded" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto"
+        android:layout_marginBottom="5dp"
+        android:text="Product Price"
+        android:textColor="@color/primaryTextColor"/>
+
+    <EditText
+        android:id="@+id/updateProductPrice"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textSize="20sp"
+        android:background="@drawable/edittext_button_style_rounded" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto"
+        android:layout_marginBottom="5dp"
+        android:text="Product Short Description"
+        android:textColor="@color/primaryTextColor"/>
+
+    <EditText
+        android:id="@+id/updateProductShortDescription"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textSize="20sp"
+        android:background="@drawable/edittext_button_style_rounded" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto"
+        android:layout_marginBottom="5dp"
+        android:text="Product Specification"
+        android:textColor="@color/primaryTextColor"/>
+
+    <EditText
+        android:id="@+id/updateProductSpecification"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textSize="20sp"
+        android:background="@drawable/edittext_button_style_rounded" />
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:textSize="20sp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:fontFamily="@font/roboto"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:text="Product Image URL"-->
+<!--        android:textColor="@color/primaryTextColor"/>-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/updateProductImageURL"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginLeft="10dp"-->
+<!--        android:layout_marginRight="10dp"-->
+<!--        android:gravity="center"-->
+<!--        android:fontFamily="@font/roboto"-->
+<!--        android:textSize="20sp"-->
+<!--        android:background="@drawable/edittext_button_style_rounded" />-->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/updateButton"
+        style="@style/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="update"
+        android:textSize="21sp"/>
+
+</LinearLayout>

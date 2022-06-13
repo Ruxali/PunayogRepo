@@ -72,7 +72,7 @@ public class FragmentForSideNav extends Fragment {
         args.putString(KEY_TITLE, title);
         fragment.setArguments(args);
 
-        if(categoryTitle != null){
+        if (categoryTitle != null) {
             categoryTitle.setText(titleLabel);
             getDataFromFirebase(titleLabel);
         }
@@ -132,17 +132,21 @@ public class FragmentForSideNav extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                        Product product = new Product();
+                    Product product = new Product();
 
-                        product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
-                        product.setProductName(snapshot.child("productName").getValue(String.class));
-                        product.setPrice( snapshot.child("price").getValue(String.class));
-                        product.setLocation( snapshot.child("location").getValue(String.class));
-                        product.setLongDesc( snapshot.child("longDesc").getValue(String.class));
-                        product.setShortDesc( snapshot.child("shortDesc").getValue(String.class));
-                        product.setSubCategory( snapshot.child("subCategory").getValue(String.class));
+                    product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
+                    product.setProductName(snapshot.child("productName").getValue(String.class));
+                    product.setPrice(snapshot.child("price").getValue(String.class));
+                    product.setLocation(snapshot.child("location").getValue(String.class));
+                    product.setLongDesc(snapshot.child("longDesc").getValue(String.class));
+                    product.setShortDesc(snapshot.child("shortDesc").getValue(String.class));
+                    product.setSubCategory(snapshot.child("subCategory").getValue(String.class));
+                    product.setCategory((String) snapshot.child("category").getValue());
+                    product.setSellerName((String) snapshot.child("sellerName").getValue());
+                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
-                        productArrayList.add(product);
+                    productArrayList.add(product);
 
                 }
 
@@ -169,6 +173,7 @@ public class FragmentForSideNav extends Fragment {
                 productAdapter.notifyDataSetChanged();
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 errorImageView.setVisibility(View.VISIBLE);

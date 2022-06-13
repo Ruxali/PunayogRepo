@@ -179,7 +179,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Query query = databaseReference.child("users");
         query.keepSynced(true);
-        System.out.println("Query: " + query);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

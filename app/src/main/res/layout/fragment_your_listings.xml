@@ -35,7 +35,7 @@
         tools:ignore="MissingConstraints">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/productRecyclerView"
+            android:id="@+id/listedProductRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/recentLinearLayout"

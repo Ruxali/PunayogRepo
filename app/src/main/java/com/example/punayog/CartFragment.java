@@ -1,24 +1,26 @@
 package com.example.punayog;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.CartAdapter;
-import com.example.punayog.adapter.ProductAdapter;
+import com.example.punayog.interfaces.SetOnPriceChange;
 import com.example.punayog.model.CartModel;
-import com.example.punayog.model.Product;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,14 +32,15 @@ import java.util.ArrayList;
 
 public class CartFragment extends Fragment {
     private RecyclerView cartRecyclerView;
-    private ImageButton listImageButton, gridImageButoon;
     private TextView totalPrice;
-    float overAllTotalAmount = 0.00F;
+
 
     private DatabaseReference myRef;
     private ArrayList<CartModel> cartArrayList;
     private Context context;
     private CartAdapter cartAdapter;
+    private FirebaseAuth database;
+    FirebaseUser firebaseuser;
 
     @Nullable
     @Override
@@ -47,25 +50,42 @@ public class CartFragment extends Fragment {
 
         cartRecyclerView = rootView.findViewById(R.id.cartRecyclerView);
 
-        listImageButton = rootView.findViewById(R.id.listImageButton);
-        gridImageButoon = rootView.findViewById(R.id.gridImageButton);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        cartRecyclerView.setLayoutManager(layoutManager);
-        cartRecyclerView.setHasFixedSize(true);
-
         //total price
         totalPrice = rootView.findViewById(R.id.totalPrice);
-//        float singlePrice = ((Float.parseFloat(cartModel.getPrice())));
-//        overAllTotalAmount = overAllTotalAmount + singlePrice;
-//        totalPrice.setText(String.valueOf(overAllTotalAmount));
+
 
         //firebase
         myRef = FirebaseDatabase.getInstance().getReference();
 
         clearAll();
 
-        getDataFromFirebase();
+        database = FirebaseAuth.getInstance();
+        firebaseuser = database.getCurrentUser();
+        if (firebaseuser == null) {
+            AlertDialog.Builder profileAlert = new AlertDialog.Builder(getContext());
+            profileAlert.setTitle("You are not Logged in yet!");
+            profileAlert.setMessage("Do you want to login?");
+            profileAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+            profileAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(getActivity(),MainActivity.class);
+                    startActivity(intent);
+                    dialogInterface.cancel();
+                }
+            });
+            profileAlert.create();
+            profileAlert.show();
+        } else {
+            getDataFromFirebase();
+        }
+
 
         return rootView;
     }
@@ -73,11 +93,13 @@ public class CartFragment extends Fragment {
 
     //for cart products
     private void getDataFromFirebase() {
+        String buyerEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
         cartArrayList = new ArrayList<>();
 
         Query query = myRef.child("cart");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.orderByChild("buyerEmail").equalTo(buyerEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -93,23 +115,21 @@ public class CartFragment extends Fragment {
                 }
 
 
-                cartAdapter = new CartAdapter(context, cartArrayList);
-                listImageButton.setOnClickListener(new View.OnClickListener() {
+                cartAdapter = new CartAdapter(totalPrice, cartArrayList, new SetOnPriceChange() {
                     @Override
-                    public void onClick(View view) {
-                        LinearLayoutManager linearLayoutManager;
-                        linearLayoutManager = new LinearLayoutManager(getContext());
-                        cartRecyclerView.setLayoutManager(linearLayoutManager);
+                    public void onPriceChange(int pos) {
+                        cartArrayList.remove(pos);
+                        double totalAmount = 0.0;
+                        for(CartModel cartModel : cartArrayList){
+                            totalAmount = totalAmount + (Double.parseDouble(String.valueOf(cartModel.getPrice())));
+                        }
+                        totalPrice.setText(String.valueOf(totalAmount));
+                        cartAdapter.notifyDataSetChanged();
                     }
                 });
-
-                gridImageButoon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
-                        cartRecyclerView.setLayoutManager(gridLayoutManager);
-                    }
-                });
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                cartRecyclerView.setLayoutManager(layoutManager);
+                cartRecyclerView.setHasFixedSize(true);
 
                 cartRecyclerView.setAdapter(cartAdapter);
                 cartAdapter.notifyDataSetChanged();
@@ -129,4 +149,10 @@ public class CartFragment extends Fragment {
 
         }
     }
+//
+//    public void setTotalPrice(String totalAmount) {
+//        System.out.println("Total:" + totalAmount);
+//        totalPrice.setText(totalAmount);
+//        System.out.println(totalPrice.getText());
+//    }
 }
