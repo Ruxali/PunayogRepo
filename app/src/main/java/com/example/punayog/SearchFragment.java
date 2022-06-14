@@ -24,8 +24,6 @@ import com.example.punayog.adapter.ProductAdapter;
 import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.Product;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,13 +34,12 @@ import com.google.firebase.firestore.remote.Datastore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SearchFragment extends Fragment {
     private RecyclerView searchRecycler;
     private DatabaseReference databaseRef;
     private ArrayList<Product> searchProductList;
-    private ProductAdapter searchAdapter;
+    private SearchAdapter searchAdapter;
     private Context context;
     String myDataFromActivity;
 
@@ -59,53 +56,36 @@ public class SearchFragment extends Fragment {
         databaseRef = FirebaseDatabase.getInstance().getReference();
 
         search();
+        activity.getSearchEdittext().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (searchAdapter!=null){
+                    searchAdapter.getFilter().filter(charSequence);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         return view;
     }
-
-//    private void search() {
-//        searchProductList = new ArrayList<>();
-//        DatabaseReference databaseReference = databaseRef.child("uploads").child("productName");
-//        databaseReference.equalTo(myDataFromActivity).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                searchProductList.clear();
-//                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-//                    Product product=new Product();
-//                    if (product.getProductName().equals(databaseReference))
-//                    {
-//                        searchProductList.add( product );
-//                    }
-//                    searchAdapter = new ProductAdapter(context, searchProductList);
-//                    LinearLayoutManager linearLayoutManager;
-//                    linearLayoutManager = new LinearLayoutManager(getContext());
-//                    searchRecycler.setLayoutManager(linearLayoutManager);
-//
-//
-//                    searchRecycler.setAdapter(searchAdapter);
-//                    searchAdapter.notifyDataSetChanged();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
 
     private void search() {
         searchProductList = new ArrayList<>();
 
-        Query query = databaseRef.child("uploads").orderByChild("productName");
+        Query query = databaseRef.child("uploads");
 
-        query.equalTo(myDataFromActivity).addListenerForSingleValueEvent(new ValueEventListener() {
-
-        query.orderByChild("productName").startAt(myDataFromActivity).endAt(myDataFromActivity).addListenerForSingleValueEvent(new ValueEventListener() {
-
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println(dataSnapshot.getChildren());
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Product product = new Product();
 
@@ -125,22 +105,14 @@ public class SearchFragment extends Fragment {
 
                 }
 
-
-                searchAdapter = new ProductAdapter(context, searchProductList);
-                LinearLayoutManager linearLayoutManager;
-                linearLayoutManager = new LinearLayoutManager(getContext());
-                searchRecycler.setLayoutManager(linearLayoutManager);
-
-
                 searchAdapter = new SearchAdapter(context, searchProductList);
                 LinearLayoutManager linearLayoutManager;
                 linearLayoutManager = new LinearLayoutManager(getContext());
                 searchRecycler.setLayoutManager(linearLayoutManager);
 
-
                 searchRecycler.setAdapter(searchAdapter);
                 searchAdapter.notifyDataSetChanged();
-
+                searchAdapter.getFilter().filter(myDataFromActivity);
             }
 
             @Override

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,17 +33,19 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductViewHolder>  {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductViewHolder> implements Filterable {
 
     private Context context;
     public ArrayList<Product> searchProductList;
-
+    public ArrayList<Product> tempProductList;
 
     public SearchAdapter(Context context, ArrayList<Product> searchProductList) {
         this.context = context;
         this.searchProductList = searchProductList;
+        this.tempProductList = searchProductList;
     }
 
     @Override
@@ -56,7 +60,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
     @Override
     public void onBindViewHolder(SearchAdapter.ProductViewHolder productViewHolder, int index) {
 
-        Product product = searchProductList.get(index);
+        Product product = tempProductList.get(index);
 
         //setting value
         productViewHolder.productName.setText(product.getProductName());
@@ -76,7 +80,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ProductDetailsActivity.class);
-                intent.putExtra("product",product);
+                intent.putExtra("product", product);
                 view.getContext().startActivity(intent);
             }
         });
@@ -86,10 +90,43 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
     @Override
     public int getItemCount() {
 
-        return searchProductList.size();
+        return tempProductList.size() > 0 ? tempProductList.size() : 0;
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    tempProductList = searchProductList;
+                } else {
+                    ArrayList<Product> filteredList = new ArrayList<>();
+                    for (Product product : searchProductList) {
 
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (product.getProductName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(product);
+                        }
+                    }
+
+                    tempProductList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = tempProductList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                tempProductList = (ArrayList<Product>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
@@ -126,8 +163,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
     }
 
 
-
 }
 
-}
+
 

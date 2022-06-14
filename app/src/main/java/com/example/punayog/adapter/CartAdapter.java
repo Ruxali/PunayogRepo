@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.CartFragment;
@@ -27,13 +28,14 @@ import java.util.ArrayList;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>  {
 
     SetOnPriceChange setOnPriceChange;
-    TextView totalPrice;
+   // TextView totalPrice;
+    MutableLiveData<Double> totalPrice;
     private CartFragment context;
     public ArrayList<CartModel> cartArrayList;
     double overAllTotalAmount = 0.0;
 
 
-    public CartAdapter(TextView totalPrice, ArrayList<CartModel> cartArrayList,SetOnPriceChange setOnPriceChange) {
+    public CartAdapter(MutableLiveData<Double> totalPrice, ArrayList<CartModel> cartArrayList,SetOnPriceChange setOnPriceChange) {
         this.totalPrice = totalPrice;
         this.cartArrayList = cartArrayList;
         this.setOnPriceChange = setOnPriceChange;
@@ -60,7 +62,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         double singlePrice = ((Double.parseDouble(cartModel.getPrice())));
         overAllTotalAmount = overAllTotalAmount + singlePrice;
-        totalPrice.setText(String.valueOf(overAllTotalAmount));
+        totalPrice.setValue((overAllTotalAmount));
 
 
 
@@ -94,10 +96,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                                             int pos = cartArrayList.indexOf(cartModel);
                                             double singlePrice = ((Double.parseDouble(cartArrayList.get(pos).getPrice())));
                                             overAllTotalAmount = overAllTotalAmount - singlePrice;
-                                            System.out.println("overall amount:" +overAllTotalAmount);
-                                            setOnPriceChange.onPriceChange(pos);
-//                                            cartArrayList.remove(pos);
-//                                            notifyItemRemoved(pos);
+//                                            System.out.println("overall amount:" +overAllTotalAmount);
+                                            totalPrice.setValue(overAllTotalAmount);
+//                                            System.out.println("decreased price"+cartTotalAmount.getValue());
+//                                            totalPrice.setText(cartTotalAmount.getValue().toString());
+                                            setOnPriceChange.onPriceChange(Double.parseDouble(cartModel.getPrice()),pos);
+                                            cartArrayList.remove(pos);
+                                            notifyItemRemoved(pos);
                                             notifyDataSetChanged();
 
                                             Toast.makeText(view.getContext(), "Deleted From Cart!", Toast.LENGTH_SHORT).show();
