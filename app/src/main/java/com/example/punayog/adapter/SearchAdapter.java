@@ -122,6 +122,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
             sellerNumber = itemView.findViewById(R.id.productSellerNumber);
         }
 
+
     }
+
 
 }

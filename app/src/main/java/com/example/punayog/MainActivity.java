@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
@@ -38,6 +39,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.punayog.adapter.CustomExpandableListAdapter;
+import com.example.punayog.adapter.ProductAdapter;
+import com.example.punayog.model.Product;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -85,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SearchFragment searchFragment = new SearchFragment();
     private ImageButton logoutButton, searchButton;
 
-
+    //connectivity checking
+    BroadcastReceiver broadcastReceiver = null;
 
     //side navigation
     ExpandableListView expandableListView;
@@ -132,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //search
         searchButton = findViewById(R.id.searchButton);
         searchEdittext = findViewById(R.id.searchEdittext);
-
+//connectivity checking
+        broadcastReceiver = new InternetReceiver();
+        checkStatus();
 
         expandableListView = findViewById(R.id.navList);
         navigationManager = FragmentNavigationManager.getmInstance(this);
@@ -218,15 +225,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("searchText",searchEdittext.getText().toString());
-//                searchFragment.setArguments(bundle);
                 searchText = searchEdittext.getText().toString();
-                fragmentTransaction.replace(R.id.container,searchFragment).commit();
+                fragmentTransaction.replace(R.id.container, searchFragment).commit();
                 closeKeyboard();
+                searchEdittext.setText(" ");
             }
         });
     }
+
+    //connectivity checking
+    private void checkStatus() {
+        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
 
     public String getMyData() {
         return searchText;
@@ -234,12 +251,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void closeKeyboard() {
         View view = this.getCurrentFocus();
-        if(view != null){
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
 
 
     //side navigation

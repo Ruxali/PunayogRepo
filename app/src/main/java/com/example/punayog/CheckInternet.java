@@ -11,10 +11,12 @@ public class CheckInternet {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo!=null){
             status = "connected";
+            return status;
         }
         else {
             status = "disconnected";
+            return status;
         }
-        return status;
+
     }
 }
