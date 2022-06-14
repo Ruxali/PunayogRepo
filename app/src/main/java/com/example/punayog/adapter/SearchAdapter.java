@@ -126,4 +126,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
     }
 
 
+
 }
+
+}
+

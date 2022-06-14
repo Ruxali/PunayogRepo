@@ -101,6 +101,9 @@ public class SearchFragment extends Fragment {
         Query query = databaseRef.child("uploads").orderByChild("productName");
 
         query.equalTo(myDataFromActivity).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        query.orderByChild("productName").startAt(myDataFromActivity).endAt(myDataFromActivity).addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -122,7 +125,14 @@ public class SearchFragment extends Fragment {
 
                 }
 
+
                 searchAdapter = new ProductAdapter(context, searchProductList);
+                LinearLayoutManager linearLayoutManager;
+                linearLayoutManager = new LinearLayoutManager(getContext());
+                searchRecycler.setLayoutManager(linearLayoutManager);
+
+
+                searchAdapter = new SearchAdapter(context, searchProductList);
                 LinearLayoutManager linearLayoutManager;
                 linearLayoutManager = new LinearLayoutManager(getContext());
                 searchRecycler.setLayoutManager(linearLayoutManager);
