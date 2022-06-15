@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class ProfileFragment extends Fragment {
     FirebaseUser firebaseuser;
     private DatabaseReference reference;
     private ShapeableImageView profileImageView;
+    private LinearLayout profileLayout;
 
     @Nullable
     @Override
@@ -62,6 +64,7 @@ public class ProfileFragment extends Fragment {
         textDoB = view.findViewById(R.id.textDoB);
         profileImageView=view.findViewById(R.id.profileImageView);
         database = FirebaseAuth.getInstance();
+        profileLayout = view.findViewById(R.id.profileLayout);
 
         firebaseuser = database.getCurrentUser();
         if (firebaseuser == null) {
@@ -83,9 +86,11 @@ public class ProfileFragment extends Fragment {
                     dialogInterface.cancel();
                 }
             });
+            profileLayout.setVisibility(View.GONE);
             profileAlert.create();
             profileAlert.show();
         } else {
+            profileLayout.setVisibility(View.VISIBLE);
             showUserProfile();
         }
         return view;

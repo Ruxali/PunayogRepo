@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView rv;
     String searchText;
 
+    private FirebaseAuth database;
+    FirebaseUser firebaseuser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +162,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle("");
+
+        //check if user is logged in
+        database = FirebaseAuth.getInstance();
+        firebaseuser = database.getCurrentUser();
+
 
         //for logout
         logoutButton = findViewById(R.id.logoutButton);
