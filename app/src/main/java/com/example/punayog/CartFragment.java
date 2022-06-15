@@ -16,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +39,7 @@ public class CartFragment extends Fragment {
     private RecyclerView cartRecyclerView;
     private TextView totalPrice;
 
-
+    public MutableLiveData<Double> cartTotalAmount = new MutableLiveData<>();
     private DatabaseReference myRef;
     private ArrayList<CartModel> cartArrayList;
     private Context context;
@@ -75,14 +75,14 @@ public class CartFragment extends Fragment {
             profileAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
                 }
             });
             profileAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(getActivity(),MainActivity.class);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     dialogInterface.cancel();
                 }
@@ -95,26 +95,12 @@ public class CartFragment extends Fragment {
             getDataFromFirebase();
         }
 
-        //send to order fragment
-        proceedButton = rootView.findViewById(R.id.proceedButton);
-        proceedButton.setOnClickListener(new View.OnClickListener() {
+        cartTotalAmount.observe(getActivity(), new Observer<Double>() {
             @Override
-            public void onClick(View view) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("totalAmount",totalPrice.getText().toString());
-//
-//                OrderFragment orderFragment = new OrderFragment();
-//                orderFragment.setArguments(bundle);
-                Fragment fragment = new OrderFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+            public void onChanged(Double s) {
+                totalPrice.setText(String.valueOf(s));
             }
         });
-
-
         return rootView;
     }
 
@@ -142,17 +128,25 @@ public class CartFragment extends Fragment {
 
                 }
 
-
-                cartAdapter = new CartAdapter(totalPrice, cartArrayList, new SetOnPriceChange() {
+                cartTotalAmount.setValue(0.0);
+                totalPrice.setText(cartTotalAmount.getValue().toString());
+                cartAdapter = new CartAdapter(cartTotalAmount, cartArrayList, new SetOnPriceChange() {
                     @Override
-                    public void onPriceChange(int pos) {
-                        cartArrayList.remove(pos);
-                        double totalAmount = 0.0;
-                        for(CartModel cartModel : cartArrayList){
-                            totalAmount = totalAmount + (Double.parseDouble(String.valueOf(cartModel.getPrice())));
-                        }
-                        totalPrice.setText(String.valueOf(totalAmount));
-                        cartAdapter.notifyDataSetChanged();
+                    public void onPriceChange(double amount, int pos) {
+//                        System.out.println("total amount" + amount);
+//                        System.out.println("total price:"+totalPrice.getText());
+////                        cartTotalAmount.setValue(Double.parseDouble(totalPrice.getText().toString().trim()));
+//                        cartTotalAmount.setValue(Double.parseDouble(totalPrice.getText().toString().trim()) - amount);
+//                        System.out.println("decreased price"+cartTotalAmount.getValue());
+//                        totalPrice.setText(cartTotalAmount.getValue().toString());
+//                        cartArrayList.remove(pos);
+//                        cartAdapter.notifyItemRemoved(pos);
+
+//                        for (CartModel cartModel : cartArrayList) {
+//
+//                        }
+//                        totalPrice.setText(String.valueOf(totalAmount));
+//                        cartAdapter.notifyDataSetChanged();
                     }
                 });
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -161,6 +155,7 @@ public class CartFragment extends Fragment {
 
                 cartRecyclerView.setAdapter(cartAdapter);
                 cartAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -168,12 +163,23 @@ public class CartFragment extends Fragment {
 
             }
         });
+        //calculateTotalPrice();
     }
 
     private void clearAll() {
         if (cartArrayList != null) {
             cartArrayList.clear();
 
+
+        }
+    }
+
+    private void calculateTotalPrice() {
+        double overAllTotalAmount = 0.0;
+        for (CartModel cartModel : cartArrayList) {
+            double singlePrice = ((Double.parseDouble(cartModel.getPrice())));
+            overAllTotalAmount = overAllTotalAmount + singlePrice;
+            totalPrice.setText(String.valueOf(overAllTotalAmount));
 
         }
     }

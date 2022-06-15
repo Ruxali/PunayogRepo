@@ -1,5 +1,5 @@
 package com.example.punayog.interfaces;
 
 public interface SetOnPriceChange {
-    void onPriceChange(int pos);
+    void onPriceChange(double amount,int pos);
 }

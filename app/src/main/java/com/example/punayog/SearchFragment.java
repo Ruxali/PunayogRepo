@@ -56,6 +56,24 @@ public class SearchFragment extends Fragment {
         databaseRef = FirebaseDatabase.getInstance().getReference();
 
         search();
+        activity.getSearchEdittext().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (searchAdapter!=null){
+                    searchAdapter.getFilter().filter(charSequence);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         return view;
     }
 
@@ -64,9 +82,10 @@ public class SearchFragment extends Fragment {
 
         Query query = databaseRef.child("uploads");
 
-        query.orderByChild("productName").startAt(myDataFromActivity).endAt(myDataFromActivity).addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println(dataSnapshot.getChildren());
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Product product = new Product();
 
@@ -93,7 +112,7 @@ public class SearchFragment extends Fragment {
 
                 searchRecycler.setAdapter(searchAdapter);
                 searchAdapter.notifyDataSetChanged();
-
+                searchAdapter.getFilter().filter(myDataFromActivity);
             }
 
             @Override

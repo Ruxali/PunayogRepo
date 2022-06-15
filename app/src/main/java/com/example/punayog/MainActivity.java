@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProfileFragment profileFragment = new ProfileFragment();
     YourListingsFragment listingsFragment = new YourListingsFragment();
     CartFragment cartFragment = new CartFragment();
-    SearchFragment searchFragment = new SearchFragment();
+    SearchFragment searchFragment;
     private ImageButton logoutButton, searchButton;
 
     //connectivity checking
@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //search
         searchButton = findViewById(R.id.searchButton);
         searchEdittext = findViewById(R.id.searchEdittext);
+        searchFragment = new SearchFragment();
 //connectivity checking
         broadcastReceiver = new InternetReceiver();
         checkStatus();
@@ -235,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 searchText = searchEdittext.getText().toString();
                 fragmentTransaction.replace(R.id.container, searchFragment).commit();
                 closeKeyboard();
-                searchEdittext.setText(" ");
+//                searchEdittext.setText(" ");
             }
         });
     }
@@ -434,4 +435,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    public EditText getSearchEdittext() {
+        return searchEdittext;
+    }
 }
