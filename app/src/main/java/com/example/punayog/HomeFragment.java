@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -75,6 +76,7 @@ public class HomeFragment extends Fragment {
         private ArrayList<Product> horizontalScrollModelList;
         private HorizontalScrollAdapter horizontalScrollAdapter;
     //horizontal product
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,6 +171,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Collections.shuffle(horizontalScrollModelList);
 
                     Product product = new Product();
 
@@ -185,6 +188,7 @@ public class HomeFragment extends Fragment {
                     product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
                     horizontalScrollModelList.add(product);
+
 
                 }
 

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class YourListingsFragment extends Fragment {
     private RecyclerView listingRecyclerView;
     private DatabaseReference myRef;
     private FirebaseAuth database;
+    private ConstraintLayout listingLayout;
     FirebaseUser firebaseuser;
 
     //variables
@@ -51,6 +53,7 @@ public class YourListingsFragment extends Fragment {
 
         listingRecyclerView = rootView.findViewById(R.id.listedProductRecyclerView);
         listingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listingLayout = rootView.findViewById(R.id.listingLayout);
 
         database = FirebaseAuth.getInstance();
         firebaseuser = database.getCurrentUser();
@@ -73,9 +76,11 @@ public class YourListingsFragment extends Fragment {
                     dialogInterface.cancel();
                 }
             });
+            listingLayout.setVisibility(View.GONE);
             profileAlert.create();
             profileAlert.show();
         } else {
+            listingLayout.setVisibility(View.VISIBLE);
             getDataFromFirebase();
         }
         return rootView;

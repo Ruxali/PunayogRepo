@@ -311,14 +311,14 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Male is selected", Toast.LENGTH_SHORT).show();
                 radioFemale.setChecked(false);
                 radioOthers.setChecked(false);
-                userGender = "male";
+                userGender = "Male";
                 break;
             case R.id.radioFemale:
                 if (checked) {
                     Toast.makeText(RegisterActivity.this, "Female is selected", Toast.LENGTH_SHORT).show();
                     radioMale.setChecked(false);
                     radioOthers.setChecked(false);
-                    userGender = "female";
+                    userGender = "Female";
                 }
                 break;
             case R.id.radioOthers:
@@ -326,7 +326,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Others is selected", Toast.LENGTH_SHORT).show();
                     radioMale.setChecked(false);
                     radioFemale.setChecked(false);
-                    userGender = "others";
+                    userGender = "Others";
                 }
                 break;
         }
