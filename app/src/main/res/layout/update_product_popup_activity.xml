@@ -28,7 +28,7 @@
     <EditText
         android:id="@+id/updateProductName"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
@@ -50,7 +50,7 @@
     <EditText
         android:id="@+id/updateProductPrice"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
@@ -72,7 +72,7 @@
     <EditText
         android:id="@+id/updateProductShortDescription"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center"

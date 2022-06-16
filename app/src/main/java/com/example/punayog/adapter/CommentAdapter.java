@@ -1,7 +1,6 @@
 package com.example.punayog.adapter;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,33 +13,31 @@ import com.example.punayog.R;
 import com.example.punayog.model.Comment;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
+import java.util.ArrayList;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
+
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private Context context;
-    private List<Comment> comments;
+    private ArrayList<Comment> comments;
     private FirebaseUser user;
 
-    public CommentAdapter(Context context, List<Comment> comments) {
+    public CommentAdapter(Context context, ArrayList<Comment> comments) {
         this.context = context;
         this.comments = comments;
     }
 
     @NonNull
     @Override
-    public CommentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CommentAdapter.CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View row = LayoutInflater.from(context).inflate(R.layout.row_comment, parent, false);
-        return new ViewHolder(row);
+        return new CommentViewHolder(row);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentAdapter.ViewHolder holder, int position) {
-
-        holder.name.setText(comments.get(position).getUname());
+    public void onBindViewHolder(@NonNull CommentAdapter.CommentViewHolder holder, int position) {
+        holder.content.setText(comments.get(position).getUid());
         holder.content.setText(comments.get(position).getContent());
-        holder.date.setText(comments.get(position).getDate());
+
     }
 
     @Override
@@ -48,24 +45,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return comments.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, content, date;
+    public class CommentViewHolder extends RecyclerView.ViewHolder {
+        TextView name, content;
 
-        public ViewHolder(@NonNull View itemView) {
+        public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.comment_username);
+            name = itemView.findViewById(R.id.comment_userid);
             content = itemView.findViewById(R.id.comment_content);
-            date = itemView.findViewById(R.id.comment_date);
-
         }
     }
-    private String timestampToString(long time) {
 
-        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-        calendar.setTimeInMillis(time);
-        String date = DateFormat.format("hh:mm",calendar).toString();
-        return date;
-
-
-    }
 }

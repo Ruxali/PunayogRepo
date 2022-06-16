@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>  {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private Context context;
     public ArrayList<Product> productArrayList;
@@ -36,8 +36,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-
-
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
         return new ProductViewHolder(view);
     }
@@ -66,7 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ProductDetailsActivity.class);
-                intent.putExtra("product",product);
+                intent.putExtra("product", product);
                 view.getContext().startActivity(intent);
             }
         });
@@ -78,8 +76,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         return productArrayList.size();
     }
-
-
 
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
