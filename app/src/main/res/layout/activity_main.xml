@@ -40,7 +40,7 @@
     </com.google.android.material.navigation.NavigationView>
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -185,7 +185,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <include layout="@layout/activity_bottom_navigation" />
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -43,6 +43,13 @@
                 android:src="@drawable/ic_baseline_grid_on_24"
                 android:backgroundTint="@color/whiteTextColor"
                 android:layout_marginTop="10dp"/>
+            <ImageButton
+                android:id="@+id/sortImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/whiteTextColor"
+                android:src="@drawable/ic_baseline_sort_24" />
         </LinearLayout>
     </LinearLayout>
 

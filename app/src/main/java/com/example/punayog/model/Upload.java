@@ -8,7 +8,7 @@ public class Upload {
     private String productId;
     private String mImageUrl;
     private String productName;
-    private String price;
+    private int price;
     private String shortDesc;
     private String longDesc;
     private String location;
@@ -20,7 +20,7 @@ public class Upload {
 
     Upload(){}
 
-    public Upload(String status,String productId,String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category, String subCategory, String sellerName, String sellerNumber, String sellerEmail) {
+    public Upload(String status,String productId,String mImageUrl, String productName, int price, String shortDesc, String longDesc, String location, String category, String subCategory, String sellerName, String sellerNumber, String sellerEmail) {
         this.status = status;
         this.productId = productId;
         this.mImageUrl = mImageUrl;
@@ -68,11 +68,11 @@ public class Upload {
         this.productName = productName;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

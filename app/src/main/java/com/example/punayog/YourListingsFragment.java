@@ -92,8 +92,10 @@ public class YourListingsFragment extends Fragment {
         Query query = myRef.child("uploads");
         FirebaseRecyclerOptions<Product> options =
                 new FirebaseRecyclerOptions.Builder<Product>()
-                .setQuery(FirebaseDatabase.getInstance().getReference().child("uploads").orderByChild("sellerEmail").equalTo(userID),Product.class)
+                .setQuery(query.orderByChild("sellerEmail").equalTo(userID),Product.class)
                 .build();
+
+        System.out.println("order"+ options);
 
         listProductAdapter = new ListingAdapter(options);
         listingRecyclerView.setAdapter(listProductAdapter);
