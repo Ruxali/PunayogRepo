@@ -175,6 +175,7 @@ public class HomeFragment extends Fragment {
 
                     Product product = new Product();
 
+                    product.setProductId((String) snapshot.child("productId").getValue());
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                     product.setProductName((String) snapshot.child("productName").getValue());
                     product.setPrice((String) snapshot.child("price").getValue());
@@ -264,6 +265,7 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Product product = new Product();
 
+                    product.setProductId((String) snapshot.child("productId").getValue());
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                     product.setProductName((String) snapshot.child("productName").getValue());
                     product.setPrice((String) snapshot.child("price").getValue());

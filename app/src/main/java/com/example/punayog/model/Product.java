@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Product  implements Parcelable {
+    private String productId;
     private String mImageUrl;
     private String productName;
     private String price;
@@ -20,7 +21,8 @@ public class Product  implements Parcelable {
 
     }
 
-    public Product(String mImageUrl, String productName, String price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
+    public Product(String productId,String mImageUrl, String productName, String price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
+        this.productId = productId;
         this.mImageUrl = mImageUrl;
         this.productName = productName;
         this.price = price;
@@ -35,6 +37,7 @@ public class Product  implements Parcelable {
     }
 
     protected Product(Parcel in) {
+        productId = in.readString();
         mImageUrl = in.readString();
         productName = in.readString();
         price = in.readString();
@@ -59,6 +62,14 @@ public class Product  implements Parcelable {
             return new Product[size];
         }
     };
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
     public String getmImageUrl() {
         return mImageUrl;
@@ -156,6 +167,7 @@ public class Product  implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(productId);
         parcel.writeString(mImageUrl);
         parcel.writeString(productName);
         parcel.writeString(price);
@@ -172,6 +184,7 @@ public class Product  implements Parcelable {
     @Override
     public String toString() {
         return "Product{" +
+                "productId='" + productId + '\'' +
                 "mImageUrl='" + mImageUrl + '\'' +
                 ", productName='" + productName + '\'' +
                 ", price='" + price + '\'' +

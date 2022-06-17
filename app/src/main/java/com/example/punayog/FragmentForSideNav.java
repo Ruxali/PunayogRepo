@@ -134,6 +134,7 @@ public class FragmentForSideNav extends Fragment {
 
                     Product product = new Product();
 
+                    product.setProductId((String) snapshot.child("productId").getValue(String.class));
                     product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
                     product.setProductName(snapshot.child("productName").getValue(String.class));
                     product.setPrice(snapshot.child("price").getValue(String.class));

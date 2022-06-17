@@ -52,11 +52,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         productViewHolder.productShortDesc.setText(product.getShortDesc());
         productViewHolder.productLocation.setText(product.getLocation());
         productViewHolder.productLongDesc.setText(product.getLongDesc());
+        productViewHolder.productCategory.setText(product.getCategory());
         productViewHolder.productSubCategory.setText(product.getSubCategory());
         productViewHolder.sellerName.setText(product.getSellerName());
         productViewHolder.sellerNumber.setText(product.getSellerNumber());
         productViewHolder.sellerEmail.setText(product.getSellerEmail());
-
+        productViewHolder.productId.setText(product.getProductId());
 
         Picasso.get().load(product.getmImageUrl()).into(productViewHolder.productImage);
 
@@ -90,6 +91,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView sellerName;
         private TextView sellerEmail;
         private TextView sellerNumber;
+        private TextView productId;
 
 
         public ProductViewHolder(View itemView) {
@@ -106,6 +108,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             sellerName = itemView.findViewById(R.id.productSellerName);
             sellerEmail = itemView.findViewById(R.id.productSellerEmail);
             sellerNumber = itemView.findViewById(R.id.productSellerNumber);
+            productId = itemView.findViewById(R.id.productIdList);
         }
 
     }

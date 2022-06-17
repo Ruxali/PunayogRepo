@@ -1,6 +1,7 @@
 package com.example.punayog;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.CommentAdapter;
+import com.example.punayog.adapter.HorizontalScrollAdapter;
 import com.example.punayog.adapter.ProductAdapter;
 import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.Comment;
@@ -47,6 +49,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +59,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
 
-    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView;
+    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView,productIdDetails;
     ImageView productImageView;
     Button addToCartButton;
     ImageButton commentButton;
@@ -77,6 +80,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private EditText commentEditText;
     private ArrayList<Comment> listComment;
     private DatabaseReference reference, upRef;
+
+    //horizontal similar products
+    private Context context;
+    private RecyclerView sameProductRecyclerView;
+    private ArrayList<Product> horizontalScrollModelList;
+    private HorizontalScrollAdapter horizontalScrollAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +109,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         sellerEmailTextView = findViewById(R.id.sellerEmailTextView);
         sellerNumberTextView = findViewById(R.id.sellerNumberTextView);
         productImageView = findViewById(R.id.productImageView);
+        productIdDetails = findViewById(R.id.productIdDetails);
 
         //add to cart
         addToCartButton = findViewById(R.id.addToCartButton);
@@ -114,16 +124,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
-
         upRef = FirebaseDatabase.getInstance().getReference("comment");
 
         //product details
-        categoryTextField.setText(product.getSubCategory());
-
         reference = FirebaseDatabase.getInstance().getReference();
-
-
-        //product details
+        categoryTextField.setText(product.getSubCategory());
         categoryTextField.setText(product.getCategory());
         subCategoryTextField.setText(product.getSubCategory());
         productNameTextView.setText(product.getProductName());
@@ -133,58 +138,102 @@ public class ProductDetailsActivity extends AppCompatActivity {
         sellerNumberTextView.setText(product.getSellerNumber());
         sellerEmailTextView.setText(product.getSellerEmail());
         Picasso.get().load(product.getmImageUrl()).into(productImageView);
+        productIdDetails.setText(product.getProductId());
 
         //Bottom Navigation init
         productBottomNavigationView = findViewById(R.id.productBottomNavigationView);
         productBottomNavigationView.setBackground(null);
 
+        onRecyclerViewComment();
+
+        //for similar products
+        sameProductRecyclerView = findViewById(R.id.sameProductRecyclerView);
+        horizontalScrollModelList = new ArrayList<>();
+        Query query = FirebaseDatabase.getInstance().getReference().child("uploads");
+        String seller = sellerEmailTextView.getText().toString();
+        String thisProductId = productIdDetails.getText().toString();
+
+        query.orderByChild("sellerEmail").equalTo(seller).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if(!snapshot.child("productId").equals(thisProductId)){
+
+
+                    Collections.shuffle(horizontalScrollModelList);
+
+                    Product product = new Product();
+
+                    product.setProductId((String) snapshot.child("productId").getValue());
+                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
+                    product.setProductName((String) snapshot.child("productName").getValue());
+                    product.setPrice((String) snapshot.child("price").getValue());
+                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
+                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
+                    product.setLocation((String) snapshot.child("location").getValue());
+                    product.setCategory((String) snapshot.child("category").getValue());
+                    product.setSellerName((String) snapshot.child("sellerName").getValue());
+                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+
+                    horizontalScrollModelList.add(product);
+                    }
+
+                }
+
+                horizontalScrollAdapter = new HorizontalScrollAdapter(context,horizontalScrollModelList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                sameProductRecyclerView.setLayoutManager(linearLayoutManager);
+                sameProductRecyclerView.setAdapter(horizontalScrollAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
 
         //for comment button
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String comment = commentEditText.getText().toString();
+                firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser == null) {
+                    AlertDialog.Builder profileAlert = new AlertDialog.Builder(ProductDetailsActivity.this);
+                    profileAlert.setTitle("You are not Logged in yet!");
+                    profileAlert.setMessage("Do you want to login?");
+                    profileAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(ProductDetailsActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    profileAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(ProductDetailsActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            dialogInterface.cancel();
+                        }
+                    });
+                    profileAlert.create();
+                    profileAlert.show();
+                } else if(comment.isEmpty()){
+                    Toast.makeText(ProductDetailsActivity.this, "Please enter comment first!", Toast.LENGTH_SHORT).show();
 
-                commentButton.setVisibility(View.INVISIBLE);
-                DatabaseReference commentReference = upRef;
-                String comment_content = commentEditText.getText().toString();
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                String saveCurrentTime, saveCurrentDate;
-                Calendar calForData = Calendar.getInstance();
-
-                SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
-                saveCurrentDate = currentDate.format(calForData.getTime());
-
-                SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-                saveCurrentTime = currentTime.format(calForData.getTime());
-                onRecyclerViewComment();
-
-                commentReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("userId", uid);
-                        hashMap.put("comment", comment_content);
-                        hashMap.put("currentTime", saveCurrentTime);
-                        hashMap.put("currentDate", saveCurrentDate);
-                        commentReference.updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(ProductDetailsActivity.this, "Comment Added", Toast.LENGTH_SHORT).show();
-                                commentButton.setVisibility(View.VISIBLE);
-                                commentEditText.setText(" ");
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                }
+                else{
+                    addToComment();
+                }
 
             }
         });
+
         //navigation bar
         productBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -246,23 +295,76 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
     }
 
+    //for adding comment
+    private void addToComment() {
+        commentButton.setVisibility(View.INVISIBLE);
+        DatabaseReference commentReference = upRef;
+        String comment_content = commentEditText.getText().toString();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String commentID = upRef.push().getKey();
+
+        String saveCurrentTime, saveCurrentDate;
+        Calendar calForData = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
+        saveCurrentDate = currentDate.format(calForData.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        saveCurrentTime = currentTime.format(calForData.getTime());
+
+
+        commentReference.child(commentID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                final HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("userId", uid);
+                hashMap.put("commentId", commentID);
+                hashMap.put("comment", comment_content);
+                hashMap.put("currentTime", saveCurrentTime);
+                hashMap.put("currentDate", saveCurrentDate);
+                hashMap.put("productId",productIdDetails.getText().toString());
+                commentReference.child(commentID).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(ProductDetailsActivity.this, "Comment Added", Toast.LENGTH_SHORT).show();
+                        commentButton.setVisibility(View.VISIBLE);
+                        commentEditText.setText(" ");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     //for fetching comment
     private void onRecyclerViewComment() {
 
         listComment = new ArrayList<>();
 
-        DatabaseReference commentRef = firebaseDatabase.getReference().child("comment");
-        commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference();
+        String productIdForComment = productIdDetails.getText().toString();
+        Query query = commentRef.child("comment");
+        query.orderByChild("productId").equalTo(productIdForComment).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Comment comment = new Comment();
-                    comment.setContent(String.valueOf(snap.child("comment")));
+
+                    comment.setUid((String) snap.child("userId").getValue());
+                    comment.setContent((String) snap.child("comment").getValue());
 
                     listComment.add(comment);
                 }
 
-                commentRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                LinearLayoutManager linearLayoutManager;
+                linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                commentRecyclerView.setLayoutManager(linearLayoutManager);
                 commentAdapter = new CommentAdapter(getApplicationContext(), listComment);
                 commentRecyclerView.setAdapter(commentAdapter);
                 commentAdapter.notifyDataSetChanged();
@@ -336,10 +438,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     }
 
-
-    private void showMessage(String comment_added) {
-        Toast.makeText(this, comment_added, Toast.LENGTH_LONG).show();
-    }
 
 
     public void statusBarColor() {
