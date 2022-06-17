@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/whiteTextColor">
 
 
-        <LinearLayout
-            android:layout_margin="8dp"
-            android:id="@+id/bannerLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-                <include layout="@layout/sliding_add_layout"/>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/bannerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
 
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:id="@+id/horizontalScrollLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bannerLinearLayout">
-                <include layout="@layout/horizontal_scroll_layout"/>
-        </LinearLayout>
+        <include layout="@layout/sliding_add_layout" />
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/recentLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_below="@id/horizontalScrollLinearLayout">
+    <LinearLayout
+        android:id="@+id/horizontalScrollLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bannerLinearLayout"
+        android:layout_margin="5dp">
+
+        <include layout="@layout/horizontal_scroll_layout" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recentLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/horizontalScrollLinearLayout"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <TextView
             android:id="@+id/topic"
             android:layout_width="wrap_content"
@@ -40,43 +43,48 @@
             android:fontFamily="@font/bold"
             android:paddingStart="19dp"
             android:text="Recent Products"
+            android:textAllCaps="true"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end">
-                <ImageButton
-                    android:id="@+id/listImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_list_24"
-                    android:backgroundTint="@color/whiteTextColor"
-                    android:layout_marginTop="10dp"/>
-                <ImageButton
-                    android:id="@+id/gridImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_grid_on_24"
-                    android:backgroundTint="@color/whiteTextColor"
-                    android:layout_marginTop="10dp"/>
-                </LinearLayout>
-        </LinearLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/productRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/recentLinearLayout"
-            android:background="@drawable/scroll_background"
-            tools:itemCount="20" />
-        <ProgressBar
-            android:id="@+id/productProgressBar"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"/>
+            android:layout_weight="1"
+            android:gravity="end">
+
+            <ImageButton
+                android:id="@+id/listImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/whiteTextColor"
+                android:src="@drawable/ic_baseline_list_24" />
+
+            <ImageButton
+                android:id="@+id/gridImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/whiteTextColor"
+                android:src="@drawable/ic_baseline_grid_on_24" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/recentLinearLayout"
+        android:background="@drawable/scroll_background"
+        tools:itemCount="20" />
+
+    <ProgressBar
+        android:id="@+id/productProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 </RelativeLayout>
