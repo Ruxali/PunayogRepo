@@ -22,6 +22,7 @@
             android:fontFamily="@font/bold"
             android:paddingStart="19dp"
             android:text="Category Name"
+            android:textAllCaps="true"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp" />
         <LinearLayout

@@ -303,7 +303,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         if (inputProductName.isEmpty()) {
             Toast.makeText(this, "Product name is required", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (!inputProductName.matches("^[a-zA-Z0-9]+([ ]?[a-zA-Z0-9]+)*$")) {
+        } else if (inputProductName.matches("^[a-zA-Z0-9]+([ ]?[a-zA-Z0-9]+)*$")) {
             Toast.makeText(this, "Name pattern is not matched", Toast.LENGTH_SHORT).show();
             return false;
         } else {

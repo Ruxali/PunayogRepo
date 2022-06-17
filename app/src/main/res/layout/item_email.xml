@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:text="Email"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
                     android:textStyle="bold|normal"

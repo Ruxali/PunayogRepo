@@ -59,7 +59,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
 
-    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView,productIdDetails;
+    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, productIdDetails;
     ImageView productImageView;
     Button addToCartButton;
     ImageButton commentButton;
@@ -156,32 +156,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if(!snapshot.child("productId").equals(thisProductId)){
+                    if (!snapshot.child("productId").equals(thisProductId)) {
 
 
-                    Collections.shuffle(horizontalScrollModelList);
+                        Collections.shuffle(horizontalScrollModelList);
 
-                    Product product = new Product();
+                        Product product = new Product();
 
-                    product.setProductId((String) snapshot.child("productId").getValue());
-                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
-                    product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice((String) snapshot.child("price").getValue());
-                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
-                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
-                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
-                    product.setLocation((String) snapshot.child("location").getValue());
-                    product.setCategory((String) snapshot.child("category").getValue());
-                    product.setSellerName((String) snapshot.child("sellerName").getValue());
-                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
-                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+                        product.setProductId((String) snapshot.child("productId").getValue());
+                        product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
+                        product.setProductName((String) snapshot.child("productName").getValue());
+                        product.setPrice((String) snapshot.child("price").getValue());
+                        product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                        product.setLongDesc((String) snapshot.child("longDesc").getValue());
+                        product.setSubCategory((String) snapshot.child("subCategory").getValue());
+                        product.setLocation((String) snapshot.child("location").getValue());
+                        product.setCategory((String) snapshot.child("category").getValue());
+                        product.setSellerName((String) snapshot.child("sellerName").getValue());
+                        product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                        product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
-                    horizontalScrollModelList.add(product);
+                        horizontalScrollModelList.add(product);
                     }
 
                 }
 
-                horizontalScrollAdapter = new HorizontalScrollAdapter(context,horizontalScrollModelList);
+                horizontalScrollAdapter = new HorizontalScrollAdapter(context, horizontalScrollModelList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
                 linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                 sameProductRecyclerView.setLayoutManager(linearLayoutManager);
@@ -222,11 +222,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     });
                     profileAlert.create();
                     profileAlert.show();
-                } else if(comment.isEmpty()){
+                } else if (comment.isEmpty()) {
                     Toast.makeText(ProductDetailsActivity.this, "Please enter comment first!", Toast.LENGTH_SHORT).show();
 
-                }
-                else{
+                } else {
                     addToComment();
                 }
 
@@ -321,7 +320,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 hashMap.put("comment", comment_content);
                 hashMap.put("currentTime", saveCurrentTime);
                 hashMap.put("currentDate", saveCurrentDate);
-                hashMap.put("productId",productIdDetails.getText().toString());
+                hashMap.put("productId", productIdDetails.getText().toString());
                 commentReference.child(commentID).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -436,7 +435,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
     }
-
 
 
     public void statusBarColor() {

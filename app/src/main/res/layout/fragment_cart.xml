@@ -23,6 +23,7 @@
             android:fontFamily="@font/bold"
             android:paddingStart="19dp"
             android:text="Your Cart Items"
+            android:textAllCaps="true"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp" />
         <LinearLayout
@@ -72,8 +73,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-        app:layout_constraintVertical_bias="0.98"
-        android:background="@color/navigation">
+        app:layout_constraintVertical_bias="0.98">
 
 
         <LinearLayout

@@ -27,6 +27,7 @@
             android:fontFamily="@font/bold"
             android:paddingStart="19dp"
             android:text="Search Result"
+            android:textAllCaps="true"
             android:textColor="@color/primaryTextColor"
             android:textSize="25sp" />
 
