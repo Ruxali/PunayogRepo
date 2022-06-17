@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,10 @@ import android.view.ViewGroup;
 
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,7 +51,7 @@ public class HomeFragment extends Fragment {
 
 
     private RecyclerView recyclerView;
-    private ImageButton listImageButton, gridImageButoon;
+    private ImageButton listImageButton, gridImageButoon,sortImageButton;
 
 
 //    private ArrayList<SearchDeal>list;
@@ -86,6 +89,7 @@ public class HomeFragment extends Fragment {
 
         listImageButton = rootView.findViewById(R.id.listImageButton);
         gridImageButoon = rootView.findViewById(R.id.gridImageButton);
+        sortImageButton = rootView.findViewById(R.id.sortImageButton);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -178,7 +182,7 @@ public class HomeFragment extends Fragment {
                     product.setProductId((String) snapshot.child("productId").getValue());
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                     product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice((String) snapshot.child("price").getValue());
+                    product.setPrice(Integer.parseInt( snapshot.child("price").getValue().toString()));
                     product.setShortDesc((String) snapshot.child("shortDesc").getValue());
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setSubCategory((String) snapshot.child("subCategory").getValue());
@@ -208,7 +212,36 @@ public class HomeFragment extends Fragment {
             });
 
 
-        //horizontal Layout
+        //sort products with price
+        sortImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(getContext(),sortImageButton);
+                popupMenu.inflate(R.menu.sort_menu);
+
+                //menu item listener
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.lowToHigh:
+                            Collections.sort(productArrayList,Product.lowToHighComparator);
+                            Toast.makeText(getContext(), "Sort from Low to High Price", Toast.LENGTH_SHORT).show();
+                            productAdapter.notifyDataSetChanged();
+                            return true;
+
+                            case R.id.highToLow:
+                                Collections.sort(productArrayList,Product.highToLowComparator);
+                                Toast.makeText(getContext(), "Sort from High to Low Price", Toast.LENGTH_SHORT).show();
+                                productAdapter.notifyDataSetChanged();
+                                return true;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
 
         return rootView;
     }
@@ -268,7 +301,8 @@ public class HomeFragment extends Fragment {
                     product.setProductId((String) snapshot.child("productId").getValue());
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                     product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice((String) snapshot.child("price").getValue());
+                    product.setPrice (Integer.parseInt(snapshot.child("price").getValue().toString()));
+                    System.out.println("Price:" + snapshot.child("price").getValue());
                     product.setLocation((String) snapshot.child("location").getValue());
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setShortDesc((String) snapshot.child("shortDesc").getValue());

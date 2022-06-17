@@ -1,13 +1,17 @@
 package com.example.punayog.model;
 
+import android.content.ClipData;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.Comparator;
 
 public class Product  implements Parcelable {
     private String productId;
     private String mImageUrl;
     private String productName;
-    private String price;
+    private int price;
     private String shortDesc;
     private String location;
     private String longDesc;
@@ -21,7 +25,7 @@ public class Product  implements Parcelable {
 
     }
 
-    public Product(String productId,String mImageUrl, String productName, String price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
+    public Product(String productId,String mImageUrl, String productName, int price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
         this.productId = productId;
         this.mImageUrl = mImageUrl;
         this.productName = productName;
@@ -40,7 +44,7 @@ public class Product  implements Parcelable {
         productId = in.readString();
         mImageUrl = in.readString();
         productName = in.readString();
-        price = in.readString();
+        price = Integer.parseInt(in.readString());
         shortDesc = in.readString();
         location = in.readString();
         longDesc = in.readString();
@@ -87,11 +91,11 @@ public class Product  implements Parcelable {
         this.productName = productName;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -170,7 +174,7 @@ public class Product  implements Parcelable {
         parcel.writeString(productId);
         parcel.writeString(mImageUrl);
         parcel.writeString(productName);
-        parcel.writeString(price);
+        parcel.writeString(String.valueOf(price));
         parcel.writeString(shortDesc);
         parcel.writeString(location);
         parcel.writeString(longDesc);
@@ -180,6 +184,21 @@ public class Product  implements Parcelable {
         parcel.writeString(sellerEmail);
         parcel.writeString(sellerNumber);
     }
+
+
+    public static Comparator<Product> lowToHighComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product price1, Product price2) {
+           return Integer.compare(price1.price, price2.price);
+        }
+    };
+
+    public static Comparator<Product> highToLowComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product price1, Product price2) {
+            return Integer.compare(price2.price, price1.price);
+        }
+    };
 
     @Override
     public String toString() {
@@ -198,4 +217,5 @@ public class Product  implements Parcelable {
                 ", sellerNumber='" + sellerNumber + '\'' +
                 '}';
     }
+
 }

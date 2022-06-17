@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -35,6 +37,7 @@ import org.w3c.dom.Text;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class FragmentForSideNav extends Fragment {
@@ -44,7 +47,7 @@ public class FragmentForSideNav extends Fragment {
 
     private static RecyclerView recyclerView;
     private static ImageButton listImageButton;
-    private static ImageButton gridImageButton;
+    private static ImageButton gridImageButton,sortImageButton;
     private static ImageView errorImageView;
 
     //Firebase
@@ -97,6 +100,7 @@ public class FragmentForSideNav extends Fragment {
         listImageButton = rootView.findViewById(R.id.listImageButton);
         gridImageButton = rootView.findViewById(R.id.gridImageButton);
         errorImageView = rootView.findViewById(R.id.errorImageView);
+        sortImageButton = rootView.findViewById(R.id.sortImageButton);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -107,6 +111,36 @@ public class FragmentForSideNav extends Fragment {
 
         clearAll();
 
+        //sort products with price
+        sortImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(getContext(),sortImageButton);
+                popupMenu.inflate(R.menu.sort_menu);
+
+                //menu item listener
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.lowToHigh:
+                                Collections.sort(productArrayList,Product.lowToHighComparator);
+                                Toast.makeText(getContext(), "Sort from Low to High Price", Toast.LENGTH_SHORT).show();
+                                productAdapter.notifyDataSetChanged();
+                                return true;
+
+                            case R.id.highToLow:
+                                Collections.sort(productArrayList,Product.highToLowComparator);
+                                Toast.makeText(getContext(), "Sort from High to Low Price", Toast.LENGTH_SHORT).show();
+                                productAdapter.notifyDataSetChanged();
+                                return true;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
 
         return rootView;
     }
@@ -134,10 +168,10 @@ public class FragmentForSideNav extends Fragment {
 
                     Product product = new Product();
 
-                    product.setProductId((String) snapshot.child("productId").getValue(String.class));
+                    product.setProductId(snapshot.child("productId").getValue(String.class));
                     product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
                     product.setProductName(snapshot.child("productName").getValue(String.class));
-                    product.setPrice(snapshot.child("price").getValue(String.class));
+                    product.setPrice(Integer.parseInt((String) snapshot.child("price").getValue()));
                     product.setLocation(snapshot.child("location").getValue(String.class));
                     product.setLongDesc(snapshot.child("longDesc").getValue(String.class));
                     product.setShortDesc(snapshot.child("shortDesc").getValue(String.class));

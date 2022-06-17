@@ -48,7 +48,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         //setting value
         productViewHolder.productName.setText(product.getProductName());
-        productViewHolder.productPrice.setText(product.getPrice());
+        productViewHolder.productPrice.setText(Integer.toString(product.getPrice()));
         productViewHolder.productShortDesc.setText(product.getShortDesc());
         productViewHolder.productLocation.setText(product.getLocation());
         productViewHolder.productLongDesc.setText(product.getLongDesc());

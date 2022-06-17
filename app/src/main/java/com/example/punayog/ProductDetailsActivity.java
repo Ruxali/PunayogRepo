@@ -125,13 +125,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         upRef = FirebaseDatabase.getInstance().getReference("comment");
+
         //product details
         reference = FirebaseDatabase.getInstance().getReference();
         categoryTextField.setText(product.getSubCategory());
         categoryTextField.setText(product.getCategory());
         subCategoryTextField.setText(product.getSubCategory());
         productNameTextView.setText(product.getProductName());
-        productPriceTextView.setText(product.getPrice());
+        productPriceTextView.setText(""+product.getPrice());
         productDetailsTextView.setText(product.getLongDesc());
         sellerNameTextView.setText(product.getSellerName());
         sellerNumberTextView.setText(product.getSellerNumber());
@@ -163,6 +164,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                         Product product = new Product();
 
+
                         product.setProductId((String) snapshot.child("productId").getValue());
                         product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                         product.setProductName((String) snapshot.child("productName").getValue());
@@ -175,6 +177,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         product.setSellerName((String) snapshot.child("sellerName").getValue());
                         product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
                         product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+
+                    product.setProductId((String) snapshot.child("productId").getValue());
+                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
+                    product.setProductName((String) snapshot.child("productName").getValue());
+                    product.setPrice(Integer.parseInt( snapshot.child("price").getValue().toString()));
+                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
+                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
+                    product.setLocation((String) snapshot.child("location").getValue());
+                    product.setCategory((String) snapshot.child("category").getValue());
+                    product.setSellerName((String) snapshot.child("sellerName").getValue());
+                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+
 
                         horizontalScrollModelList.add(product);
                     }

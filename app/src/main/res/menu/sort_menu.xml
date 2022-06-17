@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/lowToHigh"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Low to High Price"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+    <item
+        android:id="@+id/highToLow"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="High to Low Price"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+</menu>
