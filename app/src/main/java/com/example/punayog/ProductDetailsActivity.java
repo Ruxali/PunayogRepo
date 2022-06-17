@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +24,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.CommentAdapter;
+import com.example.punayog.adapter.ProductAdapter;
+import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.Comment;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -51,7 +56,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
 
-    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, editComment;
+    TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView;
     ImageView productImageView;
     Button addToCartButton;
     ImageButton commentButton;
@@ -59,7 +64,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-   private RecyclerView commentRecyclerView;
+    private RecyclerView commentRecyclerView;
 
     private Product product;
     private FirebaseAuth firebaseAuth;
@@ -69,10 +74,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
     float overAllTotalAmount = 0.00F;
 
     private CommentAdapter commentAdapter;
-    private List<Comment> listComment;
-    private static String COMMENT_KEY = "Comment";
-    private String key;
+    private EditText commentEditText;
+    private ArrayList<Comment> listComment;
     private DatabaseReference reference, upRef;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,22 +108,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
         //comment
-        editComment = findViewById(R.id.editComment);
+        commentEditText = findViewById(R.id.editComment);
         commentButton = findViewById(R.id.commentButton);
         commentRecyclerView = findViewById(R.id.commentRecyclerView);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        reference = FirebaseDatabase.getInstance().getReference("comment");
-        upRef = FirebaseDatabase.getInstance().getReference("uploads").child("productName");
-        key = upRef.push().getKey();
+        upRef = FirebaseDatabase.getInstance().getReference("comment");
 
         //product details
         categoryTextField.setText(product.getSubCategory());
 
-        reference = FirebaseDatabase.getInstance().getReference("uploads");
-        key = reference.push().getKey();
+        reference = FirebaseDatabase.getInstance().getReference();
 
 
         //product details
@@ -136,16 +138,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
         productBottomNavigationView = findViewById(R.id.productBottomNavigationView);
         productBottomNavigationView.setBackground(null);
 
+
         //for comment button
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 commentButton.setVisibility(View.INVISIBLE);
-                DatabaseReference commentReference = reference;
-                String comment_content = editComment.getText().toString();
-                String uid = firebaseUser.getUid();
-                String uname = firebaseUser.getDisplayName();
+                DatabaseReference commentReference = upRef;
+                String comment_content = commentEditText.getText().toString();
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                 String saveCurrentTime, saveCurrentDate;
                 Calendar calForData = Calendar.getInstance();
 
@@ -161,9 +163,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("userId", uid);
-                        hashMap.put("userName", uname);
                         hashMap.put("comment", comment_content);
-                        hashMap.put("productKey", key);
                         hashMap.put("currentTime", saveCurrentTime);
                         hashMap.put("currentDate", saveCurrentDate);
                         commentReference.updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -171,7 +171,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             public void onSuccess(Void unused) {
                                 Toast.makeText(ProductDetailsActivity.this, "Comment Added", Toast.LENGTH_SHORT).show();
                                 commentButton.setVisibility(View.VISIBLE);
-                                editComment.setText(" ");
+                                commentEditText.setText(" ");
                             }
                         });
 
@@ -185,8 +185,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
-        //for fetching comments
-
         //navigation bar
         productBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -226,14 +224,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     profileAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(ProductDetailsActivity.this,LoginActivity.class);
+                            Intent intent = new Intent(ProductDetailsActivity.this, LoginActivity.class);
                             startActivity(intent);
                         }
                     });
                     profileAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(ProductDetailsActivity.this,MainActivity.class);
+                            Intent intent = new Intent(ProductDetailsActivity.this, MainActivity.class);
                             startActivity(intent);
                             dialogInterface.cancel();
                         }
@@ -247,6 +245,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     //for fetching comment
     private void onRecyclerViewComment() {
 
@@ -255,12 +254,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         DatabaseReference commentRef = firebaseDatabase.getReference().child("comment");
         commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@android.support.annotation.NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-
-//                    Comment comment = snap.getValue(Comment.class);
-//                    listComment.add(comment);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()) {
                     Comment comment = new Comment();
                     comment.setContent(String.valueOf(snap.child("comment")));
 
@@ -274,9 +269,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
 
-
             @Override
-            public void onCancelled(@android.support.annotation.NonNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
@@ -313,7 +307,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     cartMap.put("productPrice", productPriceTextView.getText().toString());
                     cartMap.put("currentTime", saveCurrentTime);
                     cartMap.put("currentDate", saveCurrentDate);
-                    cartMap.put("buyerEmail",userID);
+                    cartMap.put("buyerEmail", userID);
 
                     cartReference.child(cartID).updateChildren(cartMap).
                             addOnSuccessListener(new OnSuccessListener<Void>() {
