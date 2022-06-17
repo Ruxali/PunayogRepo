@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,6 +58,7 @@ public class CartFragment extends Fragment {
 
         cartRecyclerView = rootView.findViewById(R.id.cartRecyclerView);
         cartLayout = rootView.findViewById(R.id.cartLayout);
+        proceedButton = rootView.findViewById(R.id.proceedButton);
 
         //total price
         totalPrice = rootView.findViewById(R.id.totalPrice);
@@ -66,6 +69,7 @@ public class CartFragment extends Fragment {
 
         clearAll();
 
+        //for checking if user is logged in or not
         database = FirebaseAuth.getInstance();
         firebaseuser = database.getCurrentUser();
         if (firebaseuser == null) {
@@ -95,15 +99,26 @@ public class CartFragment extends Fragment {
             getDataFromFirebase();
         }
 
+        //for total price
         cartTotalAmount.observe(getActivity(), new Observer<Double>() {
             @Override
             public void onChanged(Double s) {
                 totalPrice.setText(String.valueOf(s));
             }
         });
+
+        //go from cart to order fragment
+        proceedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(),OrderActivity.class);
+                intent.putExtra("totalPrice",totalPrice.getText().toString());
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
-
 
     //for cart products
     private void getDataFromFirebase() {
@@ -129,24 +144,13 @@ public class CartFragment extends Fragment {
                 }
 
                 cartTotalAmount.setValue(0.0);
-                totalPrice.setText(cartTotalAmount.getValue().toString());
                 cartAdapter = new CartAdapter(cartTotalAmount, cartArrayList, new SetOnPriceChange() {
                     @Override
                     public void onPriceChange(double amount, int pos) {
-//                        System.out.println("total amount" + amount);
-//                        System.out.println("total price:"+totalPrice.getText());
-////                        cartTotalAmount.setValue(Double.parseDouble(totalPrice.getText().toString().trim()));
-//                        cartTotalAmount.setValue(Double.parseDouble(totalPrice.getText().toString().trim()) - amount);
-//                        System.out.println("decreased price"+cartTotalAmount.getValue());
-//                        totalPrice.setText(cartTotalAmount.getValue().toString());
-//                        cartArrayList.remove(pos);
-//                        cartAdapter.notifyItemRemoved(pos);
+                        cartTotalAmount.setValue(Double.parseDouble(totalPrice.getText().toString().trim()) - amount);
+                        cartArrayList.remove(pos);
+                        cartAdapter.notifyItemRemoved(pos);
 
-//                        for (CartModel cartModel : cartArrayList) {
-//
-//                        }
-//                        totalPrice.setText(String.valueOf(totalAmount));
-//                        cartAdapter.notifyDataSetChanged();
                     }
                 });
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -163,7 +167,6 @@ public class CartFragment extends Fragment {
 
             }
         });
-        //calculateTotalPrice();
     }
 
     private void clearAll() {
@@ -174,19 +177,4 @@ public class CartFragment extends Fragment {
         }
     }
 
-    private void calculateTotalPrice() {
-        double overAllTotalAmount = 0.0;
-        for (CartModel cartModel : cartArrayList) {
-            double singlePrice = ((Double.parseDouble(cartModel.getPrice())));
-            overAllTotalAmount = overAllTotalAmount + singlePrice;
-            totalPrice.setText(String.valueOf(overAllTotalAmount));
-
-        }
-    }
-//
-//    public void setTotalPrice(String totalAmount) {
-//        System.out.println("Total:" + totalAmount);
-//        totalPrice.setText(totalAmount);
-//        System.out.println(totalPrice.getText());
-//    }
 }

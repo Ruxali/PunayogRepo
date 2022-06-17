@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProfileFragment profileFragment = new ProfileFragment();
     YourListingsFragment listingsFragment = new YourListingsFragment();
     CartFragment cartFragment = new CartFragment();
+
     SearchFragment searchFragment;
     private ImageButton logoutButton, searchButton;
 
@@ -140,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchButton = findViewById(R.id.searchButton);
         searchEdittext = findViewById(R.id.searchEdittext);
         searchFragment = new SearchFragment();
-//connectivity checking
+
+        //connectivity checking
         broadcastReceiver = new InternetReceiver();
         checkStatus();
 

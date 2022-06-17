@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Upload {
+    private String status;
+    private String productId;
     private String mImageUrl;
     private String productName;
     private String price;
@@ -18,7 +20,9 @@ public class Upload {
 
     Upload(){}
 
-    public Upload(String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category, String subCategory, String sellerName, String sellerNumber, String sellerEmail) {
+    public Upload(String status,String productId,String mImageUrl, String productName, String price, String shortDesc, String longDesc, String location, String category, String subCategory, String sellerName, String sellerNumber, String sellerEmail) {
+        this.status = status;
+        this.productId = productId;
         this.mImageUrl = mImageUrl;
         this.productName = productName;
         this.price = price;
@@ -30,6 +34,22 @@ public class Upload {
         this.sellerName = sellerName;
         this.sellerNumber = sellerNumber;
         this.sellerEmail = sellerEmail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getmImageUrl() {
