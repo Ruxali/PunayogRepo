@@ -83,6 +83,6 @@ dependencies {
     implementation 'com.orhanobut:dialogplus:1.11@aar'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
+    implementation 'com.google.firebase:firebase-messaging'
 
 }
