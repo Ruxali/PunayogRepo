@@ -138,6 +138,24 @@
                     android:textColorHint="@color/colorPrimaryDark"
                     android:textSize="0sp"
                     android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/productId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_view_picture"
+                    android:layout_marginTop="25dp"
+                    android:textColorHint="@color/colorPrimaryDark"
+                    android:textSize="0sp"
+                    android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/productStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_view_picture"
+                    android:layout_marginTop="25dp"
+                    android:textColorHint="@color/colorPrimaryDark"
+                    android:textSize="0sp"
+                    android:visibility="gone"/>
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/sellerNumber"
                     style="@style/modifiedEditText"

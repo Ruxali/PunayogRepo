@@ -60,6 +60,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     ImageView productImageView;
     Button addToCartButton;
     ImageButton commentButton;
+    TextView cartId;
 
     private RecyclerView recyclerView;
 
@@ -103,6 +104,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         //add to cart
         addToCartButton = findViewById(R.id.addToCartButton);
         cartReference = FirebaseDatabase.getInstance().getReference("cart");
+        cartId = findViewById(R.id.cartId);
 
 
         //comment
@@ -289,7 +291,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         saveCurrentTime = currentTime.format(calForData.getTime());
 
         String cartID = cartReference.push().getKey();
-
+        cartId.setText(cartID);
 
         cartReference.child(cartID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -299,6 +301,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 } else {
 
                     final HashMap<String, Object> cartMap = new HashMap<>();
+                    cartMap.put("cartId",cartId.getText().toString());
                     cartMap.put("productImage", product.getmImageUrl());
                     cartMap.put("productName", productNameTextView.getText().toString());
                     cartMap.put("productPrice", productPriceTextView.getText().toString());

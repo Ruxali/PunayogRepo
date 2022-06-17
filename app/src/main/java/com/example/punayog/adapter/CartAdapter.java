@@ -94,17 +94,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                                             Toast.makeText(view.getContext(), "Error:" +error.getMessage(), Toast.LENGTH_SHORT).show();
                                         }else{
                                             int pos = cartArrayList.indexOf(cartModel);
-                                            double singlePrice = ((Double.parseDouble(cartArrayList.get(pos).getPrice())));
-                                            overAllTotalAmount = overAllTotalAmount - singlePrice;
-//                                            System.out.println("overall amount:" +overAllTotalAmount);
-                                            totalPrice.setValue(overAllTotalAmount);
-//                                            System.out.println("decreased price"+cartTotalAmount.getValue());
-//                                            totalPrice.setText(cartTotalAmount.getValue().toString());
-                                            setOnPriceChange.onPriceChange(Double.parseDouble(cartModel.getPrice()),pos);
-                                            cartArrayList.remove(pos);
-                                            notifyItemRemoved(pos);
-                                            notifyDataSetChanged();
-
+                                            setOnPriceChange.onPriceChange((Double.parseDouble(cartArrayList.get(pos).getPrice())),pos);
                                             Toast.makeText(view.getContext(), "Deleted From Cart!", Toast.LENGTH_SHORT).show();
                                         }
                                     }

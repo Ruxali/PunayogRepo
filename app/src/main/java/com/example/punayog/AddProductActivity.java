@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -50,6 +51,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
     private Spinner spinnerCategory, spinnerSubCategory;
     private EditText editTextPrice, editTextShortText, editTextLongDesc, editTextLocation, mEdittextFile, sellerName, sellerNumber, sellerEmail;
     private ImageView imageViewer;
+    private TextView productId,productStatus;
     private Button choseBtn, mButtonUpload;
     private int position = 0;
 
@@ -94,6 +96,8 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         sellerName = findViewById(R.id.sellerName);
         sellerNumber = findViewById(R.id.sellerNumber);
         sellerEmail = findViewById(R.id.sellerEmail);
+        productId = findViewById(R.id.productId);
+        productStatus = findViewById(R.id.productStatus);
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -221,7 +225,13 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
 
                             firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("uploads");
+                            String str = databaseReference.push().getKey();
+                            productId.setText(str);
+                            String status = "1";
+                            productStatus.setText(status);
                             Upload upload = new Upload(
+                                    productStatus.getText().toString(),
+                                    productId.getText().toString(),
                                     imageViewer.toString(),
                                     mEdittextFile.getText().toString().trim(),
                                     editTextPrice.getText().toString().trim(),
@@ -235,8 +245,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                                     sellerEmail.getText().toString().trim());
 
                             upload.setmImageUrl(String.valueOf(uri));
-                            String uploadId = databaseReference.push().getKey();
-                            databaseReference.child(uploadId).setValue(upload);
+                            databaseReference.child(str).setValue(upload);
 //
                             Toast.makeText(AddProductActivity.this, "Product Added Successfully", Toast.LENGTH_SHORT).show();
 
