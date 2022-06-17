@@ -116,7 +116,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         upRef = FirebaseDatabase.getInstance().getReference("comment");
-
         //product details
         categoryTextField.setText(product.getSubCategory());
 
@@ -301,7 +300,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 } else {
 
                     final HashMap<String, Object> cartMap = new HashMap<>();
-                    cartMap.put("cartId",cartId.getText().toString());
+                    cartMap.put("cartId", cartId.getText().toString());
                     cartMap.put("productImage", product.getmImageUrl());
                     cartMap.put("productName", productNameTextView.getText().toString());
                     cartMap.put("productPrice", productPriceTextView.getText().toString());
