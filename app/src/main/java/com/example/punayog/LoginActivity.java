@@ -230,6 +230,9 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
+//        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+//            startActivity(new Intent(this, PushNotification.class));
+//        }
     }
     //if email is not verified
     private void showAlertDialog() {

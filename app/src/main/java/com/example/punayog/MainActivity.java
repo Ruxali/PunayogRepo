@@ -242,6 +242,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_CALL);
+        filter.addAction(Intent.ACTION_ANSWER);
+        registerReceiver(mIntentReceiver, filter);
+    }
 
     //connectivity checking
     private void checkStatus() {
@@ -252,7 +261,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         super.onPause();
         unregisterReceiver(broadcastReceiver);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Intent.ACTION_SCREEN_OFF);
+//        filter.addAction(Intent.ACTION_CALL);
+//        filter.addAction(Intent.ACTION_ANSWER);
+//
+//        registerReceiver(mIntentReceiver, filter);
     }
+
 
 
     public String getMyData() {
@@ -440,4 +456,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public EditText getSearchEdittext() {
         return searchEdittext;
     }
+
+//    //for signing out
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Intent.ACTION_SCREEN_OFF);
+//        filter.addAction(Intent.ACTION_CALL);
+//        filter.addAction(Intent.ACTION_ANSWER);
+//
+//        registerReceiver(mIntentReceiver, filter);
+//    }
+
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (action.equalsIgnoreCase("android.intent.category.HOME")) {
+                auth.signOut();
+            } else if (action.equalsIgnoreCase("android.intent.action.SCREEN_OFF")) {
+                auth.signOut();
+
+
+            } else if (action.equalsIgnoreCase("android.intent.action.DIAL")) {
+                auth.signOut();
+
+            } else if (action.equalsIgnoreCase("android.intent.action.CALL")) {
+                auth.signOut();
+
+            }
+
+
+        }
+    };
+
 }

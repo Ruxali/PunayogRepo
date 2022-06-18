@@ -165,18 +165,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         Product product = new Product();
 
 
-                        product.setProductId((String) snapshot.child("productId").getValue());
-                        product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
-                        product.setProductName((String) snapshot.child("productName").getValue());
-                        product.setPrice((String) snapshot.child("price").getValue());
-                        product.setShortDesc((String) snapshot.child("shortDesc").getValue());
-                        product.setLongDesc((String) snapshot.child("longDesc").getValue());
-                        product.setSubCategory((String) snapshot.child("subCategory").getValue());
-                        product.setLocation((String) snapshot.child("location").getValue());
-                        product.setCategory((String) snapshot.child("category").getValue());
-                        product.setSellerName((String) snapshot.child("sellerName").getValue());
-                        product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
-                        product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+
 
                     product.setProductId((String) snapshot.child("productId").getValue());
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
