@@ -57,6 +57,8 @@
     <string name="_1_shipping_address"><u>1. Shipping Address: </u></string>
     <string name="_2_billing_address"><u>2. Billing Address: </u></string>
     <string name="_3_total_amount"><u>3. Total Amount: </u></string>
+    <string name="_4_your_ordered_products"><u>4. Your Ordered Products:</u></string>
+    <string name="_5_choose_payment_method"><u>5. Choose payment method:</u></string>
 
 
 </resources>

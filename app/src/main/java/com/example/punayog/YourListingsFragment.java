@@ -81,26 +81,25 @@ public class YourListingsFragment extends Fragment {
             profileAlert.show();
         } else {
             listingLayout.setVisibility(View.VISIBLE);
-            getDataFromFirebase();
+//            getDataFromFirebase();
         }
         return rootView;
     }
 
-    private void getDataFromFirebase(){
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        myRef = FirebaseDatabase.getInstance().getReference();
-        Query query = myRef.child("uploads");
-        FirebaseRecyclerOptions<Product> options =
-                new FirebaseRecyclerOptions.Builder<Product>()
-                .setQuery(query.orderByChild("sellerEmail").equalTo(userID),Product.class)
-                .build();
+//    private void getDataFromFirebase(){
+//        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+//        myRef = FirebaseDatabase.getInstance().getReference();
+//        Query query = myRef.child("uploads");
+//        FirebaseRecyclerOptions<Product> options =
+//                new FirebaseRecyclerOptions.Builder<Product>()
+//                .setQuery(query.orderByChild("sellerEmail").equalTo(userID),Product.class)
+//                .build();
+//
+//        listProductAdapter = new ListingAdapter(options);
+//        listingRecyclerView.setAdapter(listProductAdapter);
+//        listProductAdapter.startListening();
+//
+//    }
 
-        System.out.println("order"+ options);
-
-        listProductAdapter = new ListingAdapter(options);
-        listingRecyclerView.setAdapter(listProductAdapter);
-        listProductAdapter.startListening();
-
-    }
 
 }

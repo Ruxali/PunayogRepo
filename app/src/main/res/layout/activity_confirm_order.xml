@@ -81,6 +81,17 @@
                         android:padding="10dp"
                         android:fontFamily="@font/bold"
                         android:textColor="@color/primaryTextColor" />
+                    <TextView
+                        android:id="@+id/orderID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/bold"
+                        android:text="Samsung Galaxy S22 Ultra 12/256"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="25dp"
+                        android:textStyle="italic"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
 
@@ -440,15 +451,65 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/productsLinearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/totalAmountLinearLayout"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/productsTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:fontFamily="@font/bold"
+                                android:padding="10dp"
+                                android:text="@string/_4_your_ordered_products"
+                                android:textAllCaps="true"
+                                android:textColor="@color/primaryTextColor"
+                                android:textSize="20sp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/confirmOrderRecyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/scroll_background"
+                                tools:listitem="@layout/order_list_item" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/productsLinearLayout"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/paymentTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:fontFamily="@font/bold"
+                                android:padding="10dp"
+                                android:text="@string/_5_choose_payment_method"
+                                android:textAllCaps="true"
+                                android:textColor="@color/primaryTextColor"
+                                android:textSize="20sp" />
+
+
+                        </LinearLayout>
+
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/orderConfirmButton"
                             style="@style/loginButton"
-                            android:layout_below="@id/totalAmountLinearLayout"
+                            android:layout_below="@id/paymentLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="30dp"
+                            android:layout_marginBottom="10dp"
                             android:text="Confirm Order"
                             android:textSize="20sp"/>
                     </RelativeLayout>

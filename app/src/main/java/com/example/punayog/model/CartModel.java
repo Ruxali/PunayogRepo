@@ -1,9 +1,11 @@
 package com.example.punayog.model;
 
 public class CartModel {
-    private String image, name, price,key,buyerName,buyerEmail,buyerNumber,cartId;
+    private String image, name, price,key,buyerName,buyerEmail,buyerNumber,cartId,productId,orderId;
 
-    public CartModel(String cartId,String image, String name, String price,String buyerName,String buyerEmail, String buyerNumber) {
+    public CartModel(String orderId,String productId, String cartId,String image, String name, String price,String buyerName,String buyerEmail, String buyerNumber) {
+        this.orderId = orderId;
+        this.productId = productId;
         this.cartId = cartId;
         this.image = image;
         this.name = name;
@@ -15,6 +17,22 @@ public class CartModel {
 
     public CartModel() {
 
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getCartId() {
