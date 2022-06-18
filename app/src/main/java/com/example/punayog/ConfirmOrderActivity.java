@@ -5,7 +5,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.punayog.adapter.OrderAdapter;
 import com.example.punayog.model.CartModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +35,7 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -40,13 +44,17 @@ public class ConfirmOrderActivity extends AppCompatActivity {
     private Button orderConfirmButton;
     private ImageView orderConfirmBackImageView;
     private TextView shippingNameConfirm, shippingAddressConfirm, shippingNumberConfirm;
-    private TextView billingNameConfirm, billingAddressConfirm, billingNumberConfirm, billingEmailConfirm;
+    private TextView billingNameConfirm, billingAddressConfirm, billingNumberConfirm, billingEmailConfirm,orderId;
     private TextView finalAmount;
 
-    //cart
-    ArrayList<CartModel> cartModelArrayList;
     //firebase
-    private DatabaseReference orderReference,cartReference;
+    private DatabaseReference orderReference,reference;
+
+    //ordered products
+    private RecyclerView confirmOrderRecyclerView;
+    private ArrayList<CartModel> orderArrayList;
+    private OrderAdapter orderAdapter;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +74,11 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         billingNumberConfirm = findViewById(R.id.billingNumberConfirm);
         billingAddressConfirm = findViewById(R.id.billingAddressConfirm);
         finalAmount = findViewById(R.id.finalAmount);
+        confirmOrderRecyclerView = findViewById(R.id.confirmOrderRecyclerView);
+        orderId = findViewById(R.id.orderID);
 
         //firebase
         orderReference = FirebaseDatabase.getInstance().getReference("orders");
-        cartReference = FirebaseDatabase.getInstance().getReference();
 
         //add values to textview
         Intent intent = getIntent();
@@ -89,6 +98,47 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         billingEmailConfirm.setText(billingEmail);
         String finalAmounts = intent.getStringExtra("completeTotalAmount");
         finalAmount.setText(finalAmounts);
+
+        //values for products
+        reference = FirebaseDatabase.getInstance().getReference();
+        String buyerEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        orderArrayList = new ArrayList<>();
+
+        Query query = reference.child("cart");
+
+        query.orderByChild("buyerEmail").equalTo(buyerEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CartModel cartModel = new CartModel();
+
+                    cartModel.setImage((String) snapshot.child("productImage").getValue());
+                    cartModel.setName((String) snapshot.child("productName").getValue());
+                    cartModel.setPrice((String) snapshot.child("productPrice").getValue());
+                    cartModel.setProductId((String) snapshot.child("productId").getValue());
+                    cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
+                    cartModel.setKey(snapshot.getKey());
+
+                    orderArrayList.add(cartModel);
+
+                }
+
+                orderAdapter = new OrderAdapter(context,orderArrayList);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                confirmOrderRecyclerView.setLayoutManager(layoutManager);
+                confirmOrderRecyclerView.setHasFixedSize(true);
+
+                confirmOrderRecyclerView.setAdapter(orderAdapter);
+                orderAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //confirm order
         orderConfirmButton.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +162,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                         saveCurrentTime = currentTime.format(calForData.getTime());
 
                         String orderID = orderReference.push().getKey();
+                        orderId.setText(orderID);
 
                         orderReference.child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -128,6 +179,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                                 orderMap.put("billingNumber", billingNumberConfirm.getText().toString());
                                 orderMap.put("currentTime", saveCurrentTime);
                                 orderMap.put("currentDate", saveCurrentDate);
+                                orderMap.put("orderId",orderId.getText().toString());
 
                                 orderReference.child(orderID).updateChildren(orderMap).
                                         addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -172,6 +224,11 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                 orderAlert.show();
             }
         });
+
+        //send data to firebase
+
+        DatabaseReference orderProductsReference= orderReference.child("products");
+        orderProductsReference.setValue(orderArrayList);
     }
 
 //    private void changeStatus() {

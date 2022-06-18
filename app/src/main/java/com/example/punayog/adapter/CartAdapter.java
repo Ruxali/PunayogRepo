@@ -1,5 +1,6 @@
 package com.example.punayog.adapter;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         this.setOnPriceChange = setOnPriceChange;
     }
 
+
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder( ViewGroup viewGroup, int viewType) {
@@ -58,6 +60,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         cartViewHolder.buyerName.setText(cartModel.getBuyerName());
         cartViewHolder.buyerEmail.setText(cartModel.getBuyerEmail());
         cartViewHolder.buyerNumber.setText(cartModel.getBuyerNumber());
+        cartViewHolder.productId.setText(cartModel.getProductId());
         Picasso.get().load(cartModel.getImage()).into(cartViewHolder.productImage);
 
         double singlePrice = ((Double.parseDouble(cartModel.getPrice())));
@@ -125,7 +128,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         private TextView productPrice;
         private TextView totalAmount;
         private ImageButton deleteButton;
-        private TextView buyerName, buyerEmail,  buyerNumber;
+        private TextView buyerName, buyerEmail,  buyerNumber,productId;
 
         public CartViewHolder(View itemView) {
             super(itemView);
@@ -138,6 +141,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             buyerName = itemView.findViewById(R.id.buyerName);
             buyerNumber = itemView.findViewById(R.id.buyerNumber);
             buyerEmail = itemView.findViewById(R.id.buyerEmail);
+            productId = itemView.findViewById(R.id.cartProductID);
         }
 
     }

@@ -2,7 +2,10 @@ package com.example.punayog;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.punayog.adapter.CartAdapter;
+import com.example.punayog.adapter.HorizontalScrollAdapter;
+import com.example.punayog.adapter.OrderAdapter;
+import com.example.punayog.interfaces.SetOnPriceChange;
+import com.example.punayog.model.CartModel;
+import com.example.punayog.model.Product;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -32,6 +43,13 @@ public class OrderActivity extends AppCompatActivity {
 
     //firebase
     private DatabaseReference reference;
+
+    //ordered products
+    private RecyclerView orderRecyclerView;
+    private ArrayList<CartModel> orderArrayList;
+    private OrderAdapter orderAdapter;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +98,54 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setShippingDetails();
+            }
+        });
+
+
+        //set ordered products
+        orderRecyclerView = findViewById(R.id.orderRecyclerView);
+        orderedProducts();
+    }
+
+    //show ordered products
+    private void orderedProducts() {
+        reference = FirebaseDatabase.getInstance().getReference();
+        String buyerEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        orderArrayList = new ArrayList<>();
+
+        Query query = reference.child("cart");
+
+        query.orderByChild("buyerEmail").equalTo(buyerEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CartModel cartModel = new CartModel();
+
+                    cartModel.setImage((String) snapshot.child("productImage").getValue());
+                    cartModel.setName((String) snapshot.child("productName").getValue());
+                    cartModel.setPrice((String) snapshot.child("productPrice").getValue());
+                    cartModel.setProductId((String) snapshot.child("productId").getValue());
+                    cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
+                    cartModel.setKey(snapshot.getKey());
+
+                    orderArrayList.add(cartModel);
+
+                }
+
+                orderAdapter = new OrderAdapter(context,orderArrayList);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                orderRecyclerView.setLayoutManager(layoutManager);
+                orderRecyclerView.setHasFixedSize(true);
+
+                orderRecyclerView.setAdapter(orderAdapter);
+                orderAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

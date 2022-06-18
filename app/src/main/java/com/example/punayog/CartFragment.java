@@ -137,6 +137,8 @@ public class CartFragment extends Fragment {
                     cartModel.setImage((String) snapshot.child("productImage").getValue());
                     cartModel.setName((String) snapshot.child("productName").getValue());
                     cartModel.setPrice((String) snapshot.child("productPrice").getValue());
+                    cartModel.setProductId((String) snapshot.child("productId").getValue());
+                    cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
                     cartModel.setKey(snapshot.getKey());
 
                     cartArrayList.add(cartModel);

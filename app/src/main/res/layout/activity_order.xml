@@ -411,15 +411,44 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/productsLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/totalAmountLinearLayout"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/productsTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:fontFamily="@font/bold"
+                            android:padding="10dp"
+                            android:text="@string/_4_your_ordered_products"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="20sp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/orderRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/scroll_background"
+                            tools:listitem="@layout/order_list_item" />
+                    </LinearLayout>
+
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/orderNextButton"
                         style="@style/loginButton"
-                        android:layout_below="@id/totalAmountLinearLayout"
+                        android:layout_below="@id/productsLinearLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="30dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Next"
                         android:textSize="20sp"/>
                 </RelativeLayout>

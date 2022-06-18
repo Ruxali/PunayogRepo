@@ -5,7 +5,7 @@
     android:background="@drawable/scroll_background"
     android:layout_margin="8dp"
     android:elevation="3dp"
-    android:layout_height="160dp">
+    android:layout_height="150dp">
 
 
     <RelativeLayout
@@ -33,7 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:layout_weight="0.55"
+                android:layout_weight="0.65"
                 android:orientation="vertical"
                 android:paddingLeft="7dp">
 
@@ -129,13 +129,6 @@
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_weight="0.1"
-                android:background="@color/whiteTextColor"
-                android:src="@drawable/ic_baseline_clear_24" />
 
 
         </LinearLayout>

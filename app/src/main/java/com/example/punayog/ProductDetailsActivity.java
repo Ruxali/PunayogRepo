@@ -21,6 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,6 +60,8 @@ import java.util.Locale;
 public class ProductDetailsActivity extends AppCompatActivity {
 
     BottomNavigationView productBottomNavigationView;
+    NestedScrollView productScrollView;
+    CoordinatorLayout productCoordinatorLayout;
 
     TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, productIdDetails;
     ImageView productImageView;
@@ -168,7 +172,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         product.setProductId((String) snapshot.child("productId").getValue());
                         product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                         product.setProductName((String) snapshot.child("productName").getValue());
-                        product.setPrice((String) snapshot.child("price").getValue());
+                        product.setPrice(Integer.parseInt(snapshot.child("price").getValue().toString()) );
                         product.setShortDesc((String) snapshot.child("shortDesc").getValue());
                         product.setLongDesc((String) snapshot.child("longDesc").getValue());
                         product.setSubCategory((String) snapshot.child("subCategory").getValue());
@@ -177,20 +181,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         product.setSellerName((String) snapshot.child("sellerName").getValue());
                         product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
                         product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
-
-                    product.setProductId((String) snapshot.child("productId").getValue());
-                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
-                    product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice(Integer.parseInt( snapshot.child("price").getValue().toString()));
-                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
-                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
-                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
-                    product.setLocation((String) snapshot.child("location").getValue());
-                    product.setCategory((String) snapshot.child("category").getValue());
-                    product.setSellerName((String) snapshot.child("sellerName").getValue());
-                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
-                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
-
 
                         horizontalScrollModelList.add(product);
                     }
@@ -307,6 +297,23 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
+
+        //for scroll
+//        productScrollView = findViewById(R.id.productScrollView);
+//        productCoordinatorLayout = findViewById(R.id.productCoordinatorLayout);
+//        productScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if(scrollY >= oldScrollY){
+//                    productBottomNavigationView.setVisibility(View.GONE);
+//                    productCoordinatorLayout.setVisibility(View.GONE);
+//                }
+//                else{
+//                    productBottomNavigationView.setVisibility(View.VISIBLE);
+//                    productCoordinatorLayout.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
     }
 
     //for adding comment
@@ -409,15 +416,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
         String cartID = cartReference.push().getKey();
         cartId.setText(cartID);
 
+        String productId = productIdDetails.getText().toString();
+
         cartReference.child(cartID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child("cartID").exists()) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if ((snapshot.child(String.valueOf("productId".equals(productId)))).exists() || (snapshot.child(String.valueOf("buyerEmail".equals(userID))).exists())) {
                     Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
                 } else {
 
                     final HashMap<String, Object> cartMap = new HashMap<>();
                     cartMap.put("cartId", cartId.getText().toString());
+                    cartMap.put("productId", productIdDetails.getText().toString());
                     cartMap.put("productImage", product.getmImageUrl());
                     cartMap.put("productName", productNameTextView.getText().toString());
                     cartMap.put("productPrice", productPriceTextView.getText().toString());

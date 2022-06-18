@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/productScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="-30dp"
@@ -399,7 +400,6 @@
     <include
         android:id="@+id/productBottomNav"
         layout="@layout/activity_product_bottom_navigation" />
-    <!--        tools:layout_editor_absoluteX="24dp"-->
-    <!--        tools:layout_editor_absoluteY="-323dp" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

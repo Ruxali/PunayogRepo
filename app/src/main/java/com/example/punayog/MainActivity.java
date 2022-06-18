@@ -6,7 +6,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,12 +39,15 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import com.example.punayog.adapter.CustomExpandableListAdapter;
 import com.example.punayog.adapter.ProductAdapter;
 import com.example.punayog.model.Product;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
@@ -75,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final String FILE_NAME = "myFile";
     BottomNavigationView bottomNavigationView;
+    NestedScrollView scrollView;
+    CoordinatorLayout mainCoordinatorLayout;
 
     ListView listView;
 
@@ -120,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);
+        mainCoordinatorLayout = findViewById(R.id.mainCoordinatorLayout);
+
+        logoutButton = findViewById(R.id.logoutButton);
+
 
         listView = findViewById(R.id.productListView);
 
@@ -169,10 +180,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //check if user is logged in
         database = FirebaseAuth.getInstance();
         firebaseuser = database.getCurrentUser();
-
+        if(firebaseuser == null){
+            logoutButton.setVisibility(View.GONE);
+        }else{
+            logoutButton.setVisibility(View.VISIBLE);
+        }
 
         //for logout
-        logoutButton = findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,6 +253,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.container, searchFragment).commit();
                 closeKeyboard();
 //                searchEdittext.setText(" ");
+            }
+        });
+
+
+        //scroll view
+        scrollView = findViewById(R.id.mainActivityScroll);
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY >= oldScrollY){
+                    mainCoordinatorLayout.setVisibility(View.GONE);
+                }
+                else{
+                    mainCoordinatorLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
