@@ -212,13 +212,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (user.isEmailVerified()) {
                         loginProgressDialog.dismiss();
-                       // Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(LoginActivity.this, "Email is verified", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         finish();
 
                     } else {
                         user.sendEmailVerification();
-                      //  Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(LoginActivity.this, "Check your email to verify your account", Toast.LENGTH_SHORT).show();
                         mAuth.signOut();
                         showAlertDialog();
                     }

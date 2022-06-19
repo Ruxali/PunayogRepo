@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,31 +19,26 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.CommentAdapter;
 import com.example.punayog.adapter.HorizontalScrollAdapter;
-import com.example.punayog.adapter.ProductAdapter;
-import com.example.punayog.adapter.SearchAdapter;
 import com.example.punayog.model.Comment;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.example.punayog.model.Product;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.common.net.InternetDomainName;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.example.punayog.model.Product;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -53,16 +46,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ProductDetailsActivity extends AppCompatActivity {
-
     BottomNavigationView productBottomNavigationView;
-    NestedScrollView productScrollView;
-    CoordinatorLayout productCoordinatorLayout;
-
     TextView productNameTextView, categoryTextField, subCategoryTextField, productPriceTextView, productDetailsTextView, sellerNameTextView, sellerNumberTextView, sellerEmailTextView, productIdDetails;
     ImageView productImageView;
     Button addToCartButton;
@@ -97,6 +88,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_details);
         statusBarColor();
 
+        //onRecyclerViewComment();
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -136,7 +128,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         categoryTextField.setText(product.getCategory());
         subCategoryTextField.setText(product.getSubCategory());
         productNameTextView.setText(product.getProductName());
-        productPriceTextView.setText(""+product.getPrice());
+        productPriceTextView.setText("" + product.getPrice());
         productDetailsTextView.setText(product.getLongDesc());
         sellerNameTextView.setText(product.getSellerName());
         sellerNumberTextView.setText(product.getSellerNumber());
@@ -172,7 +164,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         product.setProductId((String) snapshot.child("productId").getValue());
                         product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                         product.setProductName((String) snapshot.child("productName").getValue());
-                        product.setPrice(Integer.parseInt(snapshot.child("price").getValue().toString()) );
+                        product.setPrice(Integer.parseInt(snapshot.child("price").getValue().toString()));
                         product.setShortDesc((String) snapshot.child("shortDesc").getValue());
                         product.setLongDesc((String) snapshot.child("longDesc").getValue());
                         product.setSubCategory((String) snapshot.child("subCategory").getValue());
@@ -234,6 +226,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 } else {
                     addToComment();
+                    // pushNotification();
+
                 }
 
             }
@@ -294,28 +288,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     profileAlert.show();
                 } else {
                     addToCart();
+
                 }
 
             }
         });
 
-        //for scroll
-//        productScrollView = findViewById(R.id.productScrollView);
-//        productCoordinatorLayout = findViewById(R.id.productCoordinatorLayout);
-//        productScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                if(scrollY >= oldScrollY){
-//                    productBottomNavigationView.setVisibility(View.GONE);
-//                    productCoordinatorLayout.setVisibility(View.GONE);
-//                }
-//                else{
-//                    productBottomNavigationView.setVisibility(View.VISIBLE);
-//                    productCoordinatorLayout.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
     }
+
 
     //for adding comment
     private void addToComment() {
@@ -323,6 +303,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
         DatabaseReference commentReference = upRef;
         String comment_content = commentEditText.getText().toString();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Intent i = new Intent(Intent.ACTION_SEND);
+        String seller = sellerEmailTextView.getText().toString();
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{seller});
+        i.putExtra(Intent.EXTRA_SUBJECT, "");
+        i.putExtra(Intent.EXTRA_TEXT, "");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(ProductDetailsActivity.this, " ", Toast.LENGTH_SHORT).show();
+        }
         String commentID = upRef.push().getKey();
 
         String saveCurrentTime, saveCurrentDate;
