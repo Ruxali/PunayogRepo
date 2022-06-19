@@ -74,7 +74,6 @@
                             android:layout_weight="1.8"
                             android:src="@drawable/logo" />
 
-
                         <ImageButton
                             android:id="@+id/logoutButton"
                             android:layout_width="wrap_content"

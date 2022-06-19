@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,6 +46,8 @@ import com.example.punayog.adapter.CustomExpandableListAdapter;
 import com.example.punayog.adapter.ProductAdapter;
 import com.example.punayog.model.Product;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -67,6 +70,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -168,7 +172,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         addDrawersItem();
         setUpDrawer();
+        FirebaseMessaging.getInstance().subscribeToTopic("adhikariaarati68@gmail.com")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
 
+                    }
+                });
         if (savedInstanceState == null) {
             selectFirstItemAsDefault();
         }
@@ -180,9 +194,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //check if user is logged in
         database = FirebaseAuth.getInstance();
         firebaseuser = database.getCurrentUser();
-        if(firebaseuser == null){
+        if (firebaseuser == null) {
             logoutButton.setVisibility(View.GONE);
-        }else{
+        } else {
             logoutButton.setVisibility(View.VISIBLE);
         }
 
@@ -262,17 +276,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(scrollY >= oldScrollY){
+                if (scrollY >= oldScrollY) {
                     mainCoordinatorLayout.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     mainCoordinatorLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
+
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -297,7 +311,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //        registerReceiver(mIntentReceiver, filter);
     }
-
 
 
     public String getMyData() {
