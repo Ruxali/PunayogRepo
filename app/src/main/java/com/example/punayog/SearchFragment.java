@@ -92,7 +92,7 @@ public class SearchFragment extends Fragment {
                     product.setProductId((String) snapshot.child("productId").getValue());
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                     product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice(Integer.parseInt( snapshot.child("price").getValue().toString()));
+                    product.setPrice((String)( snapshot.child("price").getValue()));
                     product.setLocation((String) snapshot.child("location").getValue());
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setShortDesc((String) snapshot.child("shortDesc").getValue());

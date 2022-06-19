@@ -48,7 +48,7 @@ public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScro
         Picasso.get().load(product.getmImageUrl()).into(holder.productImage);
         holder.productTitle.setText(product.getProductName());
         holder.productShortDesc.setText(product.getShortDesc());
-        holder.productPrice.setText(Integer.toString(product.getPrice()));
+        holder.productPrice.setText(product.getPrice());
         holder.productLocation.setText(product.getLocation());
         holder.productLongDesc.setText(product.getLongDesc());
         holder.productSubCategory.setText(product.getSubCategory());

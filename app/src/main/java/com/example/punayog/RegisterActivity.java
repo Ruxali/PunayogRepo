@@ -97,6 +97,23 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+//        registerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                registerProgressDialog.setTitle("Registering...");
+////                registerProgressDialog.setMessage("Your account is being created!");
+////                registerProgressDialog.show();
+//                if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
+//                        !validatePassword() || !validateTC() || !validateUser()|| !checkEmail() || !checkPhone()) {
+//                   return;
+//                } else {
+//
+//                    onRegisterClick();
+//
+//                }
+//
+//            }
+//        });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,14 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
                 registerProgressDialog.setMessage("Your account is being created!");
                 registerProgressDialog.show();
                 if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
-                        !validatePassword() || !validateTC() || !validateUser()|| !checkEmail() || !checkPhone()) {
-                   return;
-                } else {
-
-                    onRegisterClick();
-                    registerProgressDialog.dismiss();
+                        !validatePassword() || !validateTC() || !validateUser() ||!checkPhone()) {
+                    return;
                 }
-
             }
         });
 
@@ -216,13 +228,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     public boolean checkPhone(){
          String phoneNumber = phoneNum.getText().toString().trim();
-        reference.orderByChild("phoneInput").equalTo(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               if(snapshot.getValue() != null){
-                  Toast.makeText(RegisterActivity.this, "Phone Number is already taken!", Toast.LENGTH_SHORT).show();
-              }
-
+               for(DataSnapshot ds : snapshot.getChildren()){
+                   User user = new User();
+                   String dbNumber = user.setPhoneInput((String) ds.child("phoneInput").getValue());
+                   if(dbNumber.equals(phoneNumber)){
+                       Toast.makeText(RegisterActivity.this, "The phone number is already Taken!", Toast.LENGTH_SHORT).show();
+                   }
+               }
             }
 
             @Override
@@ -258,21 +273,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public boolean checkEmail(){
-          mAuth.fetchSignInMethodsForEmail(textEmail.getText().toString())
-                  .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-                      @Override
-                      public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                         boolean check = !task.getResult().getSignInMethods().isEmpty();
-                         if(check){
-                            Toast.makeText(RegisterActivity.this, "This email address is already present! Try another enail.", Toast.LENGTH_SHORT).show();
-                         }
-
-                      }
-
-                  }) ;
-          return false;
-    }
 
     private boolean validatePassword() {
         String pswInput = textPassword.getText().toString().trim();
@@ -355,17 +355,18 @@ public class RegisterActivity extends AppCompatActivity {
                             downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    reference = FirebaseDatabase.getInstance().getReference().child("users");
-                                    user.setImageUri(String.valueOf(uri));
-                                    String uploadId = reference.push().getKey();
-                                    assert uploadId != null;
-                                    reference.child(uploadId).setValue(user);
-                                    if (task.isSuccessful()) {
 
+                                    if (task.isSuccessful()) {
+                                        reference = FirebaseDatabase.getInstance().getReference().child("users");
+                                        user.setImageUri(String.valueOf(uri));
+                                        String uploadId = reference.push().getKey();
+                                        assert uploadId != null;
+                                        reference.child(uploadId).setValue(user);
+                                        registerProgressDialog.dismiss();
                                         Toast.makeText(RegisterActivity.this, "User has been successfully registered", Toast.LENGTH_SHORT).show();
 
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                       intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
 
@@ -379,6 +380,7 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                 } else {
+                    registerProgressDialog.dismiss();
                     Toast.makeText(RegisterActivity.this, "Error: " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 

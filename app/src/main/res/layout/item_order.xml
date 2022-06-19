@@ -10,6 +10,7 @@
     card_view:cardCornerRAdius="5dp">
 
     <LinearLayout
+        android:id="@+id/orderHistoryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -62,15 +63,12 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:gravity="center"
+                    android:text="Tap To See Your Order History..."
                     android:padding="3dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="17sp"
                     android:textStyle="normal" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/orderRecycleView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </LinearLayout>

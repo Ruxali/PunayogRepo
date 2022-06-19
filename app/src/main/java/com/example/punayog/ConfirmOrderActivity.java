@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class ConfirmOrderActivity extends AppCompatActivity {
 
@@ -168,18 +170,24 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
 
-                                final HashMap<String, Object> orderMap = new HashMap<>();
-                                orderMap.put("totalPrice", finalAmount.getText().toString());
-                                orderMap.put("shippingName", shippingNameConfirm.getText().toString());
-                                orderMap.put("shippingAddress", shippingAddressConfirm.getText().toString());
-                                orderMap.put("shippingNumber", shippingNumberConfirm.getText().toString());
-                                orderMap.put("billingName", billingNameConfirm.getText().toString());
-                                orderMap.put("billingAddress", billingAddressConfirm.getText().toString());
-                                orderMap.put("billingEmail", billingEmailConfirm.getText().toString());
-                                orderMap.put("billingNumber", billingNumberConfirm.getText().toString());
-                                orderMap.put("currentTime", saveCurrentTime);
-                                orderMap.put("currentDate", saveCurrentDate);
-                                orderMap.put("orderId",orderId.getText().toString());
+
+                                JSONArray orders= new JSONArray(orderArrayList);
+                                System.out.println("Arraylist:" + orderArrayList);
+
+                                    HashMap<String,Object> orderMap =new HashMap<>();
+                                    orderMap.put("totalPrice", finalAmount.getText().toString());
+                                    orderMap.put("shippingName", shippingNameConfirm.getText().toString());
+                                    orderMap.put("shippingAddress", shippingAddressConfirm.getText().toString());
+                                    orderMap.put("shippingNumber", shippingNumberConfirm.getText().toString());
+                                    orderMap.put("billingName", billingNameConfirm.getText().toString());
+                                    orderMap.put("billingAddress", billingAddressConfirm.getText().toString());
+                                    orderMap.put("billingEmail", billingEmailConfirm.getText().toString());
+                                    orderMap.put("billingNumber", billingNumberConfirm.getText().toString());
+                                    orderMap.put("currentTime", saveCurrentTime);
+                                    orderMap.put("currentDate", saveCurrentDate);
+                                    orderMap.put("orderId",orderId.getText().toString());
+
+                                    orderMap.put("orders",orders.toString());
 
                                 orderReference.child(orderID).updateChildren(orderMap).
                                         addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -189,7 +197,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
 
                                                 //change product status
 //                                                changeStatus();
-                                                
+
                                                 Intent intent1 = new Intent(ConfirmOrderActivity.this,MainActivity.class);
                                                 startActivity(intent1);
 

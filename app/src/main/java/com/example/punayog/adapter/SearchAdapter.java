@@ -64,7 +64,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ProductVie
 
         //setting value
         productViewHolder.productName.setText(product.getProductName());
-        productViewHolder.productPrice.setText(""+product.getPrice());
+        productViewHolder.productPrice.setText(product.getPrice());
         productViewHolder.productShortDesc.setText(product.getShortDesc());
         productViewHolder.productLocation.setText(product.getLocation());
         productViewHolder.productLongDesc.setText(product.getLongDesc());

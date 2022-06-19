@@ -51,6 +51,7 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference reference;
     private ShapeableImageView profileImageView;
     private LinearLayout profileLayout;
+    private LinearLayout orderHistoryLayout;
 
     @Nullable
     @Override
@@ -65,6 +66,17 @@ public class ProfileFragment extends Fragment {
         profileImageView=view.findViewById(R.id.profileImageView);
         database = FirebaseAuth.getInstance();
         profileLayout = view.findViewById(R.id.profileLayout);
+
+        orderHistoryLayout = view.findViewById(R.id.orderHistoryLayout);
+
+        //to go to order history
+        orderHistoryLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(),OrderHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         firebaseuser = database.getCurrentUser();
         if (firebaseuser == null) {

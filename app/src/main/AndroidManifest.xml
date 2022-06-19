@@ -27,7 +27,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog">
-
+        <activity
+            android:name=".OrderHistoryActivity"
+            android:exported="false" />
         <activity
             android:name=".ConfirmOrderActivity"
             android:exported="false" />

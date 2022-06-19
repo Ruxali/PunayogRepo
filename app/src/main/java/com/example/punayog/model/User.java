@@ -3,7 +3,7 @@ package com.example.punayog.model;
 public class User {
     public String inputUsername, inputDOB ,emailInput,phoneInput ,pswInput,pswTwoInput,addInput,userGender;
     public String imageUri;
-    User(){}
+    public User(){}
 
     public String getInputUsername() {
         return inputUsername;
@@ -33,8 +33,9 @@ public class User {
         return phoneInput;
     }
 
-    public void setPhoneInput(String phoneInput) {
+    public String setPhoneInput(String phoneInput) {
         this.phoneInput = phoneInput;
+        return phoneInput;
     }
 
     public String getPswInput() {

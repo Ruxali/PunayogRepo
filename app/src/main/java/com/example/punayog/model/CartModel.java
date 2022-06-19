@@ -31,8 +31,9 @@ public class CartModel {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public String setProductId(String productId) {
         this.productId = productId;
+        return productId;
     }
 
     public String getCartId() {
@@ -55,8 +56,9 @@ public class CartModel {
         return buyerEmail;
     }
 
-    public void setBuyerEmail(String buyerEmail) {
+    public String setBuyerEmail(String buyerEmail) {
         this.buyerEmail = buyerEmail;
+        return buyerEmail;
     }
 
     public String getBuyerNumber() {

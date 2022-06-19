@@ -53,7 +53,7 @@ public class ListingAdapter extends FirebaseRecyclerAdapter<Product,ListingAdapt
     protected void onBindViewHolder(@NonNull productViewHolder productViewHolder, @SuppressLint("RecyclerView") final int position, @NonNull Product product) {
         //setting value
         productViewHolder.productName.setText(product.getProductName());
-        productViewHolder.productPrice.setText("" + product.getPrice());
+        productViewHolder.productPrice.setText(product.getPrice());
         productViewHolder.productShortDesc.setText(product.getShortDesc());
         productViewHolder.productLocation.setText(product.getLocation());
         productViewHolder.productLongDesc.setText(product.getLongDesc());
@@ -88,7 +88,7 @@ public class ListingAdapter extends FirebaseRecyclerAdapter<Product,ListingAdapt
                 updateButton = updateView.findViewById(R.id.updateButton);
 
                 updateProductName.setText(product.getProductName());
-                updateProductPrice.setText("" + product.getPrice());
+                updateProductPrice.setText(product.getPrice());
                 updateProductShortDescription.setText(product.getShortDesc());
                 updateProductSpecification.setText(product.getLongDesc());
 //                updateProductImageURL.setText(product.getmImageUrl());

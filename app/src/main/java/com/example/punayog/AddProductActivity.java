@@ -234,7 +234,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
                                     productId.getText().toString(),
                                     imageViewer.toString(),
                                     mEdittextFile.getText().toString().trim(),
-                                    Integer.parseInt(editTextPrice.getText().toString().trim()),
+                                    editTextPrice.getText().toString().trim(),
                                     editTextShortText.getText().toString().trim(),
                                     editTextLongDesc.getText().toString().trim(),
                                     editTextLocation.getText().toString().trim(),

@@ -30,6 +30,7 @@ import com.example.punayog.adapter.CommentAdapter;
 import com.example.punayog.adapter.HorizontalScrollAdapter;
 import com.example.punayog.adapter.ProductAdapter;
 import com.example.punayog.adapter.SearchAdapter;
+import com.example.punayog.model.CartModel;
 import com.example.punayog.model.Comment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -136,7 +137,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         categoryTextField.setText(product.getCategory());
         subCategoryTextField.setText(product.getSubCategory());
         productNameTextView.setText(product.getProductName());
-        productPriceTextView.setText(""+product.getPrice());
+        productPriceTextView.setText(product.getPrice());
         productDetailsTextView.setText(product.getLongDesc());
         sellerNameTextView.setText(product.getSellerName());
         sellerNumberTextView.setText(product.getSellerNumber());
@@ -172,7 +173,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         product.setProductId((String) snapshot.child("productId").getValue());
                         product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                         product.setProductName((String) snapshot.child("productName").getValue());
-                        product.setPrice(Integer.parseInt(snapshot.child("price").getValue().toString()) );
+                        product.setPrice((String)(snapshot.child("price").getValue()));
                         product.setShortDesc((String) snapshot.child("shortDesc").getValue());
                         product.setLongDesc((String) snapshot.child("longDesc").getValue());
                         product.setSubCategory((String) snapshot.child("subCategory").getValue());
@@ -419,12 +420,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         String productId = productIdDetails.getText().toString();
 
-        cartReference.child(cartID).addListenerForSingleValueEvent(new ValueEventListener() {
+        cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if ((snapshot.child(String.valueOf("productId".equals(productId)))).exists() || (snapshot.child(String.valueOf("buyerEmail".equals(userID))).exists())) {
-                    Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
-                } else {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    CartModel cart = new CartModel();
+                    String dbProductId = cart.setProductId((String) ds.child("productId").getValue());
+                    String dbBuyerEmail = cart.setBuyerEmail((String) ds.child("buyerEmail").getValue());
+                    if (dbProductId.equals(productId) && dbBuyerEmail.equals(userID) && dbBuyerEmail != null && dbProductId!=null) {
+                        Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
+                        break;
+                    } else {
+
 
                     final HashMap<String, Object> cartMap = new HashMap<>();
                     cartMap.put("cartId", cartId.getText().toString());
@@ -450,8 +457,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                     Toast.makeText(ProductDetailsActivity.this, "Something went wrong: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
-                }
+                    }
 
+                }
             }
 
             @Override
@@ -462,6 +470,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
     }
+
 
 
     public void statusBarColor() {

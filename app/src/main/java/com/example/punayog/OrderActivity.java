@@ -226,4 +226,6 @@ public class OrderActivity extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
         overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
     }
+
+
 }

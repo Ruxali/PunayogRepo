@@ -11,7 +11,7 @@ public class Product  implements Parcelable {
     private String productId;
     private String mImageUrl;
     private String productName;
-    private int price;
+    private String price;
     private String shortDesc;
     private String location;
     private String longDesc;
@@ -25,7 +25,7 @@ public class Product  implements Parcelable {
 
     }
 
-    public Product(String productId,String mImageUrl, String productName, int price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
+    public Product(String productId,String mImageUrl, String productName, String price, String shortDesc, String location, String longDesc, String category, String subCategory, String sellerEmail, String sellerName, String sellerNumber) {
         this.productId = productId;
         this.mImageUrl = mImageUrl;
         this.productName = productName;
@@ -44,7 +44,7 @@ public class Product  implements Parcelable {
         productId = in.readString();
         mImageUrl = in.readString();
         productName = in.readString();
-        price = Integer.parseInt(in.readString());
+        price = in.readString();
         shortDesc = in.readString();
         location = in.readString();
         longDesc = in.readString();
@@ -91,11 +91,11 @@ public class Product  implements Parcelable {
         this.productName = productName;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -174,7 +174,7 @@ public class Product  implements Parcelable {
         parcel.writeString(productId);
         parcel.writeString(mImageUrl);
         parcel.writeString(productName);
-        parcel.writeString(String.valueOf(price));
+        parcel.writeString(price);
         parcel.writeString(shortDesc);
         parcel.writeString(location);
         parcel.writeString(longDesc);
@@ -189,14 +189,14 @@ public class Product  implements Parcelable {
     public static Comparator<Product> lowToHighComparator = new Comparator<Product>() {
         @Override
         public int compare(Product price1, Product price2) {
-           return Integer.compare(price1.price, price2.price);
+           return Integer.compare(Integer.parseInt(price1.price), Integer.parseInt(price2.price));
         }
     };
 
     public static Comparator<Product> highToLowComparator = new Comparator<Product>() {
         @Override
         public int compare(Product price1, Product price2) {
-            return Integer.compare(price2.price, price1.price);
+            return Integer.compare(Integer.parseInt(price2.price),Integer.parseInt(price1.price));
         }
     };
 
