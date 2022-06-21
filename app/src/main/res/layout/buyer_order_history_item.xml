@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="420dp"
+    android:background="@drawable/scroll_background"
+    android:layout_margin="8dp"
+    android:elevation="3dp">
+
+    <RelativeLayout
+        android:id="@+id/orderRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/orderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/bold"
+                android:layout_marginLeft="5dp"
+                android:textAlignment="textStart"
+                android:text="Order No:"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/sideOrderId"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:fontFamily="@font/bold"
+                android:textAlignment="textStart"
+                android:paddingTop="5dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:text=""
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/orderBillingAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/orderBillingEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/orderBillingName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/orderBillingNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+
+
+            <TextView
+                android:id="@+id/orderProductId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+
+
+            <TextView
+                android:id="@+id/orderShippingAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/orderShippingName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/orderShippingNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunakothi, Lalitpur"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/sellerLayout"
+            android:layout_width="match_parent"
+            android:layout_below="@id/orderLayout"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:text="Seller:"
+                android:textColor="@color/primaryTextColor"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                android:fontFamily="@font/bold"
+                />
+            <TextView
+                android:id="@+id/orderSellerEmailAddress"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:text="hi"
+                android:textAlignment="textStart"
+                android:paddingTop="5dp"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:fontFamily="@font/bold"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/totalPriceLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/sellerLayout"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/bold"
+                android:textAlignment="textStart"
+                android:layout_marginLeft="5dp"
+                android:text="Total Amount:"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/orderTotalPrice"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:text=""
+                android:textColor="@color/primaryTextColor"
+                android:textAlignment="textStart"
+                android:paddingTop="5dp"
+                android:textSize="20sp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:fontFamily="@font/bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/orderStatusLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/totalPriceLayout"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/bold"
+                android:textAlignment="textStart"
+                android:text="Order Status:"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/orderStatusBuyer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:text=""
+                android:textColor="@color/primaryTextColor"
+                android:textAlignment="textStart"
+                android:paddingTop="5dp"
+                android:textSize="20sp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:fontFamily="@font/bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/orderDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/orderStatusLayout"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/bold"
+                android:textAlignment="textStart"
+                android:layout_marginLeft="5dp"
+                android:text="Order Date:"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/orderDate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:text=""
+                android:textColor="@color/primaryTextColor"
+                android:textAlignment="textStart"
+                android:paddingTop="5dp"
+                android:textSize="20sp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:fontFamily="@font/bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/orderTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/orderDateLayout"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/bold"
+                android:textAlignment="textStart"
+                android:layout_marginLeft="5dp"
+                android:text="Order Time:"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/orderTime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:text=""
+                android:textColor="@color/primaryTextColor"
+                android:textAlignment="textStart"
+                android:paddingTop="5dp"
+                android:textSize="20sp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:fontFamily="@font/bold"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/orderProductsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/orderTimeLayout"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/bold"
+                android:textAlignment="textStart"
+                android:layout_marginLeft="5dp"
+                android:text="Ordered Product:"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/productRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/orderProductsLayout">
+
+            <LinearLayout
+                android:id="@+id/mainLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="18dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/orderedItemImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="0.35"
+                    android:padding="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_person_24" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutTwo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_weight="0.65"
+                    android:orientation="vertical"
+                    android:paddingLeft="7dp">
+
+                    <TextView
+                        android:id="@+id/orderedItemTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bold"
+                        android:text="Samsung Galaxy S22 Ultra 12/256"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="20dp"
+                        android:textStyle="italic" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.1"
+                            android:fontFamily="@font/bold"
+                            android:text="Rs. "
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/orderedItemPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/bold"
+                            android:text="1,00,000"
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/deleteOrderButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Cancel Order"
+                        android:backgroundTint="@color/delete"
+                        android:textSize="15sp" />
+
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

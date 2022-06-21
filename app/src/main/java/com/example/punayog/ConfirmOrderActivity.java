@@ -3,7 +3,6 @@ package com.example.punayog;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,15 +13,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.punayog.adapter.OrderAdapter;
 import com.example.punayog.model.CartModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,27 +31,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONArray;
-import org.w3c.dom.Text;
+//import com.khalti.widget.KhaltiButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class ConfirmOrderActivity extends AppCompatActivity {
 
     private Button orderConfirmButton;
     private ImageView orderConfirmBackImageView;
     private TextView shippingNameConfirm, shippingAddressConfirm, shippingNumberConfirm;
-    private TextView billingNameConfirm, billingAddressConfirm, billingNumberConfirm, billingEmailConfirm,orderId;
+    private TextView billingNameConfirm, billingAddressConfirm, billingNumberConfirm, billingEmailConfirm, orderId;
+    private TextView orderedProductName, orderedProductPrice, orderedProductId, orderedBuyerEmail, orderedCartId,orderedSellerEmail,orderedProductImage;
     private TextView finalAmount;
+    String orderID;
+    private Button codPayment;
+//    KhaltiButton khaltiPayment;
 
     //firebase
-    private DatabaseReference orderReference,reference;
+    private DatabaseReference orderReference, reference, productReference;
 
     //ordered products
     private RecyclerView confirmOrderRecyclerView;
@@ -78,6 +80,17 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         finalAmount = findViewById(R.id.finalAmount);
         confirmOrderRecyclerView = findViewById(R.id.confirmOrderRecyclerView);
         orderId = findViewById(R.id.orderID);
+//        khaltiPayment = findViewById(R.id.khaltiPayment);
+        codPayment = findViewById(R.id.codPayment);
+
+        //for ordered products
+        orderedProductName = findViewById(R.id.orderedProductName);
+        orderedProductId = findViewById(R.id.orderedProductId);
+        orderedProductPrice = findViewById(R.id.orderedProductPrice);
+        orderedBuyerEmail = findViewById(R.id.orderedBuyerEmail);
+        orderedCartId = findViewById(R.id.orderedCartId);
+        orderedSellerEmail = findViewById(R.id.orderedSellerEmail);
+        orderedProductImage = findViewById(R.id.orderedProductImage);
 
         //firebase
         orderReference = FirebaseDatabase.getInstance().getReference("orders");
@@ -115,18 +128,26 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     CartModel cartModel = new CartModel();
 
-                    cartModel.setImage((String) snapshot.child("productImage").getValue());
-                    cartModel.setName((String) snapshot.child("productName").getValue());
-                    cartModel.setPrice((String) snapshot.child("productPrice").getValue());
-                    cartModel.setProductId((String) snapshot.child("productId").getValue());
-                    cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
-                    cartModel.setKey(snapshot.getKey());
+                    String image = cartModel.setImage((String) snapshot.child("productImage").getValue());
+                    String name = cartModel.setName((String) snapshot.child("productName").getValue());
+                    String price = cartModel.setPrice((String) snapshot.child("productPrice").getValue());
+                    String id = cartModel.setProductId((String) snapshot.child("productId").getValue());
+                    String email = cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
+                    String cartId = cartModel.setCartId((String) snapshot.child("cartId").getValue());
+                    String sellerEmail = cartModel.setBuyerEmail((String) snapshot.child("sellerEmail").getValue());
 
                     orderArrayList.add(cartModel);
 
+                    orderedProductName.setText(name);
+                    orderedProductId.setText(id);
+                    orderedProductPrice.setText(price);
+                    orderedBuyerEmail.setText(email);
+                    orderedCartId.setText(cartId);
+                    orderedSellerEmail.setText(sellerEmail);
+                    orderedProductImage.setText(image);
                 }
 
-                orderAdapter = new OrderAdapter(context,orderArrayList);
+                orderAdapter = new OrderAdapter(context, orderArrayList);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 confirmOrderRecyclerView.setLayoutManager(layoutManager);
                 confirmOrderRecyclerView.setHasFixedSize(true);
@@ -163,31 +184,37 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
                         saveCurrentTime = currentTime.format(calForData.getTime());
 
-                        String orderID = orderReference.push().getKey();
+                        orderID = orderReference.push().getKey();
                         orderId.setText(orderID);
 
-                        orderReference.child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        orderReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
 
+                                HashMap<String, Object> orderMap = new HashMap<>();
+                                orderMap.put("totalPrice", finalAmount.getText().toString());
+                                orderMap.put("shippingName", shippingNameConfirm.getText().toString());
+                                orderMap.put("shippingAddress", shippingAddressConfirm.getText().toString());
+                                orderMap.put("shippingNumber", shippingNumberConfirm.getText().toString());
+                                orderMap.put("billingName", billingNameConfirm.getText().toString());
+                                orderMap.put("billingAddress", billingAddressConfirm.getText().toString());
+                                orderMap.put("billingEmail", billingEmailConfirm.getText().toString());
+                                orderMap.put("billingNumber", billingNumberConfirm.getText().toString());
+                                orderMap.put("currentTime", saveCurrentTime);
+                                orderMap.put("currentDate", saveCurrentDate);
+                                orderMap.put("orderId", orderId.getText().toString());
 
-                                JSONArray orders= new JSONArray(orderArrayList);
-                                System.out.println("Arraylist:" + orderArrayList);
+                                orderMap.put("orderedProductName", orderedProductName.getText().toString());
+                                orderMap.put("orderedProductId", orderedProductId.getText().toString());
+                                orderMap.put("orderedProductPrice", orderedProductPrice.getText().toString());
+                                orderMap.put("orderedBuyerEmail", orderedBuyerEmail.getText().toString());
+                                orderMap.put("orderedCartId", orderedCartId.getText().toString());
+                                orderMap.put("sellerEmail",orderedSellerEmail.getText().toString());
+                                orderMap.put("productImage",orderedProductImage.getText().toString());
+                                orderMap.put("orderStatus","Ordered");
 
-                                    HashMap<String,Object> orderMap =new HashMap<>();
-                                    orderMap.put("totalPrice", finalAmount.getText().toString());
-                                    orderMap.put("shippingName", shippingNameConfirm.getText().toString());
-                                    orderMap.put("shippingAddress", shippingAddressConfirm.getText().toString());
-                                    orderMap.put("shippingNumber", shippingNumberConfirm.getText().toString());
-                                    orderMap.put("billingName", billingNameConfirm.getText().toString());
-                                    orderMap.put("billingAddress", billingAddressConfirm.getText().toString());
-                                    orderMap.put("billingEmail", billingEmailConfirm.getText().toString());
-                                    orderMap.put("billingNumber", billingNumberConfirm.getText().toString());
-                                    orderMap.put("currentTime", saveCurrentTime);
-                                    orderMap.put("currentDate", saveCurrentDate);
-                                    orderMap.put("orderId",orderId.getText().toString());
+//                                orderMap.put("orderProducts",orders.toString());
 
-                                    orderMap.put("orders",orders.toString());
 
                                 orderReference.child(orderID).updateChildren(orderMap).
                                         addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -196,12 +223,24 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                                                 Toast.makeText(ConfirmOrderActivity.this, "Your Order has been Confirmed!", Toast.LENGTH_SHORT).show();
 
                                                 //change product status
-//                                                changeStatus();
+                                                changeStatus();
 
-                                                Intent intent1 = new Intent(ConfirmOrderActivity.this,MainActivity.class);
+                                                Intent intent1 = new Intent(ConfirmOrderActivity.this, MainActivity.class);
                                                 startActivity(intent1);
 
-//                                                removeCartItems();
+                                                removeCartItems();
+
+                                                //for product
+//                                                ArrayList<CartModel> orderedProductsAL = new ArrayList<>();
+//                                                orderedProductsAL.addAll(orderArrayList);
+//                                                productReference = FirebaseDatabase.getInstance().getReference("orders");
+//                                                productReference.push().setValue(orderedProductsAL).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                    @Override
+//                                                    public void onComplete(@NonNull Task<Void> task) {
+//
+//                                                    }
+//                                                });
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -220,7 +259,6 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                         });
                     }
                 });
-
                 orderAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -233,24 +271,57 @@ public class ConfirmOrderActivity extends AppCompatActivity {
             }
         });
 
-        //send data to firebase
+    }
+    //to change status of product
+    private void changeStatus() {
+        String usedProductId = orderedProductId.getText().toString();
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference();
+        Query productQuery = productRef.child("uploads").orderByChild("productId").equalTo(usedProductId);
+        productQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("status", "0");
 
-        DatabaseReference orderProductsReference= orderReference.child("products");
-        orderProductsReference.setValue(orderArrayList);
+                    productRef.child("uploads").child(ds.getKey()).updateChildren(map)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+
+                                }
+                            });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
-//    private void changeStatus() {
-//
-//    }
+    //empty cart after order placed
+    private void removeCartItems() {
+        String usedCartId = orderedCartId.getText().toString();
+        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference();
+        Query cartQuery = cartRef.child("cart").orderByChild("cartId").equalTo(usedCartId);
+        cartQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ds.getRef().removeValue();
+                }
+            }
 
-    //empty cart after order is placed
-//    private void removeCartItems() {
-//        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-//
-//        cartReference.child("billingEmail").equalTo(userID);
-//        cartReference.removeValue();
-//
-//    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
     public void statusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

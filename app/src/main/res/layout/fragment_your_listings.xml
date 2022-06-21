@@ -10,27 +10,47 @@
     <LinearLayout
         android:id="@+id/recentLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:orientation="horizontal"
         android:weightSum="2"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/shape_rect2">
         <TextView
             android:id="@+id/topic"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="2.0"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
             android:fontFamily="@font/bold"
             android:paddingStart="19dp"
-            android:text="Your Listed Items"
+            android:text="Listed Items"
             android:textAllCaps="true"
             android:textColor="@color/primaryTextColor"
-            android:textSize="25sp" />
+            android:background="@drawable/shape_rect"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/orders"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingStart="19dp"
+            android:fontFamily="@font/bold"
+            android:text="Orders"
+            android:textAllCaps="true"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/listingScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +65,24 @@
             android:background="@drawable/scroll_background"
             app:layout_constraintTop_toBottomOf="@+id/recentLinearLayout"
             tools:listitem="@layout/seller_items" />
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/orderScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recentLinearLayout"
+        tools:ignore="MissingConstraints">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/orderedProductRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/recentLinearLayout"
+            android:background="@drawable/scroll_background"
+            app:layout_constraintTop_toBottomOf="@+id/recentLinearLayout"
+            tools:listitem="@layout/seller_order_item_list" />
     </ScrollView>
 
 

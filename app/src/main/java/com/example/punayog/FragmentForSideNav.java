@@ -165,23 +165,25 @@ public class FragmentForSideNav extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if(snapshot.child("status").getValue(String.class).equals("1")){
 
-                    Product product = new Product();
+                        Product product = new Product();
 
-                    product.setProductId(snapshot.child("productId").getValue(String.class));
-                    product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
-                    product.setProductName(snapshot.child("productName").getValue(String.class));
-                    product.setPrice( snapshot.child("price").getValue(String.class));
-                    product.setLocation(snapshot.child("location").getValue(String.class));
-                    product.setLongDesc(snapshot.child("longDesc").getValue(String.class));
-                    product.setShortDesc(snapshot.child("shortDesc").getValue(String.class));
-                    product.setSubCategory(snapshot.child("subCategory").getValue(String.class));
-                    product.setCategory((String) snapshot.child("category").getValue());
-                    product.setSellerName((String) snapshot.child("sellerName").getValue());
-                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
-                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+                        product.setProductId(snapshot.child("productId").getValue(String.class));
+                        product.setmImageUrl(snapshot.child("mImageUrl").getValue(String.class));
+                        product.setProductName(snapshot.child("productName").getValue(String.class));
+                        product.setPrice( snapshot.child("price").getValue(String.class));
+                        product.setLocation(snapshot.child("location").getValue(String.class));
+                        product.setLongDesc(snapshot.child("longDesc").getValue(String.class));
+                        product.setShortDesc(snapshot.child("shortDesc").getValue(String.class));
+                        product.setSubCategory(snapshot.child("subCategory").getValue(String.class));
+                        product.setCategory((String) snapshot.child("category").getValue());
+                        product.setSellerName((String) snapshot.child("sellerName").getValue());
+                        product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                        product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
-                    productArrayList.add(product);
+                        productArrayList.add(product);
+                    }
 
                 }
 

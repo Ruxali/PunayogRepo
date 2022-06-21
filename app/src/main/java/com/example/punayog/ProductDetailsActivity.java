@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.CommentAdapter;
 import com.example.punayog.adapter.HorizontalScrollAdapter;
+import com.example.punayog.model.CartModel;
 import com.example.punayog.model.Comment;
 import com.example.punayog.model.Product;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -122,8 +123,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         upRef = FirebaseDatabase.getInstance().getReference("comment");
 
-        //product details
+
         reference = FirebaseDatabase.getInstance().getReference();
+
+        //product details
         categoryTextField.setText(product.getSubCategory());
         categoryTextField.setText(product.getCategory());
         subCategoryTextField.setText(product.getSubCategory());
@@ -407,21 +410,21 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         String cartID = cartReference.push().getKey();
         cartId.setText(cartID);
-
-        String productId = productIdDetails.getText().toString();
+        String orderID = FirebaseDatabase.getInstance().getReference("orders").push().getKey();
+        System.out.println("order is:" +orderID);
 
         cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    CartModel cart = new CartModel();
-                    String dbProductId = cart.setProductId((String) ds.child("productId").getValue());
-                    String dbBuyerEmail = cart.setBuyerEmail((String) ds.child("buyerEmail").getValue());
-                    if (dbProductId.equals(productId) && dbBuyerEmail.equals(userID) && dbBuyerEmail != null && dbProductId!=null) {
-                        Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
-                        break;
-                    } else {
-
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    CartModel cart = new CartModel();
+//                    String dbProductId = cart.setProductId((String) ds.child("productId").getValue());
+//                    String dbBuyerEmail = cart.setBuyerEmail((String) ds.child("buyerEmail").getValue());
+//                    if (dbProductId.equals(productId) && dbBuyerEmail.equals(userID) && dbBuyerEmail != null && dbProductId!=null) {
+//                        Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    } else {
+//
 
                     final HashMap<String, Object> cartMap = new HashMap<>();
                     cartMap.put("cartId", cartId.getText().toString());
@@ -432,6 +435,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     cartMap.put("currentTime", saveCurrentTime);
                     cartMap.put("currentDate", saveCurrentDate);
                     cartMap.put("buyerEmail", userID);
+                    cartMap.put("orderId",orderID);
+                    cartMap.put("sellerEmail",sellerEmailTextView.getText().toString());
 
                     cartReference.child(cartID).updateChildren(cartMap).
                             addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -449,8 +454,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             });
                     }
 
-                }
-            }
+//                }
+//            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

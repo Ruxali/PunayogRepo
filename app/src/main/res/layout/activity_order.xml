@@ -69,7 +69,8 @@
                         android:layout_height="60dp"
                         android:text="Please Enter Order Details"
                         android:textSize="28sp"
-                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textAlignment="viewStart"
                         android:padding="10dp"
                         android:fontFamily="@font/bold"
                         android:textColor="@color/primaryTextColor" />

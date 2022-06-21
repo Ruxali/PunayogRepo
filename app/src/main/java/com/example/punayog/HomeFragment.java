@@ -189,7 +189,7 @@ public class HomeFragment extends Fragment {
         horizontalScrollModelList = new ArrayList<>();
         Query query = myRef.child("uploads");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.orderByChild("status").equalTo("1").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -311,7 +311,7 @@ public class HomeFragment extends Fragment {
 
         Query query = myRef.child("uploads");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.orderByChild("status").equalTo("1").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -321,7 +321,6 @@ public class HomeFragment extends Fragment {
                     product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                     product.setProductName((String) snapshot.child("productName").getValue());
                     product.setPrice((String)(snapshot.child("price").getValue()));
-                    System.out.println("Price:" + snapshot.child("price").getValue());
                     product.setLocation((String) snapshot.child("location").getValue());
                     product.setLongDesc((String) snapshot.child("longDesc").getValue());
                     product.setShortDesc((String) snapshot.child("shortDesc").getValue());

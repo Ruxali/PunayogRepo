@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrderActivity">
+    tools:context=".OrderHistoryActivity">
 
 
         <RelativeLayout
@@ -13,6 +13,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/topicLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -66,7 +67,8 @@
                         android:layout_height="60dp"
                         android:text="Your Order History"
                         android:textSize="28sp"
-                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textAlignment="viewStart"
                         android:padding="10dp"
                         android:fontFamily="@font/bold"
                         android:textColor="@color/primaryTextColor" />
@@ -77,11 +79,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-
-
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/orderedProductRecyclerViewBuyer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/scroll_background"
+                        tools:listitem="@layout/buyer_order_history_item" />
 
                 </ScrollView>
             </LinearLayout>
+
 
 
         </RelativeLayout>

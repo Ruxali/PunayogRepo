@@ -59,6 +59,8 @@
     <string name="_3_total_amount"><u>3. Total Amount: </u></string>
     <string name="_4_your_ordered_products"><u>4. Your Ordered Products:</u></string>
     <string name="_5_choose_payment_method"><u>5. Choose payment method:</u></string>
+    <string name="_4_ordered_products"><u>4. Ordered Products</u></string>
+    <string name="order_status"><u>5. Order Status</u></string>
 
 
 </resources>

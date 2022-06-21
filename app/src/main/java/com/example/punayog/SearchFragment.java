@@ -82,7 +82,7 @@ public class SearchFragment extends Fragment {
 
         Query query = databaseRef.child("uploads");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.orderByChild("status").equalTo("1").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 System.out.println(dataSnapshot.getChildren());

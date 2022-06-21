@@ -1,9 +1,9 @@
 package com.example.punayog.model;
 
 public class CartModel {
-    private String image, name, price,key,buyerName,buyerEmail,buyerNumber,cartId,productId,orderId;
+    private String image, name, price,key,buyerName,buyerEmail,buyerNumber,cartId,productId,orderId,sellerEmail;
 
-    public CartModel(String orderId,String productId, String cartId,String image, String name, String price,String buyerName,String buyerEmail, String buyerNumber) {
+    public CartModel(String orderId,String productId, String cartId,String image, String name, String price,String buyerName,String buyerEmail, String buyerNumber, String sellerEmail) {
         this.orderId = orderId;
         this.productId = productId;
         this.cartId = cartId;
@@ -13,10 +13,19 @@ public class CartModel {
         this.buyerEmail = buyerEmail;
         this.buyerName = buyerName;
         this.buyerNumber = buyerNumber;
+        this.sellerEmail = sellerEmail;
     }
 
     public CartModel() {
 
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
     }
 
     public String getOrderId() {
@@ -40,8 +49,9 @@ public class CartModel {
         return cartId;
     }
 
-    public void setCartId(String cartId) {
+    public String setCartId(String cartId) {
         this.cartId = cartId;
+        return cartId;
     }
 
     public String getBuyerName() {
@@ -84,24 +94,27 @@ public class CartModel {
         return image;
     }
 
-    public void setImage(String image) {
+    public String setImage(String image) {
         this.image = image;
+        return image;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public String setName(String name) {
         this.name = name;
+        return name;
     }
 
     public String getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public String setPrice(String price) {
         this.price = price;
+        return price;
     }
 
 //    public double getTotalPrice() {

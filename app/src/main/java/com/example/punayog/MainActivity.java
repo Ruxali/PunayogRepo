@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+//        unregisterReceiver(broadcastReceiver);
 //        IntentFilter filter = new IntentFilter();
 //        filter.addAction(Intent.ACTION_SCREEN_OFF);
 //        filter.addAction(Intent.ACTION_CALL);

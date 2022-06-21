@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.punayog.adapter.ListingAdapter;
 import com.example.punayog.adapter.ProductAdapter;
+import com.example.punayog.adapter.SellerOrderAdapter;
+import com.example.punayog.model.Order;
 import com.example.punayog.model.Product;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,16 +39,23 @@ import java.util.ArrayList;
 
 public class YourListingsFragment extends Fragment {
 
-    private RecyclerView listingRecyclerView;
+    private TextView topic,orders;
+    private RecyclerView listingRecyclerView,orderedProductRecyclerView;
     private DatabaseReference myRef;
     private FirebaseAuth database;
     private ConstraintLayout listingLayout;
     FirebaseUser firebaseuser;
+    ScrollView listingScrollView, orderScrollView;
 
-    //variables
+    //variables for listing
     private ArrayList<Product> productArrayList;
     private Context context;
     private ListingAdapter listProductAdapter;
+
+    //variables for order
+    private ArrayList<Order> orderArrayList;
+    private SellerOrderAdapter sellerOrderAdapter;
+
 
     @Nullable
     @Override
@@ -54,6 +65,37 @@ public class YourListingsFragment extends Fragment {
         listingRecyclerView = rootView.findViewById(R.id.listedProductRecyclerView);
         listingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listingLayout = rootView.findViewById(R.id.listingLayout);
+
+        orderedProductRecyclerView = rootView.findViewById(R.id.orderedProductRecyclerView);
+        orderedProductRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        orders = rootView.findViewById(R.id.orders);
+        topic = rootView.findViewById(R.id.topic);
+        listingScrollView = rootView.findViewById(R.id.listingScrollView);
+        orderScrollView = rootView.findViewById(R.id.orderScrollView);
+        orderScrollView.setVisibility(View.GONE);
+
+        topic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listingScrollView.setVisibility(View.VISIBLE);
+                orderScrollView.setVisibility(View.GONE);
+
+                topic.setBackgroundResource(R.drawable.shape_rect);
+                orders.setBackgroundColor(getResources().getColor(R.color.navigation));
+            }
+        });
+
+        orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listingScrollView.setVisibility(View.GONE);
+                orderScrollView.setVisibility(View.VISIBLE);
+
+               orders.setBackgroundResource(R.drawable.shape_rect);
+               topic.setBackgroundColor(getResources().getColor(R.color.navigation));
+            }
+        });
 
         database = FirebaseAuth.getInstance();
         firebaseuser = database.getCurrentUser();
@@ -82,8 +124,62 @@ public class YourListingsFragment extends Fragment {
         } else {
             listingLayout.setVisibility(View.VISIBLE);
             getDataFromFirebase();
+            getOrderDetails();
         }
         return rootView;
+    }
+
+    private void getOrderDetails() {
+        orderArrayList = new ArrayList<>();
+
+        Query query = myRef.child("orders");
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        query.orderByChild("sellerEmail").equalTo(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Order order = new Order();
+
+                    order.setOrderId((String) snapshot.child("orderId").getValue());
+                    order.setOrderStatus((String) snapshot.child("orderStatus").getValue());
+                    order.setBillingAddress((String) snapshot.child("billingAddress").getValue());
+                    order.setBillingEmail((String) snapshot.child("billingEmail").getValue());
+                    order.setBillingName((String) snapshot.child("billingName").getValue());
+                    order.setBillingNumber((String) snapshot.child("billingNumber").getValue());
+                    order.setCurrentDate((String) snapshot.child("currentDate").getValue());
+                    order.setCurrentTime((String) snapshot.child("currentTime").getValue());
+                    order.setOrderedBuyerEmail((String) snapshot.child("orderedBuyerEmail").getValue());
+                    order.setOrderedProductId((String) snapshot.child("orderedProductId").getValue());
+                    order.setOrderedProductName((String) snapshot.child("orderedProductName").getValue());
+                    order.setOrderedProductPrice((String) snapshot.child("orderedProductPrice").getValue());
+                    order.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+                    order.setShippingAddress((String) snapshot.child("shippingAddress").getValue());
+                    order.setShippingName((String) snapshot.child("shippingName").getValue());
+                    order.setShippingNumber((String) snapshot.child("shippingNumber").getValue());
+                    order.setProductImage((String) snapshot.child("productImage").getValue());
+                    order.setTotalPrice((String) snapshot.child("totalPrice").getValue());
+
+
+                    orderArrayList.add(order);
+
+                }
+
+                sellerOrderAdapter = new SellerOrderAdapter(context, orderArrayList);
+                LinearLayoutManager linearLayoutManager;
+                linearLayoutManager = new LinearLayoutManager(getContext());
+                orderedProductRecyclerView.setLayoutManager(linearLayoutManager);
+                orderedProductRecyclerView.setAdapter(sellerOrderAdapter);
+                sellerOrderAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void getDataFromFirebase(){

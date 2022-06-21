@@ -63,7 +63,8 @@
             android:layout_below="@+id/recentLinearLayout"
             android:background="@drawable/scroll_background"
             app:layout_constraintTop_toBottomOf="@+id/recentLinearLayout"
-            tools:listitem="@layout/cart_item_list" />
+            tools:listitem="@layout/cart_item_list"
+            tools:itemCount="1"/>
     </ScrollView>
 
     <LinearLayout

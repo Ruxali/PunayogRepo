@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ordered"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Ordered"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+    <item
+        android:id="@+id/packaged"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Packaged"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+    <item
+        android:id="@+id/sentForDelivery"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Sent For Delivery"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+    <item
+        android:id="@+id/onTheWay"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="On the Way"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+    <item
+        android:id="@+id/delivered"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Delivered"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+    <item
+        android:id="@+id/cancelled"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Cancelled"
+        android:iconTint="@color/colorPrimaryDark">
+    </item>
+
+</menu>

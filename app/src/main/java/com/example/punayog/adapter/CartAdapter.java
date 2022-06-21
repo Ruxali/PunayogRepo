@@ -61,6 +61,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         cartViewHolder.buyerEmail.setText(cartModel.getBuyerEmail());
         cartViewHolder.buyerNumber.setText(cartModel.getBuyerNumber());
         cartViewHolder.productId.setText(cartModel.getProductId());
+
         Picasso.get().load(cartModel.getImage()).into(cartViewHolder.productImage);
 
         double singlePrice = ((Double.parseDouble(cartModel.getPrice())));
