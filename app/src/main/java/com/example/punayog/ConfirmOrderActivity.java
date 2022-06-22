@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -31,8 +34,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-//import com.khalti.widget.KhaltiButton;
+import com.khalti.checkout.helper.Config;
+import com.khalti.checkout.helper.KhaltiCheckOut;
+import com.khalti.checkout.helper.OnCheckOutListener;
+import com.khalti.utils.Constant;
+import com.khalti.widget.KhaltiButton;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,15 +50,19 @@ import java.util.Map;
 
 public class ConfirmOrderActivity extends AppCompatActivity {
 
+    private ImageButton logoutButton;
+    private static final String FILE_NAME = "myFile";
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button orderConfirmButton;
     private ImageView orderConfirmBackImageView;
     private TextView shippingNameConfirm, shippingAddressConfirm, shippingNumberConfirm;
     private TextView billingNameConfirm, billingAddressConfirm, billingNumberConfirm, billingEmailConfirm, orderId;
     private TextView orderedProductName, orderedProductPrice, orderedProductId, orderedBuyerEmail, orderedCartId,orderedSellerEmail,orderedProductImage;
+    private TextView orderedPaymentMethod,orderedPaymentStatus;
     private TextView finalAmount;
     String orderID;
     private Button codPayment;
-//    KhaltiButton khaltiPayment;
+    KhaltiButton khaltiPayment;
 
     //firebase
     private DatabaseReference orderReference, reference, productReference;
@@ -68,6 +81,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         statusBarColor();
 
         //init
+        logoutButton = findViewById(R.id.logoutButton);
         orderConfirmButton = findViewById(R.id.orderConfirmButton);
         orderConfirmBackImageView = findViewById(R.id.orderConfirmBackImageView);
         shippingNameConfirm = findViewById(R.id.shippingNameConfirm);
@@ -79,8 +93,10 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         billingAddressConfirm = findViewById(R.id.billingAddressConfirm);
         finalAmount = findViewById(R.id.finalAmount);
         confirmOrderRecyclerView = findViewById(R.id.confirmOrderRecyclerView);
+        orderedPaymentMethod = findViewById(R.id.orderedPaymentMethod);
+        orderedPaymentStatus = findViewById(R.id.orderedPaymentStatus);
         orderId = findViewById(R.id.orderID);
-//        khaltiPayment = findViewById(R.id.khaltiPayment);
+        khaltiPayment = findViewById(R.id.khaltiPayment);
         codPayment = findViewById(R.id.codPayment);
 
         //for ordered products
@@ -113,6 +129,13 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         billingEmailConfirm.setText(billingEmail);
         String finalAmounts = intent.getStringExtra("completeTotalAmount");
         finalAmount.setText(finalAmounts);
+        long price= 0;
+        DecimalFormat decimalFormat = new DecimalFormat("#");
+        try {
+            price = decimalFormat.parse(finalAmounts).longValue()*100;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //values for products
         reference = FirebaseDatabase.getInstance().getReference();
@@ -163,6 +186,19 @@ public class ConfirmOrderActivity extends AppCompatActivity {
             }
         });
 
+        //cod
+        codPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ConfirmOrderActivity.this, "Cash On Delivery Selected", Toast.LENGTH_SHORT).show();
+                orderedPaymentMethod.setText("Cash On Delivery");
+                orderedPaymentStatus.setText("Pending");
+            }
+        });
+
+        //payment gateway
+        khaltiImplement(orderedProductId.getText().toString(),orderedProductName.getText().toString(),price);
+
         //confirm order
         orderConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +239,8 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                                 orderMap.put("currentTime", saveCurrentTime);
                                 orderMap.put("currentDate", saveCurrentDate);
                                 orderMap.put("orderId", orderId.getText().toString());
+                                orderMap.put("paymentMethod", orderedPaymentMethod.getText().toString());
+                                orderMap.put("paymentStatus", orderedPaymentStatus.getText().toString());
 
                                 orderMap.put("orderedProductName", orderedProductName.getText().toString());
                                 orderMap.put("orderedProductId", orderedProductId.getText().toString());
@@ -271,7 +309,67 @@ public class ConfirmOrderActivity extends AppCompatActivity {
             }
         });
 
+        //for logout
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConfirmOrderActivity.this);
+                builder.setMessage("Are you sure you want to Logout?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
+
+                                finish();
+                                auth.signOut();
+                                Intent intent = new Intent(ConfirmOrderActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
     }
+
+    //khalti
+
+    public void khaltiImplement(String productId, String productName,long productPrice){
+        Config.Builder builder = new Config.Builder(Constant.pub, productId, productName, productPrice, new OnCheckOutListener() {
+            @Override
+            public void onError(@NonNull String action, @NonNull Map<String, String> errorMap) {
+                Log.i(action, errorMap.toString());
+                Toast.makeText(ConfirmOrderActivity.this, "Payment Unsuccessful", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(@NonNull Map<String, Object> data) {
+                Log.i("success", data.toString());
+                Toast.makeText(ConfirmOrderActivity.this, "Payment Successful!", Toast.LENGTH_SHORT).show();
+                orderedPaymentMethod.setText("Khalti");
+                orderedPaymentStatus.setText("Paid");
+            }
+        });
+
+        Config config = builder.build();
+        KhaltiCheckOut khaltiCheckOut = new KhaltiCheckOut(this, config);
+        khaltiPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                khaltiCheckOut.show();
+            }
+        });
+    }
+
     //to change status of product
     private void changeStatus() {
         String usedProductId = orderedProductId.getText().toString();

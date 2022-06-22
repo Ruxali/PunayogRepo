@@ -1,17 +1,21 @@
 package com.example.punayog;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,9 @@ import java.util.ArrayList;
 
 public class OrderActivity extends AppCompatActivity {
 
+    private ImageButton logoutButton;
+    private static final String FILE_NAME = "myFile";
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button orderNextButton,sameAsButton;
     private ImageView orderBackImageView;
     private EditText shippingName, shippingAddress, shippingNumber;
@@ -57,6 +64,7 @@ public class OrderActivity extends AppCompatActivity {
         statusBarColor();
 
         //init
+        logoutButton = findViewById(R.id.logoutButton);
         orderNextButton = findViewById(R.id.orderNextButton);
         sameAsButton = findViewById(R.id.sameAsButton);
         orderBackImageView = findViewById(R.id.orderBackImageView);
@@ -105,49 +113,81 @@ public class OrderActivity extends AppCompatActivity {
         //set ordered products
         orderRecyclerView = findViewById(R.id.orderRecyclerView);
         orderedProducts();
+
+        //for logout
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(OrderActivity.this);
+                builder.setMessage("Are you sure you want to Logout?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
+
+                                finish();
+                                auth.signOut();
+                                Intent intent = new Intent(OrderActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
     }
 
     //show ordered products
     private void orderedProducts() {
-        reference = FirebaseDatabase.getInstance().getReference();
-        String buyerEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        orderArrayList = new ArrayList<>();
+            reference = FirebaseDatabase.getInstance().getReference();
+            String buyerEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        Query query = reference.child("cart");
+            orderArrayList = new ArrayList<>();
 
-        query.orderByChild("buyerEmail").equalTo(buyerEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    CartModel cartModel = new CartModel();
+            Query query = reference.child("cart");
 
-                    cartModel.setImage((String) snapshot.child("productImage").getValue());
-                    cartModel.setName((String) snapshot.child("productName").getValue());
-                    cartModel.setPrice((String) snapshot.child("productPrice").getValue());
-                    cartModel.setProductId((String) snapshot.child("productId").getValue());
-                    cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
-                    cartModel.setKey(snapshot.getKey());
+            query.orderByChild("buyerEmail").equalTo(buyerEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        CartModel cartModel = new CartModel();
 
-                    orderArrayList.add(cartModel);
+                        cartModel.setImage((String) snapshot.child("productImage").getValue());
+                        cartModel.setName((String) snapshot.child("productName").getValue());
+                        cartModel.setPrice((String) snapshot.child("productPrice").getValue());
+                        cartModel.setProductId((String) snapshot.child("productId").getValue());
+                        cartModel.setBuyerEmail((String) snapshot.child("buyerEmail").getValue());
+                        cartModel.setKey(snapshot.getKey());
+
+                        orderArrayList.add(cartModel);
+
+                    }
+
+                    orderAdapter = new OrderAdapter(context, orderArrayList);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    orderRecyclerView.setLayoutManager(layoutManager);
+                    orderRecyclerView.setHasFixedSize(true);
+
+                    orderRecyclerView.setAdapter(orderAdapter);
+                    orderAdapter.notifyDataSetChanged();
 
                 }
 
-                orderAdapter = new OrderAdapter(context,orderArrayList);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                orderRecyclerView.setLayoutManager(layoutManager);
-                orderRecyclerView.setHasFixedSize(true);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-                orderRecyclerView.setAdapter(orderAdapter);
-                orderAdapter.notifyDataSetChanged();
+                }
+            });
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     private boolean checkEmpty() {

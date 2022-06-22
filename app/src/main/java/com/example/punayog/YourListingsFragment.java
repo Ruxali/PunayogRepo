@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -51,11 +53,12 @@ public class YourListingsFragment extends Fragment {
     private ArrayList<Product> productArrayList;
     private Context context;
     private ListingAdapter listProductAdapter;
+    ImageView noProductImage;
 
     //variables for order
     private ArrayList<Order> orderArrayList;
     private SellerOrderAdapter sellerOrderAdapter;
-
+    LinearLayout noOrderLayout;
 
     @Nullable
     @Override
@@ -73,7 +76,13 @@ public class YourListingsFragment extends Fragment {
         topic = rootView.findViewById(R.id.topic);
         listingScrollView = rootView.findViewById(R.id.listingScrollView);
         orderScrollView = rootView.findViewById(R.id.orderScrollView);
+        noProductImage=rootView.findViewById(R.id.noProductImage);
+        noOrderLayout=rootView.findViewById(R.id.noOrderLayout);
+
         orderScrollView.setVisibility(View.GONE);
+        noProductImage.setVisibility(View.GONE);
+        noOrderLayout.setVisibility(View.GONE);
+
 
         topic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,55 +139,62 @@ public class YourListingsFragment extends Fragment {
     }
 
     private void getOrderDetails() {
-        orderArrayList = new ArrayList<>();
+        if (orderArrayList ==null){
+            orderScrollView.setVisibility(View.GONE);
+            noOrderLayout.setVisibility(View.VISIBLE);
+        }else {
+            orderScrollView.setVisibility(View.VISIBLE);
+            noOrderLayout.setVisibility(View.GONE);
+            orderArrayList = new ArrayList<>();
 
-        Query query = myRef.child("orders");
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Query query = myRef.child("orders");
+            String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        query.orderByChild("sellerEmail").equalTo(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Order order = new Order();
+            query.orderByChild("sellerEmail").equalTo(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Order order = new Order();
 
-                    order.setOrderId((String) snapshot.child("orderId").getValue());
-                    order.setOrderStatus((String) snapshot.child("orderStatus").getValue());
-                    order.setBillingAddress((String) snapshot.child("billingAddress").getValue());
-                    order.setBillingEmail((String) snapshot.child("billingEmail").getValue());
-                    order.setBillingName((String) snapshot.child("billingName").getValue());
-                    order.setBillingNumber((String) snapshot.child("billingNumber").getValue());
-                    order.setCurrentDate((String) snapshot.child("currentDate").getValue());
-                    order.setCurrentTime((String) snapshot.child("currentTime").getValue());
-                    order.setOrderedBuyerEmail((String) snapshot.child("orderedBuyerEmail").getValue());
-                    order.setOrderedProductId((String) snapshot.child("orderedProductId").getValue());
-                    order.setOrderedProductName((String) snapshot.child("orderedProductName").getValue());
-                    order.setOrderedProductPrice((String) snapshot.child("orderedProductPrice").getValue());
-                    order.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
-                    order.setShippingAddress((String) snapshot.child("shippingAddress").getValue());
-                    order.setShippingName((String) snapshot.child("shippingName").getValue());
-                    order.setShippingNumber((String) snapshot.child("shippingNumber").getValue());
-                    order.setProductImage((String) snapshot.child("productImage").getValue());
-                    order.setTotalPrice((String) snapshot.child("totalPrice").getValue());
+                        order.setOrderId((String) snapshot.child("orderId").getValue());
+                        order.setOrderStatus((String) snapshot.child("orderStatus").getValue());
+                        order.setBillingAddress((String) snapshot.child("billingAddress").getValue());
+                        order.setBillingEmail((String) snapshot.child("billingEmail").getValue());
+                        order.setBillingName((String) snapshot.child("billingName").getValue());
+                        order.setBillingNumber((String) snapshot.child("billingNumber").getValue());
+                        order.setCurrentDate((String) snapshot.child("currentDate").getValue());
+                        order.setCurrentTime((String) snapshot.child("currentTime").getValue());
+                        order.setOrderedBuyerEmail((String) snapshot.child("orderedBuyerEmail").getValue());
+                        order.setOrderedProductId((String) snapshot.child("orderedProductId").getValue());
+                        order.setOrderedProductName((String) snapshot.child("orderedProductName").getValue());
+                        order.setOrderedProductPrice((String) snapshot.child("orderedProductPrice").getValue());
+                        order.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+                        order.setShippingAddress((String) snapshot.child("shippingAddress").getValue());
+                        order.setShippingName((String) snapshot.child("shippingName").getValue());
+                        order.setShippingNumber((String) snapshot.child("shippingNumber").getValue());
+                        order.setProductImage((String) snapshot.child("productImage").getValue());
+                        order.setTotalPrice((String) snapshot.child("totalPrice").getValue());
 
 
-                    orderArrayList.add(order);
+                        orderArrayList.add(order);
+
+                    }
+
+                    sellerOrderAdapter = new SellerOrderAdapter(context, orderArrayList);
+                    LinearLayoutManager linearLayoutManager;
+                    linearLayoutManager = new LinearLayoutManager(getContext());
+                    orderedProductRecyclerView.setLayoutManager(linearLayoutManager);
+                    orderedProductRecyclerView.setAdapter(sellerOrderAdapter);
+                    sellerOrderAdapter.notifyDataSetChanged();
 
                 }
 
-                sellerOrderAdapter = new SellerOrderAdapter(context, orderArrayList);
-                LinearLayoutManager linearLayoutManager;
-                linearLayoutManager = new LinearLayoutManager(getContext());
-                orderedProductRecyclerView.setLayoutManager(linearLayoutManager);
-                orderedProductRecyclerView.setAdapter(sellerOrderAdapter);
-                sellerOrderAdapter.notifyDataSetChanged();
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                }
+            });
+        }
 
     }
 

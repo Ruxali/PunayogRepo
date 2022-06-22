@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +45,9 @@ public class SearchFragment extends Fragment {
     private Context context;
     String myDataFromActivity;
 
+    ImageView noProductImage;
+    ScrollView searchScrollView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +59,9 @@ public class SearchFragment extends Fragment {
         System.out.println("Search:" + myDataFromActivity);
 
         databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        noProductImage = view.findViewById(R.id.noProductImage);
+        searchScrollView = view.findViewById(R.id.searchScrollView);
 
         search();
         activity.getSearchEdittext().addTextChangedListener(new TextWatcher() {
@@ -78,49 +86,56 @@ public class SearchFragment extends Fragment {
     }
 
     private void search() {
-        searchProductList = new ArrayList<>();
+//        if(searchProductList == null){
+//            noProductImage.setVisibility(View.VISIBLE);
+//            searchScrollView.setVisibility(View.GONE);
+//        }else {
+//            noProductImage.setVisibility(View.GONE);
+//            searchScrollView.setVisibility(View.VISIBLE);
+            searchProductList = new ArrayList<>();
 
-        Query query = databaseRef.child("uploads");
+            Query query = databaseRef.child("uploads");
 
-        query.orderByChild("status").equalTo("1").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.getChildren());
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Product product = new Product();
+            query.orderByChild("status").equalTo("1").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    System.out.println(dataSnapshot.getChildren());
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Product product = new Product();
 
-                    product.setProductId((String) snapshot.child("productId").getValue());
-                    product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
-                    product.setProductName((String) snapshot.child("productName").getValue());
-                    product.setPrice((String)( snapshot.child("price").getValue()));
-                    product.setLocation((String) snapshot.child("location").getValue());
-                    product.setLongDesc((String) snapshot.child("longDesc").getValue());
-                    product.setShortDesc((String) snapshot.child("shortDesc").getValue());
-                    product.setSubCategory((String) snapshot.child("subCategory").getValue());
-                    product.setCategory((String) snapshot.child("category").getValue());
-                    product.setSellerName((String) snapshot.child("sellerName").getValue());
-                    product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
-                    product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
+                        product.setProductId((String) snapshot.child("productId").getValue());
+                        product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
+                        product.setProductName((String) snapshot.child("productName").getValue());
+                        product.setPrice((String) (snapshot.child("price").getValue()));
+                        product.setLocation((String) snapshot.child("location").getValue());
+                        product.setLongDesc((String) snapshot.child("longDesc").getValue());
+                        product.setShortDesc((String) snapshot.child("shortDesc").getValue());
+                        product.setSubCategory((String) snapshot.child("subCategory").getValue());
+                        product.setCategory((String) snapshot.child("category").getValue());
+                        product.setSellerName((String) snapshot.child("sellerName").getValue());
+                        product.setSellerNumber((String) snapshot.child("sellerNumber").getValue());
+                        product.setSellerEmail((String) snapshot.child("sellerEmail").getValue());
 
-                    searchProductList.add(product);
+                        searchProductList.add(product);
 
+                    }
+
+                    searchAdapter = new SearchAdapter(context, searchProductList);
+                    LinearLayoutManager linearLayoutManager;
+                    linearLayoutManager = new LinearLayoutManager(getContext());
+                    searchRecycler.setLayoutManager(linearLayoutManager);
+
+                    searchRecycler.setAdapter(searchAdapter);
+                    searchAdapter.notifyDataSetChanged();
+                    searchAdapter.getFilter().filter(myDataFromActivity);
                 }
 
-                searchAdapter = new SearchAdapter(context, searchProductList);
-                LinearLayoutManager linearLayoutManager;
-                linearLayoutManager = new LinearLayoutManager(getContext());
-                searchRecycler.setLayoutManager(linearLayoutManager);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-                searchRecycler.setAdapter(searchAdapter);
-                searchAdapter.notifyDataSetChanged();
-                searchAdapter.getFilter().filter(myDataFromActivity);
-            }
+                }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
 }

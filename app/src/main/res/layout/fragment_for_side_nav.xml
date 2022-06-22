@@ -54,22 +54,26 @@
         </LinearLayout>
     </LinearLayout>
 
-
+<ScrollView
+    android:id="@+id/categoryScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/recentLinearLayout">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/recentLinearLayout"
-        android:background="@drawable/scroll_background"
-        tools:itemCount="20" />
+        android:background="@drawable/scroll_background"/>
+</ScrollView>
 
-    <ImageView
-        android:id="@+id/errorImageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/accessories"
-        android:layout_marginTop="200dp"
-        android:visibility="invisible"/>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/noProductImage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/recentLinearLayout"-->
+<!--        android:src="@drawable/no_products" />-->
 
 
 </RelativeLayout>

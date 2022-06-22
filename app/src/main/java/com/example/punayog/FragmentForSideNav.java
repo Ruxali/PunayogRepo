@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ public class FragmentForSideNav extends Fragment {
     private static ImageButton listImageButton;
     private static ImageButton gridImageButton,sortImageButton;
     private static ImageView errorImageView;
+    private static ScrollView categoryScrollView;
 
     //Firebase
     private static DatabaseReference myRef;
@@ -99,7 +102,8 @@ public class FragmentForSideNav extends Fragment {
 
         listImageButton = rootView.findViewById(R.id.listImageButton);
         gridImageButton = rootView.findViewById(R.id.gridImageButton);
-        errorImageView = rootView.findViewById(R.id.errorImageView);
+        errorImageView = rootView.findViewById(R.id.noProductImage);
+        categoryScrollView = rootView.findViewById(R.id.categoryScrollView);
         sortImageButton = rootView.findViewById(R.id.sortImageButton);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -156,6 +160,7 @@ public class FragmentForSideNav extends Fragment {
 
     //for products
     private static void getDataFromFirebase(String titleLabel) {
+
 
         productArrayList = new ArrayList<>();
 
@@ -217,8 +222,10 @@ public class FragmentForSideNav extends Fragment {
             }
 
         });
+        }
 
-    }
+
+
 
     private void clearAll() {
         if (productArrayList != null) {

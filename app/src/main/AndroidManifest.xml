@@ -28,7 +28,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Punayog"
-        tools:replace="android:allowBackup" >
+        tools:replace="android:theme">
         <activity
             android:name=".SellerOrderDetailsActivity"
             android:exported="false" />
