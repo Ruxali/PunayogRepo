@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -48,6 +49,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     //for no orders
     LinearLayout noOrderLayout;
     ScrollView orderScrollView;
+    Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +65,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         orderScrollView = findViewById(R.id.orderScrollView);
 
         //fetch data
-        if(orderArrayList == null){
-            noOrderLayout.setVisibility(View.VISIBLE);
-            orderScrollView.setVisibility(View.GONE);
-        }else {
-            noOrderLayout.setVisibility(View.GONE);
-            orderScrollView.setVisibility(View.VISIBLE);
+
             orderArrayList = new ArrayList<>();
             String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             Query query = reference.child("orders");
@@ -116,7 +113,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
                 }
             });
-        }
+
 
         //for logout
         logoutButton.setOnClickListener(new View.OnClickListener() {
