@@ -5,7 +5,7 @@
     android:background="@drawable/scroll_background"
     android:layout_margin="8dp"
     android:elevation="3dp"
-    android:layout_height="150dp">
+    android:layout_height="180dp">
 
 
     <RelativeLayout
@@ -48,20 +48,6 @@
                     android:textSize="25dp"
                     android:textStyle="italic" />
 
-                <TextView
-                    android:id="@+id/cartProductID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/bold"
-                    android:text="Samsung Galaxy S22 Ultra 12/256"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="25dp"
-                    android:textStyle="italic"
-                    android:visibility="gone"/>
-
-
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,43 +74,29 @@
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/buyerName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/bold"
-                        android:textColor="@color/primaryTextColor"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:id="@+id/buyerEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/bold"
-                        android:text="1,00,000"
-                        android:textColor="@color/primaryTextColor"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:id="@+id/buyerNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/bold"
-                        android:text="1,00,000"
-                        android:textColor="@color/primaryTextColor"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:visibility="gone"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/buyerNumber"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="10dp"-->
+<!--                        android:fontFamily="@font/bold"-->
+<!--                        android:text="1,00,000"-->
+<!--                        android:textColor="@color/primaryTextColor"-->
+<!--                        android:textSize="18dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:visibility="gone"/>-->
                 </LinearLayout>
 
-
+                <TextView
+                    android:id="@+id/productOrderStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/bold"
+                    android:text="1,00,000"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
 
             </LinearLayout>

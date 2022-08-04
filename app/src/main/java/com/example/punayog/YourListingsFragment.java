@@ -79,10 +79,10 @@ public class YourListingsFragment extends Fragment {
         noProductImage=rootView.findViewById(R.id.noProductImage);
         noOrderLayout=rootView.findViewById(R.id.noOrderLayout);
 
-        orderScrollView.setVisibility(View.GONE);
+
         noProductImage.setVisibility(View.GONE);
         noOrderLayout.setVisibility(View.GONE);
-
+        orderScrollView.setVisibility(View.GONE);
 
         topic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,12 +139,6 @@ public class YourListingsFragment extends Fragment {
     }
 
     private void getOrderDetails() {
-        if (orderArrayList ==null){
-            orderScrollView.setVisibility(View.GONE);
-            noOrderLayout.setVisibility(View.VISIBLE);
-        }else {
-            orderScrollView.setVisibility(View.VISIBLE);
-            noOrderLayout.setVisibility(View.GONE);
             orderArrayList = new ArrayList<>();
 
             Query query = myRef.child("orders");
@@ -196,7 +190,7 @@ public class YourListingsFragment extends Fragment {
             });
         }
 
-    }
+
 
     private void getDataFromFirebase(){
         String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();

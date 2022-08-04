@@ -24,11 +24,11 @@
         android:layout_height="0dp"
         android:layout_marginTop="-30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productImageView"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -95,9 +95,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
                 android:layout_marginBottom="24dp"
                 android:gravity="end"
-                android:layout_marginLeft="30dp"
                 android:orientation="horizontal"
                 android:weightSum="2"
                 app:layout_constraintBottom_toTopOf="@+id/productDetailsTextView"
@@ -117,16 +117,15 @@
                     android:id="@+id/productPriceTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1.9"
                     android:fontFamily="@font/bold"
                     android:text="15.00"
+
                     android:textColor="@color/primaryTextColor"
+                    android:textSize="20sp" />
 
-                    android:textSize="20sp"
-                    android:layout_marginRight="8dp"/>
-
-                    android:textSize="25sp" />
-
+                android:textSize="25sp" />
 
 
             </LinearLayout>
@@ -134,7 +133,7 @@
             <TextView
                 android:id="@+id/productDetailsTextView"
                 android:layout_width="358dp"
-                android:layout_height="105dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto"
                 android:lineSpacingExtra="2dp"
@@ -147,6 +146,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/productNameTextView" />
 
             <View
+                android:id="@+id/view5"
                 android:layout_width="match_parent"
                 android:layout_height="2.5dp"
                 android:background="@color/primaryTextColor"
@@ -160,7 +160,7 @@
                 android:layout_width="180dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="12dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_background_blue"
                 android:fontFamily="@font/roboto"
@@ -173,7 +173,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/productDetailsTextView"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.027" />
 
             <TextView
                 android:id="@+id/sellerNameTextView"
@@ -217,6 +217,21 @@
                 app:layout_constraintStart_toStartOf="@+id/productDetailsTextView"
                 app:layout_constraintTop_toBottomOf="@+id/sellerNameTextView" />
 
+            <RatingBar
+                android:id="@+id/sellerAvgRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:progressTint="@color/primaryTextColor"
+                app:layout_constraintBottom_toTopOf="@+id/view2"
+                app:layout_constraintEnd_toStartOf="@+id/addToCartButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sellerEmailTextView"
+                app:layout_constraintVertical_bias="0.0" />
+
             <TextView
                 android:id="@+id/cartId"
                 android:layout_width="wrap_content"
@@ -245,7 +260,7 @@
                 android:id="@+id/view2"
                 android:layout_width="match_parent"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="84dp"
                 android:background="@color/primaryTextColor"
                 app:layout_constraintTop_toBottomOf="@+id/addToCartButton"
                 tools:ignore="MissingConstraints"
@@ -259,9 +274,9 @@
                 android:fontFamily="@font/bold"
                 android:paddingStart="19dp"
                 android:text="All Comments"
+                android:textAllCaps="true"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="20sp"
-                android:textAllCaps="true"
                 app:layout_constraintBottom_toTopOf="@+id/commentRecyclerView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -295,9 +310,9 @@
                 android:fontFamily="@font/bold"
                 android:paddingStart="19dp"
                 android:text="Your comment"
+                android:textAllCaps="true"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="20sp"
-                android:textAllCaps="true"
                 app:layout_constraintBottom_toTopOf="@+id/editComment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -360,9 +375,9 @@
                 android:fontFamily="@font/bold"
                 android:paddingStart="19dp"
                 android:text="More products from same seller"
+                android:textAllCaps="true"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="20sp"
-                android:textAllCaps="true"
                 app:layout_constraintBottom_toTopOf="@+id/sameProductRecyclerView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -376,9 +391,9 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topicSimilarProducts"
                 tools:itemCount="8"
-                tools:listitem="@layout/horizontal_scroll_item_layout"
-                app:layout_constraintTop_toBottomOf="@+id/topicSimilarProducts" />
+                tools:listitem="@layout/horizontal_scroll_item_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

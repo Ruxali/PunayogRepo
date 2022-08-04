@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     Button addToCartButton;
     ImageButton commentButton;
     TextView cartId;
+    RatingBar sellerAvgRating;
 
     private RecyclerView recyclerView;
 
@@ -82,6 +84,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private RecyclerView sameProductRecyclerView;
     private ArrayList<Product> horizontalScrollModelList;
     private HorizontalScrollAdapter horizontalScrollAdapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,6 +110,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         sellerNumberTextView = findViewById(R.id.sellerNumberTextView);
         productImageView = findViewById(R.id.productImageView);
         productIdDetails = findViewById(R.id.productIdDetails);
+
+        //rating
+        sellerAvgRating = findViewById(R.id.sellerAvgRating);
+        DatabaseReference ratingRef = FirebaseDatabase.getInstance().getReference("ratings");
+
 
         //add to cart
         addToCartButton = findViewById(R.id.addToCartButton);
@@ -156,18 +164,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+
+                    Collections.shuffle(horizontalScrollModelList);
                     if (!snapshot.child("productId").equals(thisProductId)) {
-
-
-                        Collections.shuffle(horizontalScrollModelList);
-
                         Product product = new Product();
 
 
                         product.setProductId((String) snapshot.child("productId").getValue());
                         product.setmImageUrl((String) snapshot.child("mImageUrl").getValue());
                         product.setProductName((String) snapshot.child("productName").getValue());
-                        product.setPrice((String)(snapshot.child("price").getValue()));
+                        product.setPrice((String) (snapshot.child("price").getValue()));
                         product.setShortDesc((String) snapshot.child("shortDesc").getValue());
                         product.setLongDesc((String) snapshot.child("longDesc").getValue());
                         product.setSubCategory((String) snapshot.child("subCategory").getValue());
@@ -416,15 +423,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot ds : snapshot.getChildren()) {
-//                    CartModel cart = new CartModel();
-//                    String dbProductId = cart.setProductId((String) ds.child("productId").getValue());
-//                    String dbBuyerEmail = cart.setBuyerEmail((String) ds.child("buyerEmail").getValue());
-//                    if (dbProductId.equals(productId) && dbBuyerEmail.equals(userID) && dbBuyerEmail != null && dbProductId!=null) {
-//                        Toast.makeText(ProductDetailsActivity.this, "Product already added to cart!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    } else {
-//
 
                     final HashMap<String, Object> cartMap = new HashMap<>();
                     cartMap.put("cartId", cartId.getText().toString());

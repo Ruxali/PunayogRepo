@@ -399,9 +399,17 @@
                         android:layout_marginTop="10dp"
                         android:text="Cancel Order"
                         android:backgroundTint="@color/delete"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
 
-
+                    <Button
+                        android:id="@+id/rateSellerButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Rate Seller"
+                        android:backgroundTint="@color/edit"
+                        android:textSize="15sp"
+                        android:visibility="gone"/>
 
 
                 </LinearLayout>

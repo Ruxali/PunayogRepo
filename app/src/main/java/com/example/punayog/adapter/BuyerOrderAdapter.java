@@ -1,12 +1,15 @@
 package com.example.punayog.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +21,19 @@ import com.example.punayog.SellerOrderDetailsActivity;
 import com.example.punayog.model.Order;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.OrderViewHolder> {
 
@@ -59,7 +69,13 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
         String status = order.getOrderStatus();
         if(status.equals("Ordered")){
             orderViewHolder.deleteOrderButton.setVisibility(View.VISIBLE);
-        }else{
+            orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
+        }else if(status.equals("Delivered")){
+            orderViewHolder.rateSellerBUtton.setVisibility(View.VISIBLE);
+            orderViewHolder.deleteOrderButton.setVisibility(View.GONE);
+        }
+        else{
+            orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
             orderViewHolder.deleteOrderButton.setVisibility(View.GONE);
         }
 
@@ -83,7 +99,81 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
 
                             }
                         });
+                orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
                 orderViewHolder.deleteOrderButton.setVisibility(View.GONE);
+            }
+        });
+
+        //rate the seller
+        orderViewHolder.rateSellerBUtton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder rating = new AlertDialog.Builder(view.getContext());
+                rating.setTitle("Rate the Seller");
+
+                LayoutInflater layoutInflater = rating.create().getLayoutInflater();
+                View ratingView = layoutInflater.inflate(R.layout.activity_rating,null);
+                rating.setView(ratingView);
+
+                RatingBar ratingBar;
+
+                ratingBar = ratingView.findViewById(R.id.ratingBar);
+
+                rating.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        String userID = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                        String ratings = "" + ratingBar.getRating();
+
+                        //set to db: db> users> ratings
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ratings");
+                        String ratingID = reference.push().getKey();
+                        reference.child(ratingID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                //set data in hashmap
+                                HashMap<String,Object> hashMap = new HashMap<>();
+                                hashMap.put("userId",""+userID);
+                                hashMap.put("rating",""+ratings);
+                                hashMap.put("ratingID", ""+ratingID);
+                                hashMap.put("sellerEmail", ""+ order.getSellerEmail());
+
+                                reference.child(ratingID).updateChildren(hashMap)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(rating.getContext(), "Review Added Successfully", Toast.LENGTH_SHORT).show();
+                                                orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(rating.getContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                    }
+                });
+
+                rating.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        orderViewHolder.rateSellerBUtton.setVisibility(View.VISIBLE);
+                    }
+                });
+                rating.create();
+                rating.show();
+                orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
             }
         });
     }
@@ -102,6 +192,7 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
         private TextView orderProductPrice,orderStatus;
         private TextView orderSellerEmail,orderTotalPrice;
         public Button deleteOrderButton;
+        public Button rateSellerBUtton;
 
 
         public OrderViewHolder(View itemView) {
@@ -116,6 +207,7 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
             orderTotalPrice = itemView.findViewById(R.id.orderTotalPrice);
             orderStatus = itemView.findViewById(R.id.orderStatusBuyer);
             deleteOrderButton = itemView.findViewById(R.id.deleteOrderButton);
+            rateSellerBUtton = itemView.findViewById(R.id.rateSellerButton);
         }
     }
 }
