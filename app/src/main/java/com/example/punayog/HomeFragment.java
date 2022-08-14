@@ -368,8 +368,6 @@ public class HomeFragment extends Fragment {
     private void clearAll() {
         if (productArrayList != null) {
             productArrayList.clear();
-
-
         }
     }
 

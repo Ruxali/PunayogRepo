@@ -79,10 +79,11 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
             orderViewHolder.deleteOrderButton.setVisibility(View.GONE);
         }
 
+
         orderViewHolder.deleteOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map<String,Object> map = new HashMap<>();
+                               Map<String,Object> map = new HashMap<>();
                 map.put("orderStatus","Cancelled");
 
                 FirebaseDatabase.getInstance().getReference().child("orders")
@@ -90,13 +91,24 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-
+                                Toast.makeText(view.getContext(), "Order Cancelled", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
 
+                            }
+                        });
+
+                Map<String,Object> statusMap = new HashMap<>();
+                statusMap.put("status","1");
+
+                FirebaseDatabase.getInstance().getReference().child("uploads")
+                        .child(order.getOrderedProductId()).updateChildren(statusMap)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
                             }
                         });
                 orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
@@ -176,6 +188,7 @@ public class BuyerOrderAdapter extends RecyclerView.Adapter<BuyerOrderAdapter.Or
                 orderViewHolder.rateSellerBUtton.setVisibility(View.GONE);
             }
         });
+
     }
 
     @Override

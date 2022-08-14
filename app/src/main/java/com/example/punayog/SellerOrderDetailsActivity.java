@@ -1,5 +1,6 @@
 package com.example.punayog;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -16,7 +17,12 @@ import com.example.punayog.model.Order;
 import com.example.punayog.model.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -85,6 +91,12 @@ public class SellerOrderDetailsActivity extends AppCompatActivity {
         orderedBuyerId.setText(order.getOrderedBuyerEmail());
         orderedProductId.setText(order.getOrderedProductId());
 
+        //hide status change bar
+        String status =orderStatus.getText().toString();
+        if(status.equals("Cancelled") || status.equals("Delivered")){
+            orderStatusImageView.setVisibility(View.GONE);
+        }
+
         //change status of order
         orderStatusImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +119,8 @@ public class SellerOrderDetailsActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 Toast.makeText(SellerOrderDetailsActivity.this, "Order status changed to Ordered.", Toast.LENGTH_SHORT).show();
-
+                                                startActivity(new Intent(SellerOrderDetailsActivity.this, MainActivity.class));
+                                                overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
                                             }
 
                                         });
@@ -190,6 +203,17 @@ public class SellerOrderDetailsActivity extends AppCompatActivity {
                                                 startActivity(new Intent(SellerOrderDetailsActivity.this, MainActivity.class));
                                                 overridePendingTransition(R.anim.slide_in_left, R.anim.stay);}
                                         });
+
+                                Map<String,Object> statusMap = new HashMap<>();
+                                statusMap.put("status","1");
+
+                                FirebaseDatabase.getInstance().getReference().child("uploads")
+                                        .child(orderedProductId.getText().toString()).updateChildren(statusMap)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                               }
+                                        });
                                 return true;
                         }
                         return true;
@@ -198,6 +222,8 @@ public class SellerOrderDetailsActivity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
+
+
     }
 
     public void statusBarColor() {

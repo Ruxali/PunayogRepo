@@ -64,10 +64,15 @@ public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScro
         });
     }
 
-
+    private final int limit = 8;
     @Override
     public int getItemCount() {
-        return productArrayList.size();
+        if(productArrayList.size() > limit){
+            return limit;
+        }else{
+            return productArrayList.size();
+        }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

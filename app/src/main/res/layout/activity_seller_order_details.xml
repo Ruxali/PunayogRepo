@@ -65,12 +65,13 @@
 
                     <TextView
                         android:id="@+id/orderTV"
-                        android:layout_width="350dp"
+                        android:layout_width="300dp"
                         android:layout_height="60dp"
                         android:text="Details of the Order"
                         android:textSize="28sp"
                         android:textAlignment="center"
                         android:padding="10dp"
+
                         android:fontFamily="@font/bold"
                         android:textColor="@color/primaryTextColor" />
 

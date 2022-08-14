@@ -70,7 +70,7 @@ public class ListingAdapter extends FirebaseRecyclerAdapter<Product,ListingAdapt
             public void onClick(View view) {
                 final DialogPlus dialogPlus = DialogPlus.newDialog(productViewHolder.productImage.getContext())
                         .setContentHolder(new ViewHolder(R.layout.update_product_popup_activity))
-                        .setExpanded(true,1350)
+                        .setExpanded(true,1500)
                         .create();
 
 
