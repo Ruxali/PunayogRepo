@@ -110,6 +110,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         databaseReference = FirebaseDatabase.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
 
+        //for category
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, category);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(arrayAdapter);
@@ -211,6 +212,7 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         });
 
         if (imageUri != null) {
+            //media lai chuttai vanne
             StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
             mUploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -278,7 +280,6 @@ public class AddProductActivity extends AppCompatActivity implements AdapterView
         startActivityForResult(intent, PICK_IMAGES_CODE);
     }
 
-    //for choosing multiple images at a time
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {

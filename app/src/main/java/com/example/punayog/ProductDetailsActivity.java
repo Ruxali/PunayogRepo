@@ -334,17 +334,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         DatabaseReference commentReference = upRef;
         String comment_content = commentEditText.getText().toString();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Intent i = new Intent(Intent.ACTION_SEND);
-        String seller = sellerEmailTextView.getText().toString();
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL, new String[]{seller});
-        i.putExtra(Intent.EXTRA_SUBJECT, "");
-        i.putExtra(Intent.EXTRA_TEXT, "");
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(ProductDetailsActivity.this, " ", Toast.LENGTH_SHORT).show();
-        }
+
         String commentID = upRef.push().getKey();
 
         String saveCurrentTime, saveCurrentDate;

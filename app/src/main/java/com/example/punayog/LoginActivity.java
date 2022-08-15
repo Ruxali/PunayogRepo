@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout loginLinearLayout;
     private LinearLayout noInternetlayout;
     private Button reloadButton;
-    BroadcastReceiver broadcastReceiver = null;
 
     private ProgressDialog loginProgressDialog;
 
@@ -87,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginProgressDialog = new ProgressDialog(LoginActivity.this);
 
+        //for remember me
         SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME,MODE_PRIVATE);
         String emailInput = sharedPreferences.getString("email","");
         textInputEmail.setText(emailInput);
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
     private void StoredDataUsingSharedPref(String email) {
         SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME,MODE_PRIVATE).edit();
         editor.putString("email",email);
-        editor.apply();
+        editor.apply(); // save changes
     }
 
     @Override
@@ -230,9 +230,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
-//        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
-//            startActivity(new Intent(this, PushNotification.class));
-//        }
+
     }
     //if email is not verified
     private void showAlertDialog() {
@@ -252,19 +250,6 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-//checking if user is already logged in
-//    @Override
-//    protected void onStart() {
-//        if (mAuth.getCurrentUser() != null) {
-////            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-//           // startActivity(new Intent(LoginActivity.this,UserProfile.class));
-//           // finish();
-//        } else {
-//            Toast.makeText(this, "You can log-in now", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        super.onStart();
-//    }
 
     public void statusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

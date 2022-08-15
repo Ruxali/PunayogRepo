@@ -97,23 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-//        registerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                registerProgressDialog.setTitle("Registering...");
-////                registerProgressDialog.setMessage("Your account is being created!");
-////                registerProgressDialog.show();
-//                if (!validateUserName() || !validateDoB() || !validateContact() || !validateEmail() || !validateLocation() ||
-//                        !validatePassword() || !validateTC() || !validateUser()|| !checkEmail() || !checkPhone()) {
-//                   return;
-//                } else {
-//
-//                    onRegisterClick();
-//
-//                }
-//
-//            }
-//        });
+        //register button click
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGES_CODE);
     }
 
+    //to open activity within the same app or another app
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGES_CODE && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
@@ -169,8 +154,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Boolean validateDoB() {
 
         String inputDOB = dateOfBirth.getText().toString().trim();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String date = sdf.format(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // allows to start by choosing any user defined format for date-time formatting
+        String date = sdf.format(new Date()); // represent specific instance in time
 
         Date date1 = null;
         try {

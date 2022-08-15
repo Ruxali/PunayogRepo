@@ -177,17 +177,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         addDrawersItem();
         setUpDrawer();
-        FirebaseMessaging.getInstance().subscribeToTopic("adhikariaarati68@gmail.com")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed";
-                        if (!task.isSuccessful()) {
-                            msg = "Subscribe failed";
-                        }
-
-                    }
-                });
+//        FirebaseMessaging.getInstance().subscribeToTopic("adhikariaarati68@gmail.com")
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        String msg = "Subscribed";
+//                        if (!task.isSuccessful()) {
+//                            msg = "Subscribe failed";
+//                        }
+//
+//                    }
+//                });
         if (savedInstanceState == null) {
             selectFirstItemAsDefault();
         }

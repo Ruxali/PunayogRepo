@@ -146,7 +146,7 @@ public class CartFragment extends Fragment {
 
                 }
 
-                cartTotalAmount.setValue(0.0);
+                cartTotalAmount.setValue(0.00);
                 cartAdapter = new CartAdapter(cartTotalAmount, cartArrayList, new SetOnPriceChange() {
                     @Override
                     public void onPriceChange(double amount, int pos) {
